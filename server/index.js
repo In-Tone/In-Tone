@@ -31,7 +31,7 @@ app.use(passport.session());
 app.use('/api', require('./api/api'));
 
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../public'));
+  res.sendFile(path.join(__dirname, '../public'));
 });
 
 app.use(function (err, req, res, next) {
