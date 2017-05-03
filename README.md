@@ -2,7 +2,7 @@
 
 ## Git/Waffle Workflow
 
-#### Naming Conventions:
+#### NAMING CONVENTIONS:
 
 Follow a `family-genus-species-issue#` model. 
 
@@ -34,13 +34,13 @@ The issue number what waffle needs to synch branches and issues. Keeping the iss
 
 Why this convention? So we can look at waffle and be sure that no one is working in the same file at the same time. When two people are working on the same file at the same time, merge conflicts happen. When merge conflicts happen, everything goes to hell.
 
-#### Issue Requests on Waffle
+#### ISSUE REQUESTS ON WAFFLE
 
 Add an issue on Waffle. Name the issue according to the convention above. Add extra information to the description field (e.g., whether you're refactoring, debugging, implementing a new feature, etc.). 
 
 Then go to the command line. _Add the issue number to your branch name_. Never worry about waffle again.
 
-#### The Command Line
+#### THE COMMAND LINE
 
 Create a branch and name it according to the convention above:
 
@@ -107,7 +107,7 @@ If you want to know what branches on your machine, use this command:
     git branch 
 ```
 
-##Group Workflow 
+## Group Workflow 
 
 5 three-day sprints 
 The day of a new sprint begins with a code review / mob coding code clean up / and an outline of the new sprint's goal.
