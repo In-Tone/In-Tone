@@ -6,24 +6,24 @@
 
 Follow a `family-genus-species-issue#` model. 
 Families: 
-    * database 
-    * server 
-    * app
+* database 
+* server 
+* app
 Genus (FILENAME): 
-    * users
-    * audio input 
-    * audio output 
+* users
+* audio input 
+* audio output 
 Species: 
-    * models, associations, methods, etc.
-    * routes, tests
-    * reducers, containers, components
+* models, associations, methods, etc.
+* routes, tests
+* reducers, containers, components
 Issue#: This is for synching up with waffle.io.
 
 The family tells us where in our repository you're working; the genus (filename) tells us the file you're working in, and the species tells us what you're doing in the file.
 
 Example:
-_Waffle Issue_: "db - audio input - associations"
-_Branch name_: 'db-audio-input-associations-#43'
+* _Waffle Issue_: "db - audio input - associations";
+* _Branch name_: 'db-audio-input-associations-#43'
 
 The issue number what waffle needs to synch branches and issues. Keeping the issue request and branch name the same name (or nearly so) keeps _you, the developer_ in synch with waffle and git.
 
