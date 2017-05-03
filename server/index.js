@@ -19,7 +19,7 @@ app.listen(3000, function () {
 app.use('/api', require('./api/api'));
 
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../public'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.use(function (err, req, res, next) {
