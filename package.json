@@ -1,0 +1,19 @@
+{
+  "name": "in-tone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/In-Tone/In-Tone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/In-Tone/In-Tone/issues"
+  },
+  "homepage": "https://github.com/In-Tone/In-Tone#readme"
+}
