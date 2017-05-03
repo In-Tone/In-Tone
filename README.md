@@ -8,15 +8,18 @@ Follow a `family-genus-species-issue#` model.
 Families: 
 * database 
 * server 
-* app
+* app.
+
 Genus (FILENAME): 
 * users
 * audio input 
-* audio output 
+* audio output. 
+
 Species: 
 * models, associations, methods, etc.
 * routes, tests
-* reducers, containers, components
+* reducers, containers, components.
+
 Issue#: This is for synching up with waffle.io.
 
 The family tells us where in our repository you're working; the genus (filename) tells us the file you're working in, and the species tells us what you're doing in the file.
