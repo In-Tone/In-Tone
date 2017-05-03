@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
-    "build-watch": "webpack -w"
+    "build-watch": "webpack -w",
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,11 @@
   "homepage": "https://github.com/In-Tone/In-Tone#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "crypto": "0.0.3",
     "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "lodash": "^4.17.4",
+    "passport": "^0.3.2",
     "pg": "^6.1.5",
     "pg-hstore": "^2.3.2",
     "react": "^15.5.4",
