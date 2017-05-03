@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const session = require('express-session');
+const passport = require('passport');
 
 app.use(require('volleyball'));
 
@@ -15,6 +17,16 @@ app.listen(3000, function () {
   console.log("Who's there?");
   console.log("Your server, listening on port 3000");
 });
+
+app.use(session({
+	secret: process.env.SESSION_SECRET,
+	resave: false, // does not force session to be saved to store
+	saveUnitialized: false // does not force new sessions to be saved to the store
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/api', require('./api/api'));
 
