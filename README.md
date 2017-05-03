@@ -5,17 +5,18 @@
 #### Naming Conventions:
 
 Follow a `family-genus-species-issue#` model. 
-Families: 
+
+*Families*: 
 * database 
 * server 
 * app.
 
-Genus (FILENAME): 
+*Genus (FILENAME)*: 
 * users
 * audio input 
 * audio output. 
 
-Species: 
+*Species*: 
 * models, associations, methods, etc.
 * routes, tests
 * reducers, containers, components.
