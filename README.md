@@ -38,7 +38,7 @@ Why this convention? So we can look at waffle and be sure that no one is working
 
 Add an issue on Waffle. Name the issue according to the convention above. Add extra information to the description field (e.g., whether you're refactoring, debugging, implementing a new feature, etc.). 
 
-Then go to the command line. _Add the issue number to your branch name_. Never worry about waffle again.
+Then go to the command line, _add the issue number to your branch name_, and never worry about waffle again.
 
 #### THE COMMAND LINE
 
@@ -70,7 +70,7 @@ After the branch is created, set its upstream destination (i.e, the place it's g
 
 If you've followed the naming convention above, this command will cause the issue on waffle to move from the `backlog` to the `in progress` section.
 
-(NOTE: You should be able to complete an autocomplete if your branch name is unique (if you have other existing branches on your machine that begin `db-audio` you may have to hit `tab` a few times before you find the branch you want).)
+(NOTE: You should be able to use autocomplete if your branch name is unique (if you have other existing branches on your machine that begin `db-audio` you may have to hit `tab` a few times before you find the branch you want).)
 
 Add and commit frequently. Please use an informative commit message.
 
@@ -82,7 +82,7 @@ When your finished and ready to push up, commit like so:
 
 This command will move prep Waffle to move the issue from the `in progress` column to the `done` column (which happens when a pull request is accepted). 
 
-Then go to commit, make a pull request, get someone to review the work, and rework or merge to master as necessary.
+Then go to GitHub, make a pull request, get someone to review the work, and rework or merge to master as necessary.
 
 When the branch is merged, pull down to your master. Then, when working on something else, start a new branch:
 
@@ -112,6 +112,10 @@ If you want to know what branches on your machine, use this command:
 5 three-day sprints 
 The day of a new sprint begins with a code review / mob coding code clean up / and an outline of the new sprint's goal.
 
-*NO COWBOY CODING*
-
 Always work on *one file* at a time. If in working in that file you see that you need to update another file, _then make a waffle request_. Working one more than one file at a time opens the door to merge conflicts. Merge conflicts make evertyhing go to hell. One issue and one file at a time. 
+
+# ETERNAL REMINDERS:
+
+__** ALWAYS BE MODULARIZING **__
+
+__** WHAT ONE CODER CAN DO, ANOTHER CAN DO **__
