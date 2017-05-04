@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./tests/*.spec.js --compilers js:babel-register",
     "start": "nodemon server/index.js",
-    "build-watch": "webpack -w"
+    "build-watch": "webpack -w",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
