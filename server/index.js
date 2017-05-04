@@ -3,8 +3,9 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
+const volleyball = require('volleyball');
 
-app.use(require('volleyball'));
+app.use(volleyball);
 
 express.static(path.join(__dirname, '../public'));
 
