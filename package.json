@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./tests/*.spec.js --compilers js:babel-register",
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
+    "start-watch": "nodemon server/index.js",
     "build-watch": "webpack -w",
     "build": "webpack"
   },
