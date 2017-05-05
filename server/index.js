@@ -3,9 +3,9 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
-// const volleyball = require('volleyball');
+const volleyball = require('volleyball');
 
-// app.use(volleyball);
+app.use(volleyball);
 
 const port = process.env.PORT || 3000;
 
