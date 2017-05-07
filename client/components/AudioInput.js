@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router'; 
 
 export default class AudioInput extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            arrayBuffer: {},
         }
     }
 
@@ -13,194 +13,187 @@ export default class AudioInput extends React.Component {
     }
 
     componentDidMount() {
-    if (! window.AudioContext) {
-        if (! window.webkitAudioContext) {
-            alert('no audiocontext found');
-    }
-        window.AudioContext = window.webkitAudioContext;
-    }
+        if (!window.AudioContext) {
+            if (!window.webkitAudioContext) {
+                alert('no audiocontext found');
+        }
+            window.AudioContext = window.webkitAudioContext;
+        }
 
-    var context = new AudioContext();
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
+        // create audio context and canvas
+        var context = new AudioContext();
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
 
-    // mic situation
-    var hpFilter = context.createBiquadFilter();
-    hpFilter.type = "highpass";
-    hpFilter.frequency.value = 85;
-    hpFilter.gain.value = 10;
+        // create filter nodes
+        var hpFilter = context.createBiquadFilter();
+        hpFilter.type = "highpass";
+        hpFilter.frequency.value = 85;
+        hpFilter.gain.value = 10;
 
-    var lpFilter = context.createBiquadFilter();
-    lpFilter.type = "lowpass";
-    lpFilter.frequency.value = 900;
-    lpFilter.gain.value = 10;
+        var lpFilter = context.createBiquadFilter();
+        lpFilter.type = "lowpass";
+        lpFilter.frequency.value = 900;
+        lpFilter.gain.value = 10;
 
-    var viz = context.createAnalyser();
-    viz.fftSize = 2048;
+        // create analyzer node
+        var viz = context.createAnalyser();
+        viz.fftSize = 2048;
 
-    var arrayTwo = new Uint8Array(viz.frequencyBinCount);
+        // create array to hold data for wavform visualization
+        var arrayTwo = new Uint8Array(viz.frequencyBinCount);
 
-    function draw() {
+        // draw function to draw waveform
+        function draw() {
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // ctx.fillStyle = 'rgb(214, 68, 68)';
-        ctx.fillStyle = 'transparent';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // ctx.fillStyle = 'rgb(214, 68, 68)';
+            ctx.fillStyle = 'transparent';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.lineWidth = 10;
-        ctx.strokeStyle = 'rgb(0, 0, 0)';
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = 'rgb(0, 0, 0)';
 
-        ctx.beginPath();
+            ctx.beginPath();
 
-        var sliceWidth = canvas.width * 1.0 / viz.frequencyBinCount;
-        var x = 0;
+            var sliceWidth = canvas.width * 1.0 / viz.frequencyBinCount;
+            var x = 0;
 
-        for(var i = 0; i < viz.frequencyBinCount; i++) {
+            for (var i = 0; i < viz.frequencyBinCount; i++) {
 
-            var v = arrayTwo[i] / 128.0;
-            var y = v * canvas.height/2;
+                var v = arrayTwo[i] / 128.0;
+                var y = v * canvas.height/2;
 
-            if(i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                x += sliceWidth;
             }
-            
-            x += sliceWidth;
+
+            ctx.lineTo(canvas.width, canvas.height/2);
+            ctx.stroke();
+
         }
 
-        ctx.lineTo(canvas.width, canvas.height/2);
-        ctx.stroke();
+        // begin draw
+        draw();
 
-    }
+        // capture reference to this component so we can set state below
+        var self = this;
 
-    draw();
+        // constraints object for getUserMedia stream
+        var constraints = { audio: true, video: false };
+        // set up stream -- is a promise -- recording happens in .then off it
+        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 
-    var constraints = { audio: true, video: false };
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+            // create MediaRecorder instance
+            var mediaRecorder = new MediaRecorder(stream);
 
-        var mediaRecorder = new MediaRecorder(stream);
+            // holder for audio
+            var recording = [];
 
-        var recording = [];
+            // when data is available, push available data to recording array
+            // as written, data is available when 'stop' is clicked which calls .stop on the mediaRecorder instance
+            mediaRecorder.ondataavailable = function(e) {
+                recording.push(e.data);
+            };
 
-        mediaRecorder.ondataavailable = function(e) {
-            recording.push(e.data);
-        };
+            // create audioNode stream source with stream so we can route it through the audioContext
+            var source = context.createMediaStreamSource(stream);
+            // connect it to the nodes
+            source.connect(lpFilter);
+            lpFilter.connect(hpFilter);
+            hpFilter.connect(viz);
 
-        var source = context.createMediaStreamSource(stream);
-        source.connect(lpFilter);
-        lpFilter.connect(hpFilter);
-        hpFilter.connect(viz);
+            // grab DOM buttons
+            var record = document.getElementById("record");
+            var stop = document.getElementById("stop");
 
-        var record = document.getElementById("record");
-        var stop = document.getElementById("stop");
+            // declare setInterval variable outside so we can kill the interval in a separate function
+            var repeatDraw;
 
-        var repeatDraw;
+            // onclick handler for record button
+            record.onclick = function() {
+                // connect stream to speakers, making it audible        
+                viz.connect(context.destination);
+                // call .start on mediaRecorder instance
+                mediaRecorder.start();
+                // setInterval to continually rerender waveform
+                repeatDraw = setInterval(() => {
+                    viz.getByteTimeDomainData(arrayTwo);
+                    draw();
+                }, 100);
+                record.style.background = "red";
+                record.style.color = "black";
+            }
 
-        // viz.getByteTimeDomainData(arrayTwo);
+            // onclick handler for stop button
+            stop.onclick = function() {
+                // disconnect from speakers, effectively muting stream
+                viz.disconnect(context.destination);
+                // call stop on mediaRecorder, firing a "data available" event which trigger .ondataavailable
+                mediaRecorder.stop();
+                record.style.background = "";
+                record.style.color = "";
+                clearInterval(repeatDraw);
+            }
 
-        record.onclick = function() {
-        viz.connect(context.destination);
-            mediaRecorder.start();
-            repeatDraw = setInterval(() => {
-                viz.getByteTimeDomainData(arrayTwo);
-                console.log("arrayTwo", arrayTwo);
-                draw();
-            }, 100);
-            record.style.background = "red";
-            record.style.color = "black";
-        }
+            // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
+            mediaRecorder.onstop = function(e) {
+                console.log("recorder stopped");
 
-        stop.onclick = function() {
-            viz.disconnect(context.destination);
-            mediaRecorder.stop();
-            record.style.background = "";
-            record.style.color = "";
-            clearInterval(repeatDraw);
-        }
+                // prompt to name the file
+                var clipName = prompt('Enter a name for your sound clip');
+                
+                // create audio element to post to page
+                var clipContainer = document.createElement('article');
+                var clipLabel = document.createElement('p');
+                var audio = document.createElement('audio');
+                var deleteButton = document.createElement('button');
 
-        mediaRecorder.onstop = function(e) {
-          console.log("recorder stopped");
+                // add created audio element to page
+                clipContainer.classList.add('clip');
+                audio.setAttribute('controls', '');
+                deleteButton.innerHTML = "Delete";
+                clipLabel.innerHTML = clipName;
+                clipContainer.appendChild(audio);
+                clipContainer.appendChild(clipLabel);
+                clipContainer.appendChild(deleteButton);
+                soundClips.appendChild(clipContainer);
 
-          var clipName = prompt('Enter a name for your sound clip');
+                // create Blob for access by audio element, set as src for playback
+                var blob = new Blob(recording, { 'type' : 'audio/ogg; codecs=opus' });
+                recording = [];
+                var audioURL = window.URL.createObjectURL(blob);
+                audio.src = audioURL;
 
-          var clipContainer = document.createElement('article');
-          var clipLabel = document.createElement('p');
-          var audio = document.createElement('audio');
-          var deleteButton = document.createElement('button');
+                // use FileReader to access the Blob data
+                var reader = new FileReader();
+                reader.addEventListener("loadend", function() {
+                    // not sure yet if we need the raw reader.result or the Uint8Array version on state
+                    var buffer = new Uint8Array(reader.result);
+                    self.setState({
+                        arrayBuffer: reader.result
+                    });
+                    console.log("state: ", self.state);
 
-          clipContainer.classList.add('clip');
-          audio.setAttribute('controls', '');
-          deleteButton.innerHTML = "Delete";
-          clipLabel.innerHTML = clipName;
+                });
+                // once read, fires "loadend" event, then above callback runs to set state
+                reader.readAsArrayBuffer(blob);
 
-          clipContainer.appendChild(audio);
-          clipContainer.appendChild(clipLabel);
-          clipContainer.appendChild(deleteButton);
-          soundClips.appendChild(clipContainer);
+                // delete button
+                deleteButton.onclick = function(e) {
+                    var evtTgt = e.target;
+                    evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
+                };
+            };
 
-          console.log("RECORDING pre-BLOB", recording);
-
-          var blob = new Blob(recording, { 'type' : 'audio/ogg; codecs=opus' });
-          recording = [];
-          var audioURL = window.URL.createObjectURL(blob);
-          audio.src = audioURL;
-
-          console.log("BLOB", blob);
-
-            var reader = new FileReader();
-            reader.addEventListener("loadend", function() {
-
-                console.log("reader.result", reader.result);
-
-                var buffer = new Uint8Array(reader.result);
-
-                console.log("POST-BLOB BUFFER", buffer);
-                console.log("arrayTwo", arrayTwo);
-
-                // var pitchCon = new PitchAnalyzer(44100);
-
-                // var n = 1001;
-                // var i = 1;
-
-                // var tones = [];
-                // var vols = [];
-
-                // while (n < buffer.length && i < 50000) {
-
-                //     pitchCon.input(buffer.slice(n-1000, n));
-                //     pitchCon.process();
-
-                //     var toneOne = pitchCon.findTone();
-
-                //     if (toneOne === null) {
-                //         console.log('No tone found!');
-                //         tones.push(300);
-                //         vols.push(0);
-                //     } else {
-                //         console.log('Found a toneOne, frequency:', toneOne.freq, 'volume:', toneOne.db);
-                //         tones.push(toneOne.freq);
-                //         vols.push(toneOne.db);
-                //     }
-                //     n = n+1000;
-                //     i++;
-                // }
-
-                // console.log('tones', tones);
-                // console.log('vols', vols);
-
-            });
-            reader.readAsArrayBuffer(blob);
-
-          deleteButton.onclick = function(e) {
-            var evtTgt = e.target;
-            evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-          }
-        }
-
-    }).catch(function(err) {
-        console.log(err);
-    });
+        }).catch(function(err) {
+            console.log(err);
+        });
     }
 
     handleChange() {
