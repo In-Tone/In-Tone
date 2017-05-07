@@ -14,19 +14,17 @@ export default class AudioInput extends React.Component {
 
     componentDidMount() {
     if (! window.AudioContext) {
-    if (! window.webkitAudioContext) {
-    alert('no audiocontext found');
+        if (! window.webkitAudioContext) {
+            alert('no audiocontext found');
     }
-    window.AudioContext = window.webkitAudioContext;
+        window.AudioContext = window.webkitAudioContext;
     }
 
     var context = new AudioContext();
-        console.log("AUDIO INPUT MOUNTED");
-    // get the context from the canvas to draw on
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
 
-        // mic situation
+    // mic situation
     var hpFilter = context.createBiquadFilter();
     hpFilter.type = "highpass";
     hpFilter.frequency.value = 85;
@@ -40,7 +38,6 @@ export default class AudioInput extends React.Component {
     var viz = context.createAnalyser();
     viz.fftSize = 2048;
 
-    var arrayOne = new Float32Array(viz.frequencyBinCount);
     var arrayTwo = new Uint8Array(viz.frequencyBinCount);
 
     function draw() {
@@ -82,8 +79,6 @@ export default class AudioInput extends React.Component {
     var constraints = { audio: true, video: false };
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 
-        console.log("streaming", stream);
-
         var mediaRecorder = new MediaRecorder(stream);
 
         var recording = [];
@@ -93,7 +88,6 @@ export default class AudioInput extends React.Component {
         };
 
         var source = context.createMediaStreamSource(stream);
-        // viz.getByteTimeDomainData(arrayOne);
         source.connect(lpFilter);
         lpFilter.connect(hpFilter);
         hpFilter.connect(viz);
@@ -105,33 +99,28 @@ export default class AudioInput extends React.Component {
 
         // viz.getByteTimeDomainData(arrayTwo);
 
-        var newArray = new Uint8Array(2048);
-
         record.onclick = function() {
         viz.connect(context.destination);
             mediaRecorder.start();
             repeatDraw = setInterval(() => {
-                // mediaRecorder.requestData();
                 viz.getByteTimeDomainData(arrayTwo);
+                console.log("arrayTwo", arrayTwo);
                 draw();
-            }, 1000);
+            }, 100);
             record.style.background = "red";
             record.style.color = "black";
         }
 
         stop.onclick = function() {
-        viz.disconnect(context.destination);
-          mediaRecorder.requestData();
-          mediaRecorder.stop();
-          record.style.background = "";
-          record.style.color = "";
-          clearInterval(repeatDraw);
+            viz.disconnect(context.destination);
+            mediaRecorder.stop();
+            record.style.background = "";
+            record.style.color = "";
+            clearInterval(repeatDraw);
         }
 
         mediaRecorder.onstop = function(e) {
           console.log("recorder stopped");
-
-          console.log("arrayOne", arrayOne);
 
           var clipName = prompt('Enter a name for your sound clip');
 
@@ -150,151 +139,55 @@ export default class AudioInput extends React.Component {
           clipContainer.appendChild(deleteButton);
           soundClips.appendChild(clipContainer);
 
+          console.log("RECORDING pre-BLOB", recording);
+
           var blob = new Blob(recording, { 'type' : 'audio/ogg; codecs=opus' });
           recording = [];
           var audioURL = window.URL.createObjectURL(blob);
           audio.src = audioURL;
 
+          console.log("BLOB", blob);
+
             var reader = new FileReader();
             reader.addEventListener("loadend", function() {
-                // while (reader.result.byteLength % 4 !== 0) {
-                //     console.log("BAD");
 
-                // }
+                console.log("reader.result", reader.result);
+
                 var buffer = new Uint8Array(reader.result);
 
-                console.log("DA BUFFER", buffer);
+                console.log("POST-BLOB BUFFER", buffer);
+                console.log("arrayTwo", arrayTwo);
 
-                // const findFundamentalFreq = (buffer, sampleRate) => {
-                //     // We use autocorrelation to find the fundamental frequency.
+                // var pitchCon = new PitchAnalyzer(44100);
 
-                //     // In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
-                //     // The autocorrelation index will be the average of these products. At the same time, we normalize the values.
-                //     // Source: http://www.phy.mty.edu/~suits/autocorrelation.html
+                // var n = 1001;
+                // var i = 1;
 
-                //     // the default sample rate, depending on the hardware, is 44100Hz or 48000Hz.
-                //     // a 'k' range between 120 and 650 covers signals ranging from ~70Hz to ~350Hz, which is just a little broader than the average frequency range for human speech (80-260Hz, per Wikipedia).
-                //     var n = 1024, bestR = 0, bestK = -1;
-                //     for(var k = 120; k <= 650; k++){
-                //         var sum = 0;
+                // var tones = [];
+                // var vols = [];
 
-                //         for(var i = 0; i < n; i++){
-                //             sum += ((buffer[i] - 128) / 128) * ((buffer[i + k] - 128) / 128);
-                //         }
+                // while (n < buffer.length && i < 50000) {
 
-                //         var r = sum  / (n + k);
+                //     pitchCon.input(buffer.slice(n-1000, n));
+                //     pitchCon.process();
 
-                //         if(r > bestR){
-                //             bestR = r;
-                //             bestK = k;
-                //         }
+                //     var toneOne = pitchCon.findTone();
 
-                //         if(r > 0.95) {
-                //             // Let's assume that this is good enough and stop right here
-                //             break;
-                //         }
+                //     if (toneOne === null) {
+                //         console.log('No tone found!');
+                //         tones.push(300);
+                //         vols.push(0);
+                //     } else {
+                //         console.log('Found a toneOne, frequency:', toneOne.freq, 'volume:', toneOne.db);
+                //         tones.push(toneOne.freq);
+                //         vols.push(toneOne.db);
                 //     }
+                //     n = n+1000;
+                //     i++;
+                // }
 
-                //     console.log("bestR", bestR);
-
-                //     if(bestR > 0.0025) {
-                //         // The period (in frames) of the fundamental frequency is 'bestK'. Getting the frequency from there is trivial.
-                //         var fundamentalFreq = sampleRate / bestK;
-                //         return fundamentalFreq;
-                //     }
-                //     else {
-                //         // We haven't found a good correlation
-                //         return -1;
-                //     }
-                // };
-
-                var pitchCon = new PitchAnalyzer(44100);
-
-                var n = 1001;
-                var i = 1;
-
-                var tones = [];
-                var vols = [];
-
-                while (n < buffer.length && i < 50000) {
-
-                    // console.log("f0....", findFundamentalFreq(newArray.slice(n-1000, n-99), 44100));
-                    // console.log("newArray", newArray);
-                    // console.log("f0", findFundamentalFreq(buffer.slice(n-1000, n-99), 44100));
-
-                    pitchCon.input(buffer.slice(n-1000, n));
-                    /* Process the current input in the internal buffer */
-                    pitchCon.process();
-                    // console.log("pitchCon instance", pitchCon);
-
-                    var toneOne = pitchCon.findTone();
-
-                    if (toneOne === null) {
-                        console.log('No tone found!');
-                        tones.push(300);
-                        vols.push(0);
-                    } else {
-                        console.log('Found a toneOne, frequency:', toneOne.freq, 'volume:', toneOne.db);
-                        tones.push(toneOne.freq);
-                        vols.push(toneOne.db);
-                    }
-                    n = n+1000;
-                    i++;
-                }
-
-                var tonesY = function() {
-                    var array = [];
-                    for (let i = 0; i < tones.length; i++) {
-                        array.push(i);
-                    }
-                    return array;
-                }
-
-                var data = [{x:tonesY(), y:tones, type: 'tones'}];
-                var layout = {fileopt : "overwrite", filename : "tones"};
-
-                Plotly.plot(data, layout, function (err, msg) {
-                    if (err) return console.log(err);
-                    console.log(msg);
-                });
-
-                console.log('tones', tones);
-                console.log('vols', vols);
-
-
-            // see below for optional constructor parameters.
-            const detectPitch = new Pitchfinder.YIN();
-
-
-            const ianBuffer = fs.readFileSync('ian-ooo.wav');
-
-            console.log("IAN BUFFER", ianBuffer);
-            console.log("MY BUFFER", buffer);
-
-            // const buffer = fs.readFileSync('ian-ooo.wav');
-            // need this to read from the wav file
-            const decoded = WavDecoder.decode(buffer)
-            .then(data => {
-                console.log("IN IAN");
-              const float32Array = data.channelData[0]; // get a single channel of sound
-              // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
-              let frequencies = Pitchfinder.frequencies(detectPitch, float32Array, {
-                tempo: 500, // in BPM, defaults to 120
-                quantization: 4, // samples per beat, defaults to 4 (i.e. 16th notes)
-              });
-
-              // filter out bad data - hacky for now, throws out nulls and high values
-              frequencies = frequencies.filter(freq => {
-                if (typeof freq === 'number') {
-                  return freq < 10000
-                }
-                return false
-              })
-
-              console.log("IAN", frequencies)
-
-            }) // get audio data from file using `wav-decoder`
-
+                // console.log('tones', tones);
+                // console.log('vols', vols);
 
             });
             reader.readAsArrayBuffer(blob);
@@ -316,6 +209,7 @@ export default class AudioInput extends React.Component {
     render() {
         return (
         <div id='main'>
+        <br />
 					<br />
 					<canvas id='canvas' width='1000' height='1000'></canvas>
 					<div id='soundClips'></div>

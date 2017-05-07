@@ -30,7 +30,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use('/api', require('./api/api'));
 
 app.get('*', function (req, res) {
