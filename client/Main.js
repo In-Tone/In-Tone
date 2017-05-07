@@ -3,13 +3,15 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import './index.scss';
 
-// import store from './store';
-// import Routes from './routes';
+import store from './store';
+import Routes from './Routes';
 
 const Main = () => {
-	<Provider store={store}>
-		<Routes />
-	</Provider>
+	return (
+		<Provider store={store}>
+			<Routes />
+		</Provider>
+	)
 }
 
 render(
