@@ -2,7 +2,7 @@
 
 const router = require('express').Router();
 const User = require('../../db/models/User');
-const Contour = require('../../db/models/Contour');
+const Contour = require('../../db/models/userTones');
 const {mustBeLoggedIn} = require('../auth');
 
 
