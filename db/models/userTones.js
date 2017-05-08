@@ -3,8 +3,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-module.exports = db.define('contours', {
-	category: {
+module.exports = db.define('userTone', {
+	tone: {
 		type: Sequelize.STRING,
 	},
 	data: {
@@ -12,6 +12,6 @@ module.exports = db.define('contours', {
 	}
 })
 
-module.exports.associations = (Contour, {User}) => {
-	Contour.belongsTo(User)
+module.exports.associations = (UserTone, {User}) => {
+	UserTone.belongsTo(User)
 }
