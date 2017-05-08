@@ -2,9 +2,7 @@ const Sequelize = require('sequelize');
 const crypto = require('crypto');
 const _ = require('lodash');
 
-const db = require('../db');
-
-module.exports = db.define('user', {
+module.exports = db => db.define('user', {
 	email: {
 		type: Sequelize.STRING,
 		unique: true,
