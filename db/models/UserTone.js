@@ -1,9 +1,8 @@
 'use strict';
 
 const {ARRAY, INTEGER, BLOB} = require('sequelize');
-const db = require('../db');
 
-const UserTone = db.define('UserTone', => {
+module.exports = db => db.define('UserTone', {
 	pitches: {
 		type: ARRAY(INTEGER),
 		allowNull: false
