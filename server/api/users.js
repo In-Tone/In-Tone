@@ -6,16 +6,30 @@ const Contour = require('../../db/models/Contour');
 const {mustBeLoggedIn} = require('../auth');
 
 
+router.param('id', (req, res, next) => {
+	User.findBy(id)
+		.then(foundUser => {
+			if (!foundUser) {
+				const err = new Error('User not found');
+				err.status = 404;
+				throw err;
+			}
+			req.user = foundUser;
+			next();
+		})
+		.catch(next);
+})
+
 router.get('/me', (req, res, next) => {
 	res.json(req.user);
 });
 
 // send up a users pitch contours for a particular voicing
-router.get('/:id/:contour-category'), mustBeLoggedIn, (req, res, next) => {
+router.get('/:id/:tone'), mustBeLoggedIn, (req, res, next) => {
 	Contour.findAll({
 		where: {
 			user_id: req.params.id,
-			category: req.params.contour-category
+			category: req.params.tone
 		}
 	})
 	.then(userContours => res.send(userContours))
@@ -29,7 +43,7 @@ router.get('/:id/contours', mustBeLoggedIn, (req, res, next) => {
 			user_id: req.params.id
 		}
 	})
-	.then(userContours => res.send(usercontours))
+	.then(userContours => res.send(userContours))
 	.catch(next)
 })
 
