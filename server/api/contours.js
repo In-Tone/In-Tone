@@ -8,6 +8,6 @@ const {mustBeLoggedIn} = require('../auth');
 // payload received must be an object with {category: 'string', data: [pitchContourData]}
 router.post('/contour', mustBeLoggedIn, (req, res, next) => {
 	Contour.create(req.body)
-	.then(contour => res.status(201).json(contour))
-	.catch(next)
+		.then(contour => res.status(201).json(contour))
+		.catch(next)
 });
