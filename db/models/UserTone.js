@@ -14,6 +14,6 @@ module.exports = db => db.define('UserTone', {
 });
 
 module.exports.associations = (UserTone, {User, ToneType}) => {
-	UserTones.belongsTo(User);
-	UserTones.belongsTo(ToneType);
+	UserTone.belongsTo(User);
+	UserTone.belongsTo(ToneType);
 }
