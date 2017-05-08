@@ -1,0 +1,30 @@
+html {
+
+}
+
+#app {
+	text-align: center;
+}
+
+button {
+	height: 40px;
+	width: 90px;
+	margin: auto;
+}
+
+canvas {
+	background-image: url('../icon.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	margin: auto;
+	text-align: center;
+	border: solid 5px black;
+}
+
+#buttons {
+	border: solid 5px black;
+	width: 25%;
+	margin: auto;
+	text-align: center;
+	padding-bottom: 20px;
+}
