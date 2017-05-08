@@ -14,6 +14,10 @@ const Target = db.define('target', {
     type: Sequelize.ARRAY(Sequelize.INTEGER),
     allowNull: false
   },
+  tone: {
+    type: Sequelize.ENUM('low', 'mid', 'high', 'rising', 'falling'),
+    allowNull: false
+  }
   englishTranslation: {
     type: Sequelize.STRING,
     allowNull: false
