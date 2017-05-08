@@ -5,4 +5,4 @@ const mustBeLoggedIn = (req, res, next) => {
   next()
 }
 
-module.export = {mustBeLoggedIn}
+module.exports = {mustBeLoggedIn}
