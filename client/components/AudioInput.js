@@ -173,10 +173,10 @@ export default class AudioInput extends React.Component {
                 // use FileReader to access the Blob data
                 var reader = new FileReader();
                 reader.addEventListener("loadend", function() {
-                    // not sure yet if we need the raw reader.result or the Uint8Array version on state
+                    // not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
                     var buffer = new Uint8Array(reader.result);
                     self.setState({
-                        arrayBuffer: reader.result
+                        arrayBuffer: buffer
                     });
                     console.log("state: ", self.state);
 
