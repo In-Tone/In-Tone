@@ -11,9 +11,13 @@ module.exports = db.define('user', {
 		allowNull: false
 	},
 	password: {
-		type: Sequelize.STRING
+		type: Sequelize.STRING,
+		allowNull: false
 	},
 	salt: {
+		type: Sequelize.STRING
+	},
+	username: {
 		type: Sequelize.STRING
 	}
 }, {
@@ -47,4 +51,8 @@ function setSaltAndPassword (user) {
 		user.salt = user.Model.generateSalt();
 		user.password = user.Model.encryptPassword(user.password, user.salt);
 	}
+}
+
+module.exports.associations = (User, {Contour}) => {
+	User.hasMany(Contour, {through: 'user_contours'})
 }
