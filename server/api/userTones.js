@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router();
-const userTones = require('../../db/models/userTones');
+const userTones = require('../../db/models/userTone');
 const {mustBeLoggedIn} = require('../auth');
 
 // store a pitch contour after registering it

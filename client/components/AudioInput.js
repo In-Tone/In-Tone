@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Pitchfinder from 'pitchfinder';
+import Chart from 'chart.js'
 
 export default class AudioInput extends React.Component {
 
@@ -25,6 +27,8 @@ export default class AudioInput extends React.Component {
         var context = new AudioContext();
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
+
+        var myChart;
 
         // create filter nodes
         var hpFilter = context.createBiquadFilter();
@@ -118,6 +122,7 @@ export default class AudioInput extends React.Component {
 
             // onclick handler for record button
             record.onclick = function() {
+                myChart = null;
                 // connect stream to speakers, making it audible        
                 viz.connect(context.destination);
                 // call .start on mediaRecorder instance
@@ -177,15 +182,61 @@ export default class AudioInput extends React.Component {
                 var reader = new FileReader();
                 reader.addEventListener("loadend", function() {
                     // not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
-                    var buffer = new Uint8Array(reader.result);
+                    // var buffer = new Uint8Array(reader.result);
+                    
                     context.decodeAudioData(reader.result).then((data) => {
-                        console.log("data", data)
-                    })
-                    console.log("buffer.buffer", buffer.buffer);
-                    self.setState({
-                        arrayBuffer: buffer.buffer
+
+                    const detectPitch = new Pitchfinder.AMDF();
+
+                    const float32Array = data.getChannelData(0); // get a single channel of sound
+                    // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
+
+                    // 500 bpm = 8.33 beats per second
+                    // quantization = 4 --> 33.32 samples per second
+                    let frequencies = Pitchfinder.frequencies(detectPitch, float32Array, {
+                    tempo: 500, // in BPM, defaults to 120
+                    quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
                     });
-                    console.log("state: ", self.state);
+
+                    console.log('all freqs: ', frequencies)
+                    // filter out bad data - hacky for now, throws out nulls and high values
+                    frequencies = frequencies.filter(freq => {
+                    if (typeof freq === 'number') {
+                      return freq < 10000
+                    }
+                    return false
+                    }).map(freq => Math.round(freq))
+
+
+                    var chartCtx = document.getElementById("chart").getContext("2d");
+
+                    myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: frequencies,
+                            datasets: [{
+                                label: 'Pitch Contour',
+                                data: frequencies,
+                                borderColor: [
+                                    'black'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: false
+                        }
+                    });
+
+                    console.log("frequencies", frequencies)
+
+
+                        console.log("data", data)
+                        self.setState({
+                            arrayBuffer: data
+                        });
+                        console.log("state: ", self.state);
+                    });
 
                 });
                 // once read, fires "loadend" event, then above callback runs to set state
@@ -210,15 +261,16 @@ export default class AudioInput extends React.Component {
         return (
         <div id='main'>
         <br />
-					<br />
-					<canvas id='canvas' width='1000' height='1000'></canvas>
-					<div id='soundClips'></div>
-					<div id="buttons">
-					<br />
-					<button id="record">RECORD</button>
-					<button id="stop">STOP</button>
-					<br />
-					</div>
+    		<br />
+    		<canvas id='canvas' width='1000' height='1000'></canvas>
+    		<div id='soundClips'></div>
+    		<div id="buttons">
+    		<br />
+    		<button id="record">RECORD</button>
+    		<button id="stop">STOP</button>
+    		<br />
+    		</div>
+            <canvas id="chart" width="100" height="100"></canvas>
         </div>
     )}
 }
