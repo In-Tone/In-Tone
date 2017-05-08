@@ -6,7 +6,7 @@ const {mustBeLoggedIn} = require('../auth');
 
 // store a pitch contour after registering it
 // payload received must be an object with {category: 'string', data: [pitchContourData]}
-router.post('/contour', mustBeLoggedIn, (req, res, next) => {
+router.post('/userTones', mustBeLoggedIn, (req, res, next) => {
 	UserTones.create(req.body)
 		.then(userTones => res.status(201).json(userTones))
 		.catch(next)
