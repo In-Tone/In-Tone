@@ -3,7 +3,7 @@
 const {ARRAY, INTEGER, BLOB} = require('sequelize');
 const db = require('../db');
 
-const UserTones = db.define('UserTone', => {
+const UserTone = db.define('UserTone', => {
 	pitches: {
 		type: ARRAY(INTEGER),
 		allowNull: false
@@ -14,7 +14,7 @@ const UserTones = db.define('UserTone', => {
 	}
 });
 
-module.exports.associations = (UserTones, {Users, ToneTypes}) => {
-	UserTones.belongsTo(Users);
-	UserTones.belongsTo(ToneTypes);
+module.exports.associations = (UserTone, {User, ToneType}) => {
+	UserTones.belongsTo(User);
+	UserTones.belongsTo(ToneType);
 }
