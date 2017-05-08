@@ -11,3 +11,5 @@ router.post('/userTones', mustBeLoggedIn, (req, res, next) => {
 		.then(userTones => res.status(201).json(userTones))
 		.catch(next)
 });
+
+module.exports = router;
