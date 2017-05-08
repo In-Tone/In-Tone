@@ -13,10 +13,10 @@ const app = require('APP')
     // This lets us avoid cyclic dependencies, which can be hard to reason
     // about.
     , metaModels = {
-      OAuth: require('./oauth'),
-      User: require('./user'),
-      // ---------- Add new models here ----------
-
+      User: require('./User'),
+      Target: require('./Target'),
+      ToneType: require('./ToneType'),
+      UserTone: require('./UserTone')
     }
     , {mapValues} = require('lodash')
 
