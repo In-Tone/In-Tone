@@ -1,37 +1,35 @@
 'use strict';
 
-const Sequelize = require('sequelize');
+const {STRING, ARRAY, INTEGER} = require('sequelize');
 
-const db = require('../db');
-
-const Target = db.define('target', {
-  // for playback
-  audioBuffer: {
-    type: Sequelize.BLOB,
-    allowNull: false
-  },
-  pitchSeries: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER),
-    allowNull: false
-  },
-  tone: {
-    type: Sequelize.ENUM('low', 'mid', 'high', 'rising', 'falling'),
-    allowNull: false
-  }
-  englishTranslation: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  transliteration: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  thaiSpelling: { // link to an image on imgur
-    type: Sequelize.STRING,
+module.exports = db => db.define('target', {
+  wav: {
+    type: STRING,
+    allowNull: false,
     validate: {
       isUrl: true
     }
+  },
+  pitches: {
+    type: ARRAY(INTEGER),
+    allowNull: false
+  },
+  englishTranslation: {
+    type: STRING,
+    allowNull: false
+  },
+  transliteration: {
+    type: STRING,
+    allowNull: false
+  },
+  thaiSpelling: {
+    type: STRING,
+    validate: {
+      isUrl: true // or unicode!
+    }
   }
-});
+})
 
-module.exports = Target;
+module.exports.associations = (Target, {Tone}) => {
+  Target.belongsTo(Tone)
+}
