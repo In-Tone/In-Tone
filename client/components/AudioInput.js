@@ -195,7 +195,7 @@ export default class AudioInput extends React.Component {
                     // quantization = 4 --> 33.32 samples per second
                     let frequencies = Pitchfinder.frequencies(detectPitch, float32Array, {
                     tempo: 500, // in BPM, defaults to 120
-                    quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
+                    quantization: 16, // samples per beat, defaults to 4 (i.e. 16th notes)
                     });
 
                     console.log('all freqs: ', frequencies)
