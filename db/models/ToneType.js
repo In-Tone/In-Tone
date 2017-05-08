@@ -2,7 +2,7 @@
 
 const {ENUM} = require('sequelize');
 
-module.exports = db => db.define('userTone', {
+module.exports = db => db.define('toneType', {
 	language: {
 		type: ENUM('thai','chinese','vietnamese','hmong'),
 		allowNull: false
