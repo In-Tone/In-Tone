@@ -13,6 +13,7 @@ export default class AudioInput extends React.Component {
     }
 
     componentDidMount() {
+	// for edge case browser compatibility
         if (!window.AudioContext) {
             if (!window.webkitAudioContext) {
                 alert('no audiocontext found');
@@ -41,7 +42,7 @@ export default class AudioInput extends React.Component {
         viz.fftSize = 2048;
 
         // create array to hold data for wavform visualization
-        var arrayTwo = new Uint8Array(viz.frequencyBinCount);
+        var waveArray = new Uint8Array(viz.frequencyBinCount);
 
         // draw function to draw waveform
         function draw() {
@@ -61,7 +62,7 @@ export default class AudioInput extends React.Component {
 
             for (var i = 0; i < viz.frequencyBinCount; i++) {
 
-                var v = arrayTwo[i] / 128.0;
+                var v = waveArray[i] / 128.0;
                 var y = v * canvas.height/2;
 
                 if (i === 0) {
@@ -84,7 +85,7 @@ export default class AudioInput extends React.Component {
         // capture reference to this component so we can set state below
         var self = this;
 
-        // constraints object for getUserMedia stream
+        // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
         var constraints = { audio: true, video: false };
         // set up stream -- is a promise -- recording happens in .then off it
         navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
@@ -123,7 +124,7 @@ export default class AudioInput extends React.Component {
                 mediaRecorder.start();
                 // setInterval to continually rerender waveform
                 repeatDraw = setInterval(() => {
-                    viz.getByteTimeDomainData(arrayTwo);
+                    viz.getByteTimeDomainData(waveArray);
                     draw();
                 }, 100);
                 record.style.background = "red";
