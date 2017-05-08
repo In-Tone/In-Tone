@@ -53,6 +53,6 @@ function setSaltAndPassword (user) {
 	}
 }
 
-module.exports.associations = (User, {UserTone}) => {
-	User.hasMany(UserTone, {through: 'userTones'})
+module.exports.associations = (User, {UserTones}) => {
+	User.hasMany(UserTones, {through: 'userTones'})
 }
