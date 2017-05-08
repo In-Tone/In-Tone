@@ -5,12 +5,13 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 
 const Target = db.define('target', {
+  // for playback
   audioBuffer: {
     type: Sequelize.BLOB,
     allowNull: false
   },
   pitchSeries: {
-    type: Sequelize.ARRAY,
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
     allowNull: false
   },
   englishTranslation: {
@@ -28,7 +29,5 @@ const Target = db.define('target', {
     }
   }
 });
-
-Target.belongsTo(Tone);
 
 module.exports = Target;
