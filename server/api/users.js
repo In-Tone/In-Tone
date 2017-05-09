@@ -2,7 +2,6 @@
 
 // const db = require('../../db/db');
 const db = require('../../db/index.js');
-console.log(db)
 const User = db.model('user');
 const ToneType = db.model('toneType');
 const UserTone = db.model('UserTone');
