@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import AudioInput from './components/AudioInput';
 import Study from './components/Study';
+import Layout from './components/Layout';
 import Home from './components/Home';
 
 const Routes = () => {
 	return (
 		<Router history={hashHistory}>
-			<Route path='/' component={AudioInput} />
-			<Route name='Home' path='/home' component={Home} />
-			<Route name='Study' path='/study' component={Study} />
+			<Route path='/' component={Layout}>
+        <Route path='/home' component={Home} />
+				<Route path='study' component={Study}/>
+			</Route>
 		</Router>
 	)
 }
