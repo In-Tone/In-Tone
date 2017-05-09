@@ -2,7 +2,7 @@
 
 const {ENUM} = require('sequelize');
 
-module.exports = db => db.define('userTone', {
+module.exports = db => db.define('toneType', {
 	language: {
 		type: ENUM('thai','chinese','vietnamese','hmong'),
 		allowNull: false
@@ -14,6 +14,6 @@ module.exports = db => db.define('userTone', {
 });
 
 module.exports.associations = (ToneType, {UserTone, Target}) => {
-	ToneType.belongsToMany(UserTone)
-	ToneType.belongsToMany(Target)
+	ToneType.hasMany(UserTone)
+	ToneType.hasMany(Target)
 };

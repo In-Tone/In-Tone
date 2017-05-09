@@ -4,15 +4,15 @@
 // so any other part of the application could call sequelize.model('User')
 // to get access to the User model.
 
-const app = require('APP')
-    , debug = require('debug')(`${app.name}:models`)
-    // Our model files export functions that take a database and return
-    // a model. We call these functions "meta models" (they are models of
-    // models).
-    //
-    // This lets us avoid cyclic dependencies, which can be hard to reason
-    // about.
-    , metaModels = {
+// const app = require('APP')
+//     , debug = require('debug')(`${app.name}:models`)
+//     // Our model files export functions that take a database and return
+//     // a model. We call these functions "meta models" (they are models of
+//     // models).
+//     //
+//     // This lets us avoid cyclic dependencies, which can be hard to reason
+//     // about.
+const metaModels = {
       User: require('./User'),
       Target: require('./Target'),
       ToneType: require('./ToneType'),
@@ -45,13 +45,12 @@ module.exports = db => {
     .forEach(name => {
       const {associations} = metaModels[name]
       if (typeof associations === 'function') {
-        debug('associating model %s', name)
+        // debug('associating model %s', name)
         // Metamodel::associations(self: Model, others: {[name: String]: Model}) -> ()
         //
         // Associate self with others.
         associations.call(metaModels[name], models[name], models)
       }
     })
-
   return models
 }
