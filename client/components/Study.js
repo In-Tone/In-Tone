@@ -8,7 +8,6 @@ import Paper from 'material-ui/Paper';
 const Chart = require('chart.js');
 import { Grid } from 'react-bootstrap';
 
-
 class Study extends React.Component {
 
 	constructor(props) {
@@ -25,7 +24,6 @@ class Study extends React.Component {
 	}
 
 	selectLanguage(event, index, value) {
-		console.log('selectLanguage event', event)
 		this.setState({languageValue: value})
 		// mapDispatchToProps to get the right information for that language
 	}
@@ -74,7 +72,7 @@ class Study extends React.Component {
 							value={this.state.languageValue}
 							style={{width:'15%'}}
 							autoWidth={false}
-							onTouchTap={this.selectLanguage}
+							onChange={this.selectLanguage}
 						>
 							<MenuItem value={1} primaryText='Language' />
 							<MenuItem value={2} primaryText='Thai' />
@@ -115,7 +113,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-
 	}
 }
 
