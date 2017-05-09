@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 const Chart = require('chart.js');
 import { Grid } from 'react-bootstrap';
+import Pitchfinder from 'pitchfinder';
 
 class Study extends React.Component {
 
@@ -54,43 +55,6 @@ class Study extends React.Component {
 	// toggle pitch contour graph (own, target, combined)
 	toggleOverlay() {
 
-	}
-
-	render() {
-		console.log('state', this.state)
-		return (
-			<div className='studyDiv'>
-				<Card>
-					<CardMedia
-						overlay={<CardTitle title='Transliteration Here' subtitle='English Translation Here'/>}
-					>
-						{/* REPLACE WITH PROPS.TARGET_IMAGE */}
-						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
-					</CardMedia>
-					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-						<RaisedButton label='Tone' />
-						<RaisedButton label='Record' id='Record'/>
-						<DropDownMenu 
-							value={this.state.languageValue}
-							style={{width:'15%'}}
-							autoWidth={false}
-							onChange={this.selectLanguage}
-						>
-							<MenuItem value={1} primaryText='Language' />
-							<MenuItem value={2} primaryText='Thai' />
-							<MenuItem value={3} primaryText='Chinese' />
-							<MenuItem value={4} primaryText='Hmong' />
-						</DropDownMenu>
-						<RaisedButton label='Next' />
-						<RaisedButton label='Overlay' />
-					</CardActions>
-				</Card>
-				<br />
-				<Paper zDepth={1}>
-					<canvas ref='chartCanvas' ></canvas>
-				</Paper>
-			</div>
-		)
 	}
 
 	componentDidMount(){
@@ -147,7 +111,7 @@ class Study extends React.Component {
         hpFilter.connect(viz);
 
         // grab DOM buttons
-        var Record = document.getElementById("Record");
+        var record = document.getElementById("Record");
         // var stop = document.getElementById("stop");
 
         // declare setInterval variable outside so we can kill the interval in a separate function
@@ -155,20 +119,20 @@ class Study extends React.Component {
 
         // onclick handler for record button
         record.onclick = function() {
-            myChart = null;
             // connect stream to speakers, making it audible        
             viz.connect(context.destination);
             // call .start on mediaRecorder instance
             mediaRecorder.start();
             // setInterval to continually rerender waveform
-            Record.style.background = "red";
-            Record.style.color = "black";
-            stopRecord = setTimeout(() => {
-            	Record.style.background = "";
-            	Record.style.color = "";
+            record.style.background = "red";``
+            record.style.color = "black";
+            setTimeout(() => {
+            	record.style.background = "";
+            	record.style.color = "";
             	mediaRecorder.stop();
+            	viz.disconnect(context.destination);
             }, 3500);
-        }
+        };
 
         // onclick handler for stop button
         // stop.onclick = function() {
@@ -191,18 +155,19 @@ class Study extends React.Component {
             // create audio element to post to page
             var clipContainer = document.createElement('article');
             var clipLabel = document.createElement('p');
-            var audio = document.createElement('audio');
+            var audio = document.getElementById('soundSample');
             var deleteButton = document.createElement('button');
+
 
             // add created audio element to page
             clipContainer.classList.add('clip');
             audio.setAttribute('controls', '');
             deleteButton.innerHTML = "Delete";
             clipLabel.innerHTML = clipName;
-            clipContainer.appendChild(audio);
-            clipContainer.appendChild(clipLabel);
-            clipContainer.appendChild(deleteButton);
-            soundClips.appendChild(clipContainer);
+            // clipContainer.appendChild(audio);
+            // clipContainer.appendChild(clipLabel);
+            // clipContainer.appendChild(deleteButton);
+            // soundClips.appendChild(clipContainer);
 
             // create Blob for access by audio element, set as src for playback
             var blob = new Blob(recording, { 'type' : 'audio/ogg; codecs=opus' });
@@ -236,22 +201,23 @@ class Study extends React.Component {
                 // filter out bad data - hacky for now, throws out nulls and high values
                 frequencies = frequencies.filter(freq => {
                 if (typeof freq === 'number') {
-                  return freq < 10000
+                  return freq < 1000
                 }
                 return false
                 }).map(freq => Math.round(freq))
 
 
-                var chartCtx = document.getElementById("chart").getContext("2d");
+                var chartCtx = document.getElementById("studyChart").getContext("2d");
 
-                let chartContext = this.refs.chartCanvas;
-                let myLineChart = new Chart(chartContext, {
+                let myLineChart = new Chart(chartCtx, {
                 type: 'line',
-                labels: this.state.chartLabels,
-                datasets: {
-                    label: 'dummy data',
-                    data: this.state.userPitches,
-                    borderCapStyle: 'butt'
+                data: {
+                	labels: frequencies,
+	                datasets: [{
+	                    label: 'dummy data',
+	                    data: frequencies,
+	                    borderCapStyle: 'butt'
+	                }]
                 }
                 });
 
@@ -282,7 +248,47 @@ class Study extends React.Component {
         console.log(err);
     });
 	}
+
+	render() {
+		console.log('state', this.state)
+		return (
+			<div className='studyDiv'>
+				<Card>
+					<CardMedia
+						overlay={<CardTitle title='Transliteration Here' subtitle='English Translation Here'/>}
+					>
+						{/* REPLACE WITH PROPS.TARGET_IMAGE */}
+						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
+					</CardMedia>
+					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+						<RaisedButton label='Tone' />
+						<RaisedButton label='Record' id='Record'/>
+						<DropDownMenu 
+							value={this.state.languageValue}
+							style={{width:'15%'}}
+							autoWidth={false}
+							onChange={this.selectLanguage}
+						>
+							<MenuItem value={1} primaryText='Language' />
+							<MenuItem value={2} primaryText='Thai' />
+							<MenuItem value={3} primaryText='Chinese' />
+							<MenuItem value={4} primaryText='Hmong' />
+						</DropDownMenu>
+						<RaisedButton label='Next' />
+						<RaisedButton label='Overlay' />
+					</CardActions>
+				</Card>
+				<br />
+				<audio id='soundSample' src=''/>
+				<Paper zDepth={1}>
+					<canvas id='studyChart' ></canvas>
+				</Paper>
+				<div id='soundClips'></div>
+			</div>
+		)
+	}
 }
+
 
 const mapStateToProps = state => {
 	return {
