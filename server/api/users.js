@@ -1,50 +1,42 @@
 'use strict'
 
-const router = require('express').Router();
-const User = require('../../db/models/User');
-const Contour = require('../../db/models/userTone');
+// const db = require('../../db/db');
+const db = require('../../db/index.js');
+const User = db.model('user');
+const ToneType = db.model('toneType');
+const UserTone = db.model('UserTone');
 const {mustBeLoggedIn} = require('../auth');
+const router = require('express').Router();
 
-
-router.param('id', (req, res, next) => {
-	User.findBy(id)
-		.then(foundUser => {
-			if (!foundUser) {
-				const err = new Error('User not found');
-				err.status = 404;
-				throw err;
-			}
-			req.user = foundUser;
-			next();
-		})
-		.catch(next);
-})
-
-router.get('/me', (req, res, next) => {
-	res.json(req.user);
+router.param('username',(req, res, next, username) => {
+			User.findOne({
+				where: { username: username },
+				include: [{ all: true }]
+			})
+				.then(foundUser => {
+					if (!foundUser) {
+						const err = new Error('User not found');
+						err.status = 404;
+						throw err;
+					}
+					req.user = foundUser;
+				})
+				.catch(next);
 });
 
-// send up a users pitch contours for a particular voicing
-router.get('/:id/:tone'), mustBeLoggedIn, (req, res, next) => {
-	Contour.findAll({
-		where: {
-			user_id: req.params.id,
-			category: req.params.tone
-		}
-	})
-	.then(userContours => res.send(userContours))
-	.catch(next)
-}
+router.get('/:username', (req, res, next) => {
+			res.json(req.user);
+});
 
-// send up all of a users pitch contours
-router.get('/:id/contours', mustBeLoggedIn, (req, res, next) => {
-	Contour.findAll({
-		where: {
-			user_id: req.params.id
-		}
-	})
-	.then(userContours => res.send(userContours))
-	.catch(next)
-})
+router.post('/:username/:userTone/:toneType', (req, res, next) => {
+			UserTone.update(req.body, {
+				where: {
+					userId: req.user.id,
+					toneTypeId: req.params.toneType
+				}
+			})
+				.then(updatedTone => res.json(updatedTone))
+				.catch(next);
+});
 
 module.exports = router;

@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 router.use('/login', require('./login'));
 router.use('/users', require('./users'));
-router.use('/userTones', require('./userTones'));
+router.use('/languages', require('./languages'));
 
 router.get('/', (req, res, next) => {
 	res.sendStatus(200);
