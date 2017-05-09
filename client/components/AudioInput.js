@@ -187,7 +187,7 @@ export default class AudioInput extends React.Component {
                     
                     context.decodeAudioData(reader.result).then((data) => {
 
-                    const detectPitch = new Pitchfinder.AMDF();
+                    const detectPitch = new Pitchfinder.YIN();
 
                     const float32Array = data.getChannelData(0); // get a single channel of sound
                     // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
