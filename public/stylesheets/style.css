@@ -28,3 +28,10 @@ button {
 	text-align: center;
 	padding-bottom: 20px;
 }
+
+/* STUDY COMPONENT STYLES */
+.studyDiv {
+	width: 80%;
+	margin: auto;
+	padding-top: 2%;
+}
