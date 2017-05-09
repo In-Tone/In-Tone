@@ -14,12 +14,20 @@ class Study extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			languageValue: 1,
 			targetIMG: '',
 			targetTranslation: '',
 			// chart data
 			pitchContour: [1,2,3,6,9,12,20],
 			chartLabels: ['-','-','-','-','-','-','-']
 		}
+		this.selectLanguage = this.selectLanguage.bind(this);
+	}
+
+	selectLanguage(event, index, value) {
+		console.log('selectLanguage event', event)
+		this.setState({languageValue: value})
+		// mapDispatchToProps to get the right information for that language
 	}
 
 	// play target audio 
@@ -29,7 +37,8 @@ class Study extends React.Component {
 
 	// record audio input
 	recordAudio() {
-
+		// import and invoke the record audio function extracted from
+		// audioinput.js
 	}
 
 	// select next word
@@ -48,6 +57,7 @@ class Study extends React.Component {
 	}
 
 	render() {
+		console.log('state', this.state)
 		return (
 			<div className='studyDiv'>
 				<Card>
@@ -57,14 +67,25 @@ class Study extends React.Component {
 						{/* REPLACE WITH PROPS.TARGET_IMAGE */}
 						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
 					</CardMedia>
-					<CardActions>
-						<RaisedButton label='Language' />
+					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
 						<RaisedButton label='Tone' />
 						<RaisedButton label='Record' />
+						<DropDownMenu 
+							value={this.state.languageValue}
+							style={{width:'15%'}}
+							autoWidth={false}
+							onTouchTap={this.selectLanguage}
+						>
+							<MenuItem value={1} primaryText='Language' />
+							<MenuItem value={2} primaryText='Thai' />
+							<MenuItem value={3} primaryText='Chinese' />
+							<MenuItem value={4} primaryText='Hmong' />
+						</DropDownMenu>
 						<RaisedButton label='Next' />
 						<RaisedButton label='Overlay' />
 					</CardActions>
-				</Card>		
+				</Card>
+				<br />
 				<Paper zDepth={1}>
 					<canvas ref='chartCanvas' ></canvas>
 				</Paper>

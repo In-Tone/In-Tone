@@ -3,9 +3,12 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import './index.scss';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import store from './store';
 import Routes from './Routes';
+
+injectTapEventPlugin();
 
 const Main = () => {
 	//MuiThemeProvider is a necessary wrapper to get material-ui to work 
