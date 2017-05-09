@@ -30,6 +30,6 @@ module.exports = db => db.define('target', {
   }
 })
 
-module.exports.associations = (Target, {Tone}) => {
-  Target.belongsTo(Tone)
+module.exports.associations = (Target, {ToneType}) => {
+  Target.belongsTo(ToneType)
 }
