@@ -19,7 +19,99 @@ class Study extends React.Component {
 			targetTranslation: '',
 			// chart data
 			userPitches: [],
-			targetPitches: [],
+			targetPitches: [136,
+  221,
+  218,
+  216,
+  217,
+  218,
+  217,
+  217,
+  217,
+  217,
+  218,
+  139,
+  134,
+  139,
+  215,
+  212,
+  211,
+  208,
+  208,
+  208,
+  206,
+  206,
+  202,
+  200,
+  199,
+  197,
+  195,
+  193,
+  192,
+  191,
+  188,
+  184,
+  177,
+  179,
+  179,
+  178,
+  171,
+  170,
+  170,
+  170,
+  172,
+  172,
+  171,
+  170,
+  170,
+  170,
+  170,
+  170,
+  172,
+  172,
+  172,
+  173,
+  172,
+  174,
+  172,
+  174,
+  174,
+  176,
+  178,
+  179,
+  181,
+  185,
+  189,
+  192,
+  196,
+  200,
+  206,
+  210,
+  218,
+  224,
+  232,
+  240,
+  246,
+  258,
+  266,
+  274,
+  286,
+  296,
+  304,
+  315,
+  324,
+  332,
+  339,
+  347,
+  353,
+  356,
+  359,
+  356,
+  359,
+  359,
+  334,
+  134,
+  134],
 			chartLabels: [],
 			audioBuffer: []
 		}
@@ -58,6 +150,8 @@ class Study extends React.Component {
 	}
 
 	componentDidMount(){
+		let targetPitches = this.state.targetPitches;
+
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
             alert('no audiocontext found');
@@ -212,11 +306,18 @@ class Study extends React.Component {
                 let myLineChart = new Chart(chartCtx, {
                 type: 'line',
                 data: {
-                	labels: frequencies,
+                	labels: targetPitches,
 	                datasets: [{
-	                    label: 'dummy data',
-	                    data: frequencies,
-	                    borderCapStyle: 'butt'
+                    label: 'user pitch',
+                    data: frequencies,
+                    borderCapStyle: 'butt',
+                    borderColor: 'blue'
+	                },
+	                {
+	                	label: 'target pitch',
+	                	data: targetPitches,
+	                	borderCapStyle: 'butt',
+	                	borderColor: 'red'
 	                }]
                 }
                 });
@@ -279,7 +380,7 @@ class Study extends React.Component {
 					</CardActions>
 				</Card>
 				<br />
-				<audio id='soundSample' src=''/>
+				<audio controls id='soundSample' src='/audio/Rising-Nhai-Where.wav'/>
 				<Paper zDepth={1}>
 					<canvas id='studyChart' ></canvas>
 				</Paper>
