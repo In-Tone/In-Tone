@@ -12,7 +12,7 @@ button {
 	margin: auto;
 }
 
-canvas {
+#canvas {
 	background-image: url('../icon.jpg');
 	background-repeat: no-repeat;
 	background-position: center;
