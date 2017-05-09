@@ -1,11 +1,11 @@
 'use strict';
 
 const db = require('../../db');
-const ToneType = db.model('userTone');
+const ToneType = db.model('toneType');
 const Target = db.model('target');
 
 module.exports = require('express').Router()
-	.get('/:langaugeName',
+	.get('/:languageName',
 		(req, res, next) => 
 			ToneType.findAll({
 				where: {
