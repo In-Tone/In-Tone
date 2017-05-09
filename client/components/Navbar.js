@@ -5,7 +5,8 @@ import {connect} from 'react-redux'
 import {Link, browserHistory} from 'react-router'
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
-
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 
 class Navbar extends Component {
 	constructor() {
@@ -15,7 +16,9 @@ class Navbar extends Component {
 	render() {
 		return (
 			<AppBar
-			title={<FlatButton style={{color:'white'}}>Train</FlatButton>}
+			title={<Link to='/study'><FlatButton
+				style={{color:'white'}}>Train</FlatButton></Link>}
+			iconElementLeft={<Link to='/'><FlatButton label="Home" style={{color:'white'}} /></Link>}
 			iconElementRight={<FlatButton label="Login" />}
 			/>
 		)
