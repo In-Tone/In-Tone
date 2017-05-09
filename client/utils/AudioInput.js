@@ -1,99 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import {Card, CardActions, CardMedia, CardTitle} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
-const Chart = require('chart.js');
-import { Grid } from 'react-bootstrap';
+    // import Pitchfinder from 'pitchfinder';
+    // import Chart from 'chart.js'
 
-class Study extends React.Component {
+export const recorder = () => {
 
-	constructor(props) {
-		super(props)
-		this.state = {
-			languageValue: 1,
-			targetIMG: '',
-			targetTranslation: '',
-			// chart data
-			userPitches: [],
-			targetPitches: [],
-			chartLabels: [],
-			audioBuffer: []
-		}
-		this.selectLanguage = this.selectLanguage.bind(this);
-	}
-
-	selectLanguage(event, index, value) {
-		this.setState({languageValue: value})
-		// mapDispatchToProps to get the right information for that language
-	}
-
-	// play target audio 
-	getTargetAudio(targetWord) {
-
-	}
-
-	// record audio input
-	recordAudio() {
-		// import and invoke the record audio function extracted from
-		// audioinput.js
-	}
-
-	// select next word
-	nextWord() {
-
-	}
-
-	// go back to the previous word
-	previousWord() {
-
-	}
-
-	// toggle pitch contour graph (own, target, combined)
-	toggleOverlay() {
-
-	}
-
-	render() {
-		console.log('state', this.state)
-		return (
-			<div className='studyDiv'>
-				<Card>
-					<CardMedia
-						overlay={<CardTitle title='Transliteration Here' subtitle='English Translation Here'/>}
-					>
-						{/* REPLACE WITH PROPS.TARGET_IMAGE */}
-						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
-					</CardMedia>
-					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-						<RaisedButton label='Tone' />
-						<RaisedButton label='Record' id='Record'/>
-						<DropDownMenu 
-							value={this.state.languageValue}
-							style={{width:'15%'}}
-							autoWidth={false}
-							onChange={this.selectLanguage}
-						>
-							<MenuItem value={1} primaryText='Language' />
-							<MenuItem value={2} primaryText='Thai' />
-							<MenuItem value={3} primaryText='Chinese' />
-							<MenuItem value={4} primaryText='Hmong' />
-						</DropDownMenu>
-						<RaisedButton label='Next' />
-						<RaisedButton label='Overlay' />
-					</CardActions>
-				</Card>
-				<br />
-				<Paper zDepth={1}>
-					<canvas ref='chartCanvas' ></canvas>
-				</Paper>
-			</div>
-		)
-	}
-
-	componentDidMount(){
+    // for edge case browser compatibility
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
             alert('no audiocontext found');
@@ -120,6 +30,12 @@ class Study extends React.Component {
     viz.fftSize = 2048;
 
     // capture reference to this component so we can set state below
+    // #### MAYBE THIS IS IMPORTANT ### //
+    // #### MAYBE THIS IS IMPORTANT ### //
+    // #### MAYBE THIS IS IMPORTANT ### //
+    // #### MAYBE THIS IS IMPORTANT ### //
+    // #### MAYBE THIS IS IMPORTANT ### //
+    // #### MAYBE THIS IS IMPORTANT ### //
     var self = this;
 
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
@@ -147,8 +63,8 @@ class Study extends React.Component {
         hpFilter.connect(viz);
 
         // grab DOM buttons
-        var Record = document.getElementById("Record");
-        // var stop = document.getElementById("stop");
+        var record = document.getElementById("record");
+        var stop = document.getElementById("stop");
 
         // declare setInterval variable outside so we can kill the interval in a separate function
         var repeatDraw;
@@ -161,25 +77,24 @@ class Study extends React.Component {
             // call .start on mediaRecorder instance
             mediaRecorder.start();
             // setInterval to continually rerender waveform
-            Record.style.background = "red";
-            Record.style.color = "black";
-            stopRecord = setTimeout(() => {
-            	Record.style.background = "";
-            	Record.style.color = "";
-            	mediaRecorder.stop();
-            }, 3500);
+            repeatDraw = setInterval(() => {
+                viz.getByteTimeDomainData(waveArray);
+                draw();
+            }, 100);
+            record.style.background = "red";
+            record.style.color = "black";
         }
 
         // onclick handler for stop button
-        // stop.onclick = function() {
-        //     // disconnect from speakers, effectively muting stream
-        //     viz.disconnect(context.destination);
-        //     // call stop on mediaRecorder, firing a "data available" event which trigger .ondataavailable
-        //     mediaRecorder.stop();
-            // record.style.background = "";
-            // record.style.color = "";
-        //     clearInterval(repeatDraw);
-        // }
+        stop.onclick = function() {
+            // disconnect from speakers, effectively muting stream
+            viz.disconnect(context.destination);
+            // call stop on mediaRecorder, firing a "data available" event which trigger .ondataavailable
+            mediaRecorder.stop();
+            record.style.background = "";
+            record.style.color = "";
+            clearInterval(repeatDraw);
+        }
 
         // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
         mediaRecorder.onstop = function(e) {
@@ -250,19 +165,18 @@ class Study extends React.Component {
                 labels: this.state.chartLabels,
                 datasets: {
                     label: 'dummy data',
-                    data: this.state.userPitches,
+                    data: this.state.pitchContour,
                     borderCapStyle: 'butt'
                 }
                 });
 
-                console.log("frequencies", frequencies);
+                console.log("frequencies", frequencies)
 
 
-                    console.log("data", data);
+                    console.log("data", data)
                     self.setState({
                         arrayBuffer: data,
-                        userPitches: frequencies,
-                        chartLabels: frequencies
+                        pitches: frequencies
                     });
                     console.log("state: ", self.state);
                 });
@@ -281,18 +195,8 @@ class Study extends React.Component {
     }).catch(function(err) {
         console.log(err);
     });
-	}
+
+
+    
 }
-
-const mapStateToProps = state => {
-	return {
-
-	}
-}
-
-const mapDispatchToProps = dispatch => {
-	return {
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Study)
+ 
