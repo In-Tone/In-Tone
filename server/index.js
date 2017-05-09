@@ -24,7 +24,7 @@ app.listen(port, function () {
 app.use(session({
 	secret: process.env.SESSION_SECRET || 'remove me',
 	resave: false, // does not force session to be saved to store
-	saveUnitialized: false // does not force new sessions to be saved to the store
+	saveUninitialized: false // does not force new sessions to be saved to the store
 }));
 
 app.use(passport.initialize());

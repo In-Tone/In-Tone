@@ -8,6 +8,7 @@ export default class AudioInput extends React.Component {
         super(props);
         this.state = {
             arrayBuffer: {},
+            pitches: []
         }
     }
 
@@ -233,7 +234,8 @@ export default class AudioInput extends React.Component {
 
                         console.log("data", data)
                         self.setState({
-                            arrayBuffer: data
+                            arrayBuffer: data,
+                            pitches: frequencies
                         });
                         console.log("state: ", self.state);
                     });
