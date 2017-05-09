@@ -3,10 +3,9 @@
 const db = require('../../db');
 const ToneType = db.model('toneType');
 const Target = db.model('target');
+const router = require('express').Router();
 
-module.exports = require('express').Router()
-	.get('/:languageName',
-		(req, res, next) => 
+router.get('/:languageName', (req, res, next) => {
 			ToneType.findAll({
 				where: {
 					language: req.params.languageName
@@ -16,4 +15,7 @@ module.exports = require('express').Router()
 				}]
 			})
 			.then(foundTones => res.json(foundTones))
-			.catch(next));
+			.catch(next);
+});
+
+module.exports = router;

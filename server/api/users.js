@@ -6,11 +6,9 @@ const User = db.model('user');
 const ToneType = db.model('toneType');
 const UserTone = db.model('UserTone');
 const {mustBeLoggedIn} = require('../auth');
+const router = require('express').Router();
 
-module.exports = require('express').Router()
-	.param('username',
-		mustBeLoggedIn,
-		(req, res, next, username) => 
+router.param('username',(req, res, next, username) => {
 			User.findOne({
 				where: { username: username },
 				include: [{ all: true }]
@@ -23,15 +21,14 @@ module.exports = require('express').Router()
 					}
 					req.user = foundUser;
 				})
-				.catch(next))
-	.get('/:username',
-		mustBeLoggedIn,
-		(req, res, next) => 
-			res.json(req.user)
-		)
-	.post('/:username/:userTone/:toneType',
-		mustBeLoggedIn,
-		(req, res, next) => 
+				.catch(next);
+});
+
+router.get('/:username', (req, res, next) => {
+			res.json(req.user);
+});
+
+router.post('/:username/:userTone/:toneType', (req, res, next) => {
 			UserTone.update(req.body, {
 				where: {
 					userId: req.user.id,
@@ -39,4 +36,7 @@ module.exports = require('express').Router()
 				}
 			})
 				.then(updatedTone => res.json(updatedTone))
-				.catch(next));
+				.catch(next);
+});
+
+module.exports = router;
