@@ -23,6 +23,7 @@
   "homepage": "https://github.com/In-Tone/In-Tone#readme",
   "dependencies": {
     "axios": "^0.16.1",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "chart.js": "^2.5.0",
     "crypto": "0.0.3",
