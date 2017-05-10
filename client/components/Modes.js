@@ -5,15 +5,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 const play = {
   margin: 12,
   height: '200px',
-  width: '100%',
+  width: '1800px',
   display: 'inline',
-  backgroundColor: 'white'
 };
 
 const study = {
   margin: 12,
   height: '200px',
-  width: '100%',
+  width: '1800px',
   display: 'inline',
   color: 'blue'
 };
@@ -21,14 +20,16 @@ const study = {
 const demo = {
   margin: 12,
   height: '200px',
-  width: '100%',
+  width: '1800px',
   display: 'inline',
   color: 'green'
 };
 
 const button = (label, toggleFunction, style, routeDestination) => {
 	return (
-		<Link to={routeDestination}><RaisedButton label={label} style={style}/></Link>
+		<Link to={routeDestination}>
+			<RaisedButton label={label} buttonStyle={style}/>
+		</Link>
 	)
 }
 
