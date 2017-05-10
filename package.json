@@ -8,7 +8,8 @@
     "start": "node server/index.js",
     "start-watch": "nodemon server/index.js",
     "build-watch": "webpack -w",
-    "build": "webpack"
+    "build": "webpack",
+    "seed": "node db/seed.js"
   },
   "repository": {
     "type": "git",
