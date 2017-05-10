@@ -42,6 +42,11 @@ class Study extends React.Component {
             targetDuration: 641.587
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
+
+    this.targets = this.props.targets;
+
+    // remove
+    this.logger = this.logger.bind(this);
 	}
 
 	selectLanguage(event, index, value) {
@@ -75,9 +80,11 @@ class Study extends React.Component {
 
 	}
 
-	componentDidMount(){
+  logger() {
+    console.log(this.targets);
+  }
 
-	let targetPitches = this.state.targetPitches;
+	componentDidMount(){
 
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
@@ -363,7 +370,7 @@ class Study extends React.Component {
 						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
 					</CardMedia>
 					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-						<RaisedButton label='Tone' />
+						<RaisedButton label='Tone' onClick={this.logger} />
 						<RaisedButton label='Record' id='Record'/>
 						<DropDownMenu
 							value={this.state.languageValue}
@@ -392,11 +399,9 @@ class Study extends React.Component {
 }
 
 
-const mapStateToProps = state => {
-	return {
-
-	}
-}
+const mapStateToProps = state => ({
+  targets: state.targets
+})
 
 const mapDispatchToProps = dispatch => {
 	return {
