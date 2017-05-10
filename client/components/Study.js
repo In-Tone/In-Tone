@@ -9,6 +9,23 @@ const Chart = require('chart.js');
 import { Grid } from 'react-bootstrap';
 import Pitchfinder from 'pitchfinder';
 
+import toWav from 'audiobuffer-to-wav';
+ 
+// request the MP3 as binary 
+// xhr({
+//   uri: 'audio/track.mp3',
+//   responseType: 'arraybuffer'
+// }, function (err, body, resp) {
+//   if (err) throw err
+//   // decode the MP3 into an AudioBuffer 
+//   audioContext.decodeAudioData(resp, function (buffer) {
+//     // encode AudioBuffer to WAV 
+//     var wav = toWav(buffer)
+    
+//     // do something with the WAV ArrayBuffer ... 
+//   })
+// })
+
 class Study extends React.Component {
 
 	constructor(props) {
@@ -113,7 +130,8 @@ class Study extends React.Component {
   134,
   134],
 			chartLabels: [],
-			audioBuffer: []
+			audioBuffer: [],
+      targetDuration: 0
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
 	}
@@ -150,6 +168,7 @@ class Study extends React.Component {
 	}
 
 	componentDidMount(){
+
 		let targetPitches = this.state.targetPitches;
 
     if (!window.AudioContext) {
@@ -173,12 +192,28 @@ class Study extends React.Component {
     lpFilter.frequency.value = 900;
     lpFilter.gain.value = 10;
 
+// Create a compressor node
+var compressor = context.createDynamicsCompressor();
+compressor.threshold.value = -50;
+compressor.knee.value = 40;
+compressor.ratio.value = 12;
+// compressor.reduction.value = -20;
+compressor.attack.value = 0;
+compressor.release.value = 0.25;
+
     // create analyzer node
     var viz = context.createAnalyser();
     viz.fftSize = 2048;
 
     // capture reference to this component so we can set state below
     var self = this;
+
+    var test = document.getElementById('soundSample');
+    test.onloadedmetadata = function() {
+      self.setState({
+        targetDuration: test.duration
+      });
+    }
 
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
     var constraints = { audio: true, video: false };
@@ -200,9 +235,10 @@ class Study extends React.Component {
         // create audioNode stream source with stream so we can route it through the audioContext
         var source = context.createMediaStreamSource(stream);
         // connect it to the nodes
-        source.connect(lpFilter);
-        lpFilter.connect(hpFilter);
-        hpFilter.connect(viz);
+        source.connect(viz);
+        // lpFilter.connect(hpFilter);
+        // hpFilter.connect(viz);
+        viz.connect(compressor);
 
         // grab DOM buttons
         var record = document.getElementById("Record");
@@ -211,6 +247,8 @@ class Study extends React.Component {
         // declare setInterval variable outside so we can kill the interval in a separate function
         var repeatDraw;
 
+        var duration = self.state.targetDuration;
+
         // onclick handler for record button
         record.onclick = function() {
             // connect stream to speakers, making it audible        
@@ -218,14 +256,14 @@ class Study extends React.Component {
             // call .start on mediaRecorder instance
             mediaRecorder.start();
             // setInterval to continually rerender waveform
-            record.style.background = "red";``
+            record.style.background = "red";
             record.style.color = "black";
             setTimeout(() => {
             	record.style.background = "";
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, 3500);
+            }, 2500);
         };
 
         // onclick handler for stop button
@@ -251,7 +289,6 @@ class Study extends React.Component {
             var clipLabel = document.createElement('p');
             var audio = document.getElementById('soundSample');
             var deleteButton = document.createElement('button');
-
 
             // add created audio element to page
             clipContainer.classList.add('clip');
@@ -280,13 +317,14 @@ class Study extends React.Component {
                 context.decodeAudioData(reader.result).then((data) => {
 
                 const detectPitch = new Pitchfinder.YIN();
+                const detectors = [detectPitch, Pitchfinder.AMDF()];
 
                 const float32Array = data.getChannelData(0); // get a single channel of sound
                 // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
 
                 // 500 bpm = 8.33 beats per second
                 // quantization = 4 --> 33.32 samples per second
-                let frequencies = Pitchfinder.frequencies(detectPitch, float32Array, {
+                let frequencies = Pitchfinder.frequencies(detectors, float32Array, {
                 tempo: 500, // in BPM, defaults to 120
                 quantization: 16, // samples per beat, defaults to 4 (i.e. 16th notes)
                 });
@@ -324,7 +362,6 @@ class Study extends React.Component {
 
                 console.log("frequencies", frequencies);
 
-
                     console.log("data", data);
                     self.setState({
                         arrayBuffer: data,
@@ -348,10 +385,9 @@ class Study extends React.Component {
     }).catch(function(err) {
         console.log(err);
     });
-	}
+}
 
 	render() {
-		console.log('state', this.state)
 		return (
 			<div className='studyDiv'>
 				<Card>
