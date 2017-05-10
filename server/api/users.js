@@ -1,8 +1,42 @@
-const router = require('express').Router();
-const User = require('../../db/models/User');
+'use strict'
 
-router.get('/me', (req, res, next) => {
-	res.json(req.user);
+// const db = require('../../db/db');
+const db = require('../../db/index.js');
+const User = db.model('user');
+const ToneType = db.model('toneType');
+const UserTone = db.model('UserTone');
+const {mustBeLoggedIn} = require('../auth');
+const router = require('express').Router();
+
+router.param('username',(req, res, next, username) => {
+			User.findOne({
+				where: { username: username },
+				include: [{ all: true }]
+			})
+				.then(foundUser => {
+					if (!foundUser) {
+						const err = new Error('User not found');
+						err.status = 404;
+						throw err;
+					}
+					req.user = foundUser;
+				})
+				.catch(next);
+});
+
+router.get('/:username', (req, res, next) => {
+			res.json(req.user);
+});
+
+router.post('/:username/:userTone/:toneType', (req, res, next) => {
+			UserTone.update(req.body, {
+				where: {
+					userId: req.user.id,
+					toneTypeId: req.params.toneType
+				}
+			})
+				.then(updatedTone => res.json(updatedTone))
+				.catch(next);
 });
 
 module.exports = router;

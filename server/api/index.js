@@ -1,9 +1,10 @@
-const router = require('express').Router();
+'use strict'
 
-// router.use('/users', require('./users'));
+const router = require('express').Router();
 
 router.use('/login', require('./login'));
 router.use('/users', require('./users'));
+router.use('/languages', require('./languages'));
 
 router.get('/', (req, res, next) => {
 	res.sendStatus(200);

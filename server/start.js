@@ -1,7 +1,7 @@
 // main.js/start.js/index.js
 
 // say our sequelize instance is create in 'db.js'
-const db = require('../db/db.js'); 
+const db = require('../db/index.js'); 
 
 // and our server is created in 'server.js'
 

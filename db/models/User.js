@@ -1,20 +1,22 @@
-const Sequelize = require('sequelize');
+const {STRING} = require('sequelize');
 const crypto = require('crypto');
 const _ = require('lodash');
 
-const db = require('../db');
-
-module.exports = db.define('user', {
+module.exports = db => db.define('user', {
 	email: {
-		type: Sequelize.STRING,
+		type: STRING,
 		unique: true,
 		allowNull: false
 	},
 	password: {
-		type: Sequelize.STRING
+		type: STRING,
+		allowNull: false
 	},
 	salt: {
-		type: Sequelize.STRING
+		type: STRING
+	},
+	username: {
+		type: STRING
 	}
 }, {
 	instanceMethods: {
@@ -47,4 +49,8 @@ function setSaltAndPassword (user) {
 		user.salt = user.Model.generateSalt();
 		user.password = user.Model.encryptPassword(user.password, user.salt);
 	}
+}
+
+module.exports.associations = (User, {UserTone}) => {
+	User.hasMany(UserTone)
 }

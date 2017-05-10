@@ -7,10 +7,11 @@ const request = require('supertest')
 		, app = require('../start')
 		, agent = request.agent(app)
 
-describe('/api/users', () => {
+describe('/api/items', () => {
 	before('Await database sync', () => {
 		return db.didSync
 		.then(() => {
+			// creates a new user just to pass the validation specs for contours
 			User.create({
 				email: 'test@user.net',
 				password: 'password',
@@ -23,24 +24,13 @@ describe('/api/users', () => {
 	})
 	afterEach('Clear the tables', () => db.truncate({ cascade: true}))
 
-	describe('GET /:id', () => {
+	describe('POST /:id', () => {
 
-		describe('Get a user', () => {
-			it('gets a user by id', () => {
-
-			})
-		})
-
-		describe('Get user contours per voicing', () => {
-			it('retrieves user contours by category', () => {
-
-			})
-		})
-
-		describe('Get all user contours', () => {
-			it('gets all contours by user', () => {
+		describe('Add a new contour', () => {
+			it('adds a new item AND properly associates it to user', () => {
 				
 			})
+
 		})
 
 	})
