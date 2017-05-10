@@ -9,34 +9,45 @@ const {mustBeLoggedIn} = require('../auth');
 const router = require('express').Router();
 
 router.param('username',(req, res, next, username) => {
-			User.findOne({
-				where: { username: username },
-				include: [{ all: true }]
-			})
-				.then(foundUser => {
-					if (!foundUser) {
-						const err = new Error('User not found');
-						err.status = 404;
-						throw err;
-					}
-					req.user = foundUser;
-				})
-				.catch(next);
+	User.findOne({
+		where: { username: username },
+		include: [{ all: true }]
+	})
+		.then(foundUser => {
+			if (!foundUser) {
+				const err = new Error('User not found');
+				err.status = 404;
+				throw err;
+			}
+			req.user = foundUser;
+			next();
+		})
+		.catch(next);
 });
 
 router.get('/:username', (req, res, next) => {
-			res.json(req.user);
+	res.send(req.user);
 });
 
-router.post('/:username/:userTone/:toneType', (req, res, next) => {
-			UserTone.update(req.body, {
-				where: {
-					userId: req.user.id,
-					toneTypeId: req.params.toneType
-				}
-			})
-				.then(updatedTone => res.json(updatedTone))
-				.catch(next);
-});
+router.post('/:username/:toneType', (req, res, next) => {
+	UserTone.findOne({
+		where: {
+			user_id: req.user.id,
+			tone_type_id: req.params.toneType
+		}
+	})
+		.then(userTone => {
+			if (!userTone) {
+				return res.sendStatus(404);
+			} else {
+				return userTone.update(req.body);
+			}
+		})
+		.then(updatedUserTone => {
+			res.send(updatedUserTone);
+		})
+		.catch(next)
+
+})
 
 module.exports = router;
