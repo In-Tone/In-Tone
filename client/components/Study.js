@@ -10,19 +10,19 @@ import { Grid } from 'react-bootstrap';
 import Pitchfinder from 'pitchfinder';
 
 import toWav from 'audiobuffer-to-wav';
- 
-// request the MP3 as binary 
+
+// request the MP3 as binary
 // xhr({
 //   uri: 'audio/track.mp3',
 //   responseType: 'arraybuffer'
 // }, function (err, body, resp) {
 //   if (err) throw err
-//   // decode the MP3 into an AudioBuffer 
+//   // decode the MP3 into an AudioBuffer
 //   audioContext.decodeAudioData(resp, function (buffer) {
-//     // encode AudioBuffer to WAV 
+//     // encode AudioBuffer to WAV
 //     var wav = toWav(buffer)
-    
-//     // do something with the WAV ArrayBuffer ... 
+
+//     // do something with the WAV ArrayBuffer ...
 //   })
 // })
 
@@ -36,102 +36,10 @@ class Study extends React.Component {
 			targetTranslation: '',
 			// chart data
 			userPitches: [],
-			targetPitches: [136,
-  221,
-  218,
-  216,
-  217,
-  218,
-  217,
-  217,
-  217,
-  217,
-  218,
-  139,
-  134,
-  139,
-  215,
-  212,
-  211,
-  208,
-  208,
-  208,
-  206,
-  206,
-  202,
-  200,
-  199,
-  197,
-  195,
-  193,
-  192,
-  191,
-  188,
-  184,
-  177,
-  179,
-  179,
-  178,
-  171,
-  170,
-  170,
-  170,
-  172,
-  172,
-  171,
-  170,
-  170,
-  170,
-  170,
-  170,
-  172,
-  172,
-  172,
-  173,
-  172,
-  174,
-  172,
-  174,
-  174,
-  176,
-  178,
-  179,
-  181,
-  185,
-  189,
-  192,
-  196,
-  200,
-  206,
-  210,
-  218,
-  224,
-  232,
-  240,
-  246,
-  258,
-  266,
-  274,
-  286,
-  296,
-  304,
-  315,
-  324,
-  332,
-  339,
-  347,
-  353,
-  356,
-  359,
-  356,
-  359,
-  359,
-  334,
-  134,
-  134],
+			targetPitches: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,219,217,217,217,218,218,217,211,208,207,204,200,196,193,188,183,179,86,170,170,170,170,170,171,172,173,173,174,177,180,186,193,202,215,227,244,261,285,298,320,337,353,356,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359],
 			chartLabels: [],
 			audioBuffer: [],
-      targetDuration: 0
+      targetDuration: 2321.655
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
 	}
@@ -141,7 +49,7 @@ class Study extends React.Component {
 		// mapDispatchToProps to get the right information for that language
 	}
 
-	// play target audio 
+	// play target audio
 	getTargetAudio(targetWord) {
 
 	}
@@ -192,14 +100,14 @@ class Study extends React.Component {
     lpFilter.frequency.value = 900;
     lpFilter.gain.value = 10;
 
-// Create a compressor node
-var compressor = context.createDynamicsCompressor();
-compressor.threshold.value = -50;
-compressor.knee.value = 40;
-compressor.ratio.value = 12;
-// compressor.reduction.value = -20;
-compressor.attack.value = 0;
-compressor.release.value = 0.25;
+    // Create a compressor node
+    var compressor = context.createDynamicsCompressor();
+    compressor.threshold.value = -50;
+    compressor.knee.value = 40;
+    compressor.ratio.value = 12;
+    // compressor.reduction.value = -20;
+    compressor.attack.value = 0;
+    compressor.release.value = 0.25;
 
     // create analyzer node
     var viz = context.createAnalyser();
@@ -210,9 +118,10 @@ compressor.release.value = 0.25;
 
     var test = document.getElementById('soundSample');
     test.onloadedmetadata = function() {
-      self.setState({
-        targetDuration: test.duration
-      });
+        console.log('test.duration', test.duration)
+    //   self.setState({
+    //     targetDuration: test.duration
+    //   });
     }
 
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
@@ -251,7 +160,8 @@ compressor.release.value = 0.25;
 
         // onclick handler for record button
         record.onclick = function() {
-            // connect stream to speakers, making it audible        
+            console.log('duration', duration)
+            // connect stream to speakers, making it audible
             viz.connect(context.destination);
             // call .start on mediaRecorder instance
             mediaRecorder.start();
@@ -263,7 +173,7 @@ compressor.release.value = 0.25;
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, 2500);
+            }, duration);
         };
 
         // onclick handler for stop button
@@ -283,7 +193,7 @@ compressor.release.value = 0.25;
 
             // prompt to name the file
             var clipName = prompt('Enter a name for your sound clip');
-            
+
             // create audio element to post to page
             var clipContainer = document.createElement('article');
             var clipLabel = document.createElement('p');
@@ -313,7 +223,7 @@ compressor.release.value = 0.25;
             reader.addEventListener("loadend", function() {
                 // not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
                 // var buffer = new Uint8Array(reader.result);
-                
+
                 context.decodeAudioData(reader.result).then((data) => {
 
                 const detectPitch = new Pitchfinder.YIN();
@@ -326,32 +236,48 @@ compressor.release.value = 0.25;
                 // quantization = 4 --> 33.32 samples per second
                 let frequencies = Pitchfinder.frequencies(detectors, float32Array, {
                 tempo: 500, // in BPM, defaults to 120
-                quantization: 16, // samples per beat, defaults to 4 (i.e. 16th notes)
-                });
+                quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
+                }).map(freq => Math.round(freq));
+
+                let results = [];
+
+                frequencies.forEach(freq => {
+                    if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
+                        if (!results.length) {
+                            results.push(0);
+                        } else {
+                            results.push(results[results.length - 1])
+                        }
+                    } else {
+                        results.push(freq);
+                    }
+                })
+
+                // filter out bad data - hacky for now, throws out nulls and high values
+                // frequencies = frequencies.filter(freq => {
+                // if (typeof freq === 'number') {
+                //   return freq < 1000
+                // }
+                // return false
+                // }).map(freq => Math.round(freq))
 
                 console.log('all freqs: ', frequencies)
-                // filter out bad data - hacky for now, throws out nulls and high values
-                frequencies = frequencies.filter(freq => {
-                if (typeof freq === 'number') {
-                  return freq < 1000
-                }
-                return false
-                }).map(freq => Math.round(freq))
-
+                console.log('target pitches', self.state.targetPitches)
+                console.log("results frequencies", results);
 
                 var chartCtx = document.getElementById("studyChart").getContext("2d");
 
                 let myLineChart = new Chart(chartCtx, {
                 type: 'line',
                 data: {
-                	labels: targetPitches,
+                	labels: results,
 	                datasets: [{
-                    label: 'user pitch',
-                    data: frequencies,
-                    borderCapStyle: 'butt',
-                    borderColor: 'blue'
-	                },
-	                {
+                        label: 'user pitch',
+                        data: results,
+                        borderCapStyle: 'butt',
+                        borderColor: 'blue'
+                        },
+                        {
 	                	label: 'target pitch',
 	                	data: targetPitches,
 	                	borderCapStyle: 'butt',
@@ -360,7 +286,7 @@ compressor.release.value = 0.25;
                 }
                 });
 
-                console.log("frequencies", frequencies);
+
 
                     console.log("data", data);
                     self.setState({
@@ -400,7 +326,7 @@ compressor.release.value = 0.25;
 					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
 						<RaisedButton label='Tone' />
 						<RaisedButton label='Record' id='Record'/>
-						<DropDownMenu 
+						<DropDownMenu
 							value={this.state.languageValue}
 							style={{width:'15%'}}
 							autoWidth={false}
