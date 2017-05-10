@@ -41,17 +41,13 @@ class Modes extends React.Component {
   }
 
   // language for the dispatch 
-  languageSelect(event, index, value) {
-    // only problem here is getting the language...
-    console.log('event?', event)
-    console.log('index?', index)
-    console.log('value?', value)
-
-    //let language = value.toLowerCase();
-    //this.fetchTargets(language);
+  languageSelect(event, selected) {
+    let language = selected.toLowerCase();
+    this.fetchTargets(language);
   }
 
-  buttonSelected(e) {
+  // work on this 
+  buttonSelected(target) {
     backgroundColor= 'blue'
   }
 
@@ -60,26 +56,20 @@ class Modes extends React.Component {
       // select language radio buttons
       case 0:
         return (
-          <RadioButtonGroup name='languageSelect' defaultSelected='thai'>
+          <RadioButtonGroup name='languageSelect' defaultSelected='thai' onChange={this.languageSelect}>
             <RadioButton 
-              onClick={this.languageSelect}
-              value='light'
-              label='Thai'
-              // insert styles here
+              label='ThaiButton'
+              value = 'Thai' 
             />
             <RadioButton 
-              onClick={this.languageSelect}
-              value='light'
-              label='Chinese'
+              label='ChineseButton'
+              value='Chinese'
               disabled={true}
-              // insert styles here
             />
             <RadioButton 
-              onClick={this.languageSelect}
-              value='light'
-              label='Hmong'
+              label='HmongButton'
+              value='Hmong'
               disabled={true}
-              // insert styles here
             />
           </RadioButtonGroup>
         )
