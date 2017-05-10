@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const SET_TARGETS = 'SET_TARGETS'
 
 export const setTargets = (targets) => ({
@@ -6,10 +8,11 @@ export const setTargets = (targets) => ({
 });
 
 export const fetchTargets = (language) =>
-	dispatch =>
-		axios.get(`api/languages/${language}`)
+	dispatch => {
+		axios.get(`api/targets/${language}`)
 			.then(targets => dispatch(setTargets(targets)))
 			.catch(err => console.error(err))
+	}
 
 const reducer = (state=[], action) => {
 	switch(action.type) {
