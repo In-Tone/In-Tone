@@ -164,20 +164,33 @@ class Study extends React.Component {
 
         // onclick handler for record button
         record.onclick = function() {
-            console.log('duration', duration)
-            // connect stream to speakers, making it audible
-            viz.connect(context.destination);
-            // call .start on mediaRecorder instance
-            mediaRecorder.start();
-            // setInterval to continually rerender waveform
-            record.style.background = "red";
-            record.style.color = "black";
+            console.log('duration', duration);
+            var countdown = document.getElementById('countdown');
+            console.log(countdown);
+            var seconds = 3;
+            countdown.innerHTML = seconds;
+            var countdownTimer = setInterval(() => {
+                seconds = seconds-1;
+                countdown.innerHTML = (seconds > 0) ? seconds : "Go!";
+            }, 1000);
             setTimeout(() => {
+                clearInterval(countdownTimer);
+                record.style.background = "red";
+                record.style.color = "black";
+            }, 3000);
+            setTimeout(() => {
+                // connect stream to speakers, making it audible
+                viz.connect(context.destination);
+                // call .start on mediaRecorder instance
+                mediaRecorder.start();
+            }, 3500);
+            setTimeout(() => {
+                // setInterval to continually rerender waveform
             	record.style.background = "";
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, duration);
+            }, duration+3500);
         };
 
         // onclick handler for stop button
@@ -371,7 +384,9 @@ class Study extends React.Component {
 					</CardMedia>
 					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
 						<RaisedButton label='Tone' onClick={this.logger} />
-						<RaisedButton label='Record' id='Record'/>
+						<RaisedButton id='Record'>
+              <p id="countdown">Record</p>
+            </RaisedButton>
 						<DropDownMenu
 							value={this.state.languageValue}
 							style={{width:'15%'}}
