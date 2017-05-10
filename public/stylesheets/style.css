@@ -34,6 +34,10 @@ button {
 	border: solid 5px black;
 }
 
+#modes-container {
+	height: auto;
+	width: auto;
+}
 
 #canvas-container {
    width: 100%;
