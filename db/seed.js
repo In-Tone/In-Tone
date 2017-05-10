@@ -3,20 +3,73 @@
 
 // all our models were initialized and assigned as properties on db object, allowing us to destructure here:
 const db = require('./index') // in bones it was const db = require('APP/db') (symlink)
-const {Target} = db
-const {ToneType} = db
+const {Target, ToneType, User, UserTone} = db
 const {mapValues} = require('lodash');
 const Promise = require('bluebird');
 
 function seedEverything() {
 	const seeded = {
-		toneTypes: toneTypes()
+		toneTypes: toneTypes(),
+		users: users()
 	}
-	seeded.targets = targets(seeded)
+
+	// below are for models with belongsTo associations
+	seeded.targets = targets(seeded);
+	seeded.userTones = userTones(seeded);
 
 	return Promise.props(seeded)
 
 }
+
+const userTones = seed(UserTone, ({users, toneTypes}) => ({
+	marcTones: {
+		pitches: [],
+		wavblob: {},
+		user_id: 1,
+		tone_type_id: 1
+	},
+	pimTones: {
+		pitches: [],
+		wavblob: {},
+		user_id: 2,
+		tone_type_id: 1
+	},
+	edmondTones: {
+		pitches: [],
+		wavblob: {},
+		user_id: 3,
+		tone_type_id: 1
+	},
+	mikeTones: {
+		pitches: [],
+		wavblob: {},
+		user_id: 4,
+		tone_type_id: 1
+	}
+}))
+
+const users = seed(User, {
+	marc: {
+		email: 'marc@test.com',
+		password: 'test',
+		username: 'marcyMarc'
+	},
+	pim: {
+		email: 'pim@test.com',
+		password: 'test',
+		username: 'pimmyPim'
+	},
+	edmond: {
+		email: 'edmond@test.com',
+		password: 'test',
+		username: 'eddyEdmond'
+	},
+	mike: {
+		email: 'mike@test.com',
+		password: 'test',
+		username: 'mikeyMike'
+	},
+})
 
 const toneTypes = seed(ToneType, {
 	thaiMid: {
