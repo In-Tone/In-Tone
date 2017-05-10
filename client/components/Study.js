@@ -36,10 +36,10 @@ class Study extends React.Component {
 			targetTranslation: '',
 			// chart data
 			userPitches: [],
-			targetPitches: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,219,217,217,217,218,218,217,211,208,207,204,200,196,193,188,183,179,86,170,170,170,170,170,171,172,173,173,174,177,180,186,193,202,215,227,244,261,285,298,320,337,353,356,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359,359],
+			targetPitches: [83,87,87,87,87,87,87,87,87,92,281,281,283,281,277,276,276,276,276,277,277,279,279,281,281,277,277,272,271,264,261,255,246,231,208,193,170,155,145,142,142,142],
 			chartLabels: [],
 			audioBuffer: [],
-      targetDuration: 2321.655
+            targetDuration: 641.587
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
 	}
@@ -77,7 +77,7 @@ class Study extends React.Component {
 
 	componentDidMount(){
 
-		let targetPitches = this.state.targetPitches;
+	let targetPitches = this.state.targetPitches;
 
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
@@ -119,9 +119,6 @@ class Study extends React.Component {
     var test = document.getElementById('soundSample');
     test.onloadedmetadata = function() {
         console.log('test.duration', test.duration)
-    //   self.setState({
-    //     targetDuration: test.duration
-    //   });
     }
 
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
@@ -261,28 +258,70 @@ class Study extends React.Component {
                 // return false
                 // }).map(freq => Math.round(freq))
 
-                console.log('all freqs: ', frequencies)
-                console.log('target pitches', self.state.targetPitches)
+                console.log('all freqs: ', frequencies);
+                console.log('target pitches', targetPitches);
                 console.log("results frequencies", results);
 
+
+                var outerArray =[];
+
+                targetPitches.map((pitch, i) => {
+                    var diff = Math.abs(pitch - results[i]);
+                    if (diff > 0 && diff < 10) {
+                        outerArray.push([diff, i]);
+                    }
+                })
+
+                // for (let i = 0; i < targetPitches.length; i++) {
+                //     var innerArray =[];
+                //     if (targetPitches[i] === 0) {
+                //         continue;
+                //     }
+                //     for (let k = 0; k < results.length; k++) {
+                //             if (Math.abs(targetPitches[i] - results[k]) < 20) {
+                //             innerArray.push(targetPitches[i]);
+                //             innerArray.push(results[k]);
+                //             outerArray.push(innerArray);
+                //         }
+                //         innerArray = [];
+                //     }
+                // }
+
+                console.log("test comparison", outerArray);
+
                 var chartCtx = document.getElementById("studyChart").getContext("2d");
+
+                var index = outerArray[0][1];
+
+                var one = results.slice(index);
+                var two = targetPitches.slice(index);
+                var three = outerArray.map(arr => arr[0]);
+
+                console.log("one", one);
+                console.log("two", two);
 
                 let myLineChart = new Chart(chartCtx, {
                 type: 'line',
                 data: {
-                	labels: results,
+                	labels: one,
 	                datasets: [{
                         label: 'user pitch',
-                        data: results,
+                        data: one,
                         borderCapStyle: 'butt',
                         borderColor: 'blue'
                         },
                         {
 	                	label: 'target pitch',
-	                	data: targetPitches,
+	                	data: two,
 	                	borderCapStyle: 'butt',
 	                	borderColor: 'red'
-	                }]
+	                },
+                    {
+                        label: 'difference',
+                        data: three,
+                        borderCapStyle: 'butt',
+                        borderColor: 'green'
+                    }]
                 }
                 });
 
@@ -342,7 +381,7 @@ class Study extends React.Component {
 					</CardActions>
 				</Card>
 				<br />
-				<audio controls id='soundSample' src='/audio/Rising-Nhai-Where.wav'/>
+				<audio controls id='soundSample' src='/audio/Falling-Chai-Yes-Clipped.wav'/>
 				<Paper zDepth={1}>
 					<canvas id='studyChart' ></canvas>
 				</Paper>
