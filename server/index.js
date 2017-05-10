@@ -4,6 +4,7 @@ const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const volleyball = require('volleyball');
+const db = require('../db/index.js'); 
 
 app.use(volleyball);
 
@@ -15,11 +16,14 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(port, function () {
-  console.log("Knock, knock");
-  console.log("Who's there?");
-  console.log("Your server, listening on port 3000");
-});
+db.sync()
+  .then(() => {
+    app.listen(port, function () {
+      console.log("Knock, knock");
+      console.log("Who's there?");
+      console.log("Your server, listening on port 3000");
+    });
+  })
 
 app.use(session({
 	secret: process.env.SESSION_SECRET || 'remove me',

@@ -14,5 +14,8 @@ Object.assign(db, require('./models/index.js')(db), {createAndSync});
 db.didSync = db.createAndSync();
 
 function createAndSync(force=false) {
-	return db.sync({force});
+	return db.sync({force})
+		.then(() => { console.log(`Synced models to db: ${url}`)
+		.catch(err => { console.log(err)});
+	});
 }
