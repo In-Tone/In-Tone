@@ -15,7 +15,6 @@ db.didSync = db.createAndSync();
 
 function createAndSync(force=false) {
 	return db.sync({force})
-		.then(() => { console.log(`Synced models to db: ${url}`)
+		.then(() => { console.log(`Synced models to db: ${url}`) })
 		.catch(err => { console.log(err)});
-	});
 }
