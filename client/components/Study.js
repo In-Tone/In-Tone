@@ -6,25 +6,8 @@ import {Card, CardActions, CardMedia, CardTitle} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 const Chart = require('chart.js');
-import { Grid } from 'react-bootstrap';
 import Pitchfinder from 'pitchfinder';
-
-import toWav from 'audiobuffer-to-wav';
-
-// request the MP3 as binary
-// xhr({
-//   uri: 'audio/track.mp3',
-//   responseType: 'arraybuffer'
-// }, function (err, body, resp) {
-//   if (err) throw err
-//   // decode the MP3 into an AudioBuffer
-//   audioContext.decodeAudioData(resp, function (buffer) {
-//     // encode AudioBuffer to WAV
-//     var wav = toWav(buffer)
-
-//     // do something with the WAV ArrayBuffer ...
-//   })
-// })
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class Study extends React.Component {
 
@@ -163,8 +146,11 @@ class Study extends React.Component {
 
   }
 
-  componentDidMount(){
+  componentWillMount() {
     const targets = this.props.targets;
+    const pitches = this.state.pitches;
+
+    console.log('what is targets', targets)
     this.setState({ targets });
 
     let randNum = Math.floor(Math.random()*targets.length);
@@ -181,6 +167,10 @@ class Study extends React.Component {
       wav: targets[randNum].wav,
       duration: targets[randNum].duration
     });
+  }
+
+  componentDidMount(){
+    const pitches = this.state.pitches;
 
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
@@ -286,7 +276,7 @@ class Study extends React.Component {
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, duration+3500);
+            }, 3500+duration);
         };
 
         // onclick handler for stop button
@@ -375,27 +365,27 @@ class Study extends React.Component {
                 // }).map(freq => Math.round(freq))
 
                 console.log('all freqs: ', frequencies);
-                console.log('target pitches', targetPitches);
+                console.log('target pitches', pitches);
                 console.log("results frequencies", results);
 
 
                 var outerArray =[];
 
-                targetPitches.map((pitch, i) => {
+                pitches.map((pitch, i) => {
                     var diff = Math.abs(pitch - results[i]);
                     if (diff > 0 && diff < 10) {
                         outerArray.push([diff, i]);
                     }
                 })
 
-                // for (let i = 0; i < targetPitches.length; i++) {
+                // for (let i = 0; i < pitches.length; i++) {
                 //     var innerArray =[];
-                //     if (targetPitches[i] === 0) {
+                //     if (pitches[i] === 0) {
                 //         continue;
                 //     }
                 //     for (let k = 0; k < results.length; k++) {
-                //             if (Math.abs(targetPitches[i] - results[k]) < 20) {
-                //             innerArray.push(targetPitches[i]);
+                //             if (Math.abs(pitches[i] - results[k]) < 20) {
+                //             innerArray.push(pitches[i]);
                 //             innerArray.push(results[k]);
                 //             outerArray.push(innerArray);
                 //         }
@@ -410,7 +400,7 @@ class Study extends React.Component {
                 var index = outerArray[0][1];
 
                 var one = results.slice(index);
-                var two = targetPitches.slice(index);
+                var two = pitches.slice(index);
                 var three = outerArray.map(arr => arr[0]);
 
                 console.log("one", one);
@@ -489,29 +479,35 @@ class Study extends React.Component {
         )
 
 	   return (
-		<div className='studyDiv'>
-		  <Card>
-		      <CardMedia
-				overlay={<CardTitle title={transliteration} subtitle={englishTranslation}/>}
-			  >
-			  {/* REPLACE WITH PROPS.TARGET_IMAGE */}
-			  <img src={'http://i.imgur.com/Ht2BR2T.png'} />
-		      </CardMedia>
-			  <CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                <RaisedButton label='Previous' onClick={this.previous}/>
-				<RaisedButton id='Record'>
-                    <p id="countdown">Record</p>
-                </RaisedButton>
-                <RaisedButton label='Next' onClick={this.randomReset}/>
-			</CardActions>
-		  </Card>
-		  <br />
-			<audio controls id='soundSample' src={wav}/>
-			<Paper zDepth={1}>
-				<canvas id='studyChart' ></canvas>
-			</Paper>
-			<div id='soundClips'></div>
-		</div>
+            <div className='studyDiv'>
+
+                <Row className='show-grid'>
+                    <Col lg={6}>
+                        <Paper zDepth={1}>
+                            <img src={image} />
+                            <h1>{transliteration}</h1>
+                            <h2>{englishTranslation}</h2>
+                        </Paper>
+                    </Col>
+                    <Col lg={6}>
+                        <Paper zDepth={1}>
+                            <RaisedButton label='Previous' onClick={this.previous}/>
+                            <RaisedButton id='Record'>
+                                <p id="countdown">Record</p>
+                            </RaisedButton>
+                            <RaisedButton label='Next' onClick={this.randomReset}/>
+                            <audio controls id='soundSample' src={wav}/>
+                            <div id='soundClips'></div>
+                        </Paper>
+                    </Col>
+                </Row>
+
+                <br />
+
+                <Paper zDepth={1}>
+                    <canvas id='studyChart' ></canvas>
+                </Paper>
+            </div>
 		)
     }
 }
