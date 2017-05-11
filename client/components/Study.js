@@ -50,6 +50,7 @@ class Study extends React.Component {
       pitches: [],
       nativeSpelling: '',
       transliteration: '',
+      duration: '',
       wav: ''
 
 		}
@@ -95,10 +96,11 @@ class Study extends React.Component {
 	}
 
   logger() {
-    console.log(this.targets);
+    console.log(this.state);
   }
 
   randomReset() {
+    let targets = this.state.targets;
     let currentToneId = this.state.toneId;
     let randNum = Math.floor(Math.random()*targets.length);
 
@@ -134,7 +136,8 @@ class Study extends React.Component {
       pitches: targets[randNum].pitches,
       nativeSpelling: targets[randNum].nativeSpelling,
       transliteration: targets[randNum].transliteration,
-      wav: targets[randNum].wav
+      wav: targets[randNum].wav,
+      duration: targets[randNum].duration
     });
 
     if (!window.AudioContext) {
