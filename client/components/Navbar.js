@@ -16,10 +16,9 @@ class Navbar extends Component {
 	render() {
 		return (
 			<AppBar
-			title={<Link to='/modes'><FlatButton
-				style={{color:'white'}}>Train</FlatButton></Link>}
+			title={<Link to='/modes'><FlatButton style={{color:'white'}}>Train</FlatButton></Link>}
 			iconElementLeft={<Link to='/'><FlatButton label="Home" style={{color:'white'}} /></Link>}
-			iconElementRight={<FlatButton label="Login" />}
+			iconElementRight={<Link to='/'><FlatButton label="Login" style={{color:'white'}} /></Link>}
 			/>
 		)
 	}

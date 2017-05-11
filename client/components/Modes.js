@@ -5,14 +5,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import { fetchTargets } from '../reducers/Targets'
+import Paper from 'material-ui/Paper';
+import { fetchTargets } from '../reducers/Targets';
 
 class Modes extends React.Component {
   constructor(props){
     super(props)
     this.state = {
       finished: false,
-      stepIndex: 0
+      stepIndex: 0,
+      studyMode: ''
     }
     // dispatch/state to props
     this.fetchTargets = this.props.fetchTargets;
@@ -21,15 +23,15 @@ class Modes extends React.Component {
     this.handleNext = this.handleNext.bind(this);
     this.handlePrev = this.handlePrev.bind(this);
     this.languageSelect = this.languageSelect.bind(this);
-    this.buttonSelected = this.buttonSelected.bind(this);
   }
 
   handleNext() {
     // object destructuring to get stepIndex
     const {stepIndex} = this.state;
+    console.log('step index', stepIndex)
     this.setState({
       stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2
+      finished: stepIndex >= 1
     });
   }
 
@@ -46,30 +48,27 @@ class Modes extends React.Component {
     this.fetchTargets(language);
   }
 
-  // work on this 
-  buttonSelected(target) {
-    backgroundColor= 'blue'
-  }
-
   getStepContent(stepIndex) {
     switch (stepIndex) {
-      // select language radio buttons
       case 0:
         return (
           <RadioButtonGroup name='languageSelect' defaultSelected='thai' onChange={this.languageSelect}>
             <RadioButton 
-              label='ThaiButton'
-              value = 'Thai' 
-            />
-            <RadioButton 
-              label='ChineseButton'
+              label='Chinese'
               value='Chinese'
               disabled={true}
+              style={{margin: '8.5% 0 8.5% 0', height: '25%'}}
             />
             <RadioButton 
-              label='HmongButton'
+              label='Thai'
+              value = 'Thai'
+              style={{margin: '8.5% 0 8.5% 0', height: '25%'}}
+            />
+            <RadioButton 
+              label='Hmong'
               value='Hmong'
               disabled={true}
+              style={{margin: '8.5% 0 8.5% 0', height: '25%'}}
             />
           </RadioButtonGroup>
         )
@@ -77,13 +76,18 @@ class Modes extends React.Component {
       case 1:
         return (
           <div>
-            <RaisedButton label={'play'} disabled={true} fullWidth={true} onClick={this.buttonSelected} />
-            <RaisedButton label={'study'} fullWidth={true}/>
-            <RaisedButton label={'demo'} disabled={true} fullWidth={true}/>
+            <RaisedButton label={'Play'} labelStyle={{fontSize:42}}  disabled={true} className='optionButtons'/>
+            <Link to={'study'}>
+              <RaisedButton label="Study" labelStyle={{fontSize:42}}value = "Study" className='optionButtons'
+              />
+            </Link>
+            <RaisedButton label={'Demo'} labelStyle={{fontSize:42}} disabled={true}  className='optionButtons'/>
           </div>
         )
       default:
-        return 'step up 2: electric boogaloo'
+        return (
+          <h1> You Shall Not Pass </h1>
+        )
     }
   }
 
@@ -91,6 +95,7 @@ class Modes extends React.Component {
     const {finished, stepIndex} = this.state;
     return (
       <div className='studyDiv'>
+      <Paper>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel> Select Language </StepLabel>
@@ -98,13 +103,10 @@ class Modes extends React.Component {
           <Step>
             <StepLabel> Select Training Style </StepLabel>
           </Step>
-          <Step>
-            <StepLabel> Gerps </StepLabel>
-          </Step>
         </Stepper>
         <div>
           {finished ? (
-            <h1> Finished </h1>
+            <div></div>
           ) : (
             <div>
               <h2>{this.getStepContent(stepIndex)}</h2>
@@ -115,57 +117,23 @@ class Modes extends React.Component {
                 onClick={this.handlePrev}
               />
               <FlatButton
-                label={stepIndex === 2 ? 'Train!' : 'Next'}
+                label={'Next'}
+                disabled={stepIndex === 1}
                 primary={true}
                 onClick={this.handleNext}
               />
             </div>
           )}
         </div>
-      </div>
+      </Paper>
+    </div>
     )
   }
 }
 
-const mapStateToProps = state => {
-  return {
-
-  }
-}
+// null until/if we end up using mapState
+const mapStateToProps = null;
 
 const mapDispatchToProps = { fetchTargets }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modes);
-
-/*const play = {
-  margin: 12,
-  height: '200px',
-  width: '1800px',
-  display: 'inline',
-};
-
-const study = {
-  margin: 12,
-  height: '200px',
-  width: '1800px',
-  display: 'inline',
-  color: 'blue'
-};
-
-const demo = {
-  margin: 12,
-  height: '200px',
-  width: '1800px',
-  display: 'inline',
-  color: 'green'
-};
-
-const Modes = () => (
-	<div>
-		<div id="modes-container">
-	    {button('PLAY', null, play, "play")}
-	    {button('STUDY', null, study, "study")}
-	    {button('DEMO', null, demo, "demo")}
-		</div>
-	</div>
-)*/

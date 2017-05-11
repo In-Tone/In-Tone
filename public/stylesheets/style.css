@@ -71,3 +71,10 @@ button {
 	margin: auto;
 	padding-top: 2%;
 }
+
+/* MODES COMPONENT STYLES */
+.optionButtons {
+	width: 80%;
+	padding: 5% 0 5% 0;
+	height: 15;
+}
