@@ -16,6 +16,7 @@ class Navbar extends Component {
 	render() {
 		return (
 			<AppBar
+			style={{position: 'fixed'}}
 			title={<Link to='/modes'><FlatButton style={{color:'white'}}>Train</FlatButton></Link>}
 			iconElementLeft={<Link to='/'><FlatButton label="Home" style={{color:'white'}} /></Link>}
 			iconElementRight={<Link to='/'><FlatButton label="Login" style={{color:'white'}} /></Link>}
