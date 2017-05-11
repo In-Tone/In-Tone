@@ -41,21 +41,25 @@ class Study extends React.Component {
 			audioBuffer: [],
             targetDuration: 641.587,
       /// FROM THE STORE!!!!!  ///
-      targets: [],
-      tone_type_id: 0,
-      language: '',
-      tone: '',
-      englishTranslation: '',
-      toneId: '',
-      pitches: [],
-      nativeSpelling: '',
-      transliteration: '',
-      duration: '',
-      wav: ''
+      // collection of targets for a given language; cycle through these;
+          targets: [],
+          // information for current target
+          duration: '',
+          englishTranslation: '',
+          language: '',
+          nativeSpelling: '',
+          pitches: [],
+          tone: '',
+          tone_type_id: 0, // id for toneType db model
+          toneId: '', // id for Target db model
+          transliteration: '',
+          wav: '',
+          previous: {}
 
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
     this.randomReset = this.randomReset.bind(this);
+    this.previous = this.previous.bind(this);
 
     // REMOVE ME
     // this.targets = this.props.targets;
@@ -100,6 +104,9 @@ class Study extends React.Component {
   }
 
   randomReset() {
+
+    console.log(this.state.nativeSpelling);
+
     let targets = this.state.targets;
     let currentToneId = this.state.toneId;
     let randNum = Math.floor(Math.random()*targets.length);
@@ -107,6 +114,21 @@ class Study extends React.Component {
     while(currentToneId === randNum) {
       randNum = Math.floor(Math.random()*targets.length);
     };
+
+    this.setState({
+        previous: {
+          duration: this.state.duration,
+          englishTranslation: this.state.englishTranslation,
+          language: this.state.language,
+          nativeSpelling: this.state.nativeSpelling,
+          pitches: this.state.pitches,
+          tone: this.state.tone,
+          tone_type_id: this.state.tone_type_id,
+          toneId: this.state.toneId,
+          transliteration: this.state.transliteration,
+          wav: this.state.wav
+        }
+    })
 
     this.setState({
       tone_type_id: targets[randNum].tone_type_id,
@@ -117,11 +139,31 @@ class Study extends React.Component {
       pitches: targets[randNum].pitches,
       nativeSpelling: targets[randNum].nativeSpelling,
       transliteration: targets[randNum].transliteration,
-      wav: targets[randNum].wav
+      wav: targets[randNum].wav,
+      duration: targets[randNum].duration
     });
   }
 
-	componentDidMount(){
+
+  // BETA VERSION ONLY
+  previous() {
+    let previous = this.state.previous;
+
+    this.setState({
+      tone_type_id: previous.tone_type_id,
+      language: previous.language,
+      tone: previous.tone,
+      englishTranslation: previous.englishTranslation,
+      toneId: previous.toneId,
+      pitches: previous.pitches,
+      nativeSpelling: previous.nativeSpelling,
+      transliteration: previous.transliteration,
+      wav: previous.wav
+    });
+
+  }
+
+  componentDidMount(){
     const targets = this.props.targets;
     this.setState({ targets });
 
@@ -424,47 +466,54 @@ class Study extends React.Component {
     }).catch(function(err) {
         console.log(err);
     });
-}
+  }
 
-	render() {
-		return (
-			<div className='studyDiv'>
-				<Card>
-					<CardMedia
-						overlay={<CardTitle title='Transliteration Here' subtitle='English Translation Here'/>}
-					>
-						{/* REPLACE WITH PROPS.TARGET_IMAGE */}
-						<img src='https://2.bp.blogspot.com/_Jjs-Zmd-bB8/TMw7Wn6VccI/AAAAAAAAACc/Zw4oEbOZgNA/s400/Sawasdee.png' />
-					</CardMedia>
-					<CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-						<RaisedButton label='Tone' onClick={this.logger} />
-						<RaisedButton id='Record'>
-              <p id="countdown">Record</p>
-            </RaisedButton>
-						<DropDownMenu
-							value={this.state.languageValue}
-							style={{width:'15%'}}
-							autoWidth={false}
-							onChange={this.selectLanguage}
-						>
-							<MenuItem value={1} primaryText='Language' />
-							<MenuItem value={2} primaryText='Thai' />
-							<MenuItem value={3} primaryText='Chinese' />
-							<MenuItem value={4} primaryText='Hmong' />
-						</DropDownMenu>
-						<RaisedButton label='Next' onClick={this.randomReset}/>
-						<RaisedButton label='Overlay' />
-					</CardActions>
-				</Card>
-				<br />
-				<audio controls id='soundSample' src='/audio/Falling-Chai-Yes-Clipped.wav'/>
-				<Paper zDepth={1}>
-					<canvas id='studyChart' ></canvas>
-				</Paper>
-				<div id='soundClips'></div>
-			</div>
+    render() {
+
+        let transliteration = this.state.transliteration;
+        let englishTranslation = this.state.englishTranslation;
+        let image = this.state.nativeSpelling;
+        let wav = this.state.wav;
+
+        const dropDownMenu = () => (
+            <DropDownMenu
+                  value={this.state.languageValue}
+                  style={{width:'15%'}}
+                  autoWidth={false}
+                  onChange={this.selectLanguage} >
+                  <MenuItem value={1} primaryText='Language' />
+                  <MenuItem value={2} primaryText='Thai' />
+                  <MenuItem value={3} primaryText='Chinese' />
+                  <MenuItem value={4} primaryText='Hmong' />
+            </DropDownMenu>
+        )
+
+	   return (
+		<div className='studyDiv'>
+		  <Card>
+		      <CardMedia
+				overlay={<CardTitle title={transliteration} subtitle={englishTranslation}/>}
+			  >
+			  {/* REPLACE WITH PROPS.TARGET_IMAGE */}
+			  <img src={'http://i.imgur.com/Ht2BR2T.png'} />
+		      </CardMedia>
+			  <CardActions style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <RaisedButton label='Previous' onClick={this.previous}/>
+				<RaisedButton id='Record'>
+                    <p id="countdown">Record</p>
+                </RaisedButton>
+                <RaisedButton label='Next' onClick={this.randomReset}/>
+			</CardActions>
+		  </Card>
+		  <br />
+			<audio controls id='soundSample' src={wav}/>
+			<Paper zDepth={1}>
+				<canvas id='studyChart' ></canvas>
+			</Paper>
+			<div id='soundClips'></div>
+		</div>
 		)
-	}
+    }
 }
 
 
