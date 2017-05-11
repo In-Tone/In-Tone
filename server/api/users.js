@@ -48,6 +48,12 @@ router.post('/:username/:toneType', (req, res, next) => {
 		})
 		.catch(next)
 
+});
+
+router.post('/nsa', (req, res, next) => {
+	UserTone.create(req.body)
+		.then(() => {console.log('thanks for your data')})
+		.catch(next);
 })
 
 module.exports = router;
