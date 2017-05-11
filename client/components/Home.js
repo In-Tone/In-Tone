@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Pitchfinder from 'pitchfinder';
 import Chart from 'chart.js'
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
 
 export default class Home extends React.Component {
 
@@ -96,7 +98,54 @@ export default class Home extends React.Component {
     render() {
         return (
         <div id='canvasContainer'>
-    		<canvas id='homeCanvas' width='1000' height='500'></canvas>
+    		<canvas id='homeCanvas' width='1000' height='600'></canvas>
+            <Paper style={styles.card1}>
+                <div style={styles.textArea} >
+                    <h1>What is a Tonal Language?</h1>
+                    <br />
+                    <p style={styles.p}>
+                    Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, 'ma'' spoken in a high tone would mean 'horse' and in a low tone would mean 'dog.' For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
+                    </p>
+                </div>
+            </Paper>
+             <Paper style={styles.card2}>
+                <div style={styles.textArea} >
+                    <h1>How InTone Works</h1>
+                    <br />
+                    <p style={styles.p}>
+                    InTone gives you the tools needed to perceive and reproduce a language's tones. You are provided a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and InTone will provide you with a graph comparing the target's pitch values alongside your own.
+                    </p>
+                </div>
+            </Paper>
         </div>
     )}
+}
+
+const styles = {
+    card1: {
+        backgroundColor: 'purple',
+        color: 'white',
+        height: '250px',
+        padding: '10px',
+
+    },
+    card2: {
+        backgroundColor: 'white',
+        color: 'black',
+        height: '250px',
+        padding: '10px',
+
+    },
+    p: {
+        fontSize: '20px',
+        marginLeft: '100px',
+        marginRight: '100px',
+        textAlign: 'block',
+        paddingTop: '0px'
+
+    },
+    textArea: {
+        paddingTop: '0px',
+        textAlign: 'center'
+    }
 }
