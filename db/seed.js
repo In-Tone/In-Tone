@@ -150,7 +150,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		tone_type_id: 2
 	},
 	midKlai: {
-		wav: 'http://localhost:3000/audio/Mid-Klai-Far.wav',
+		wav: 'https://s3.amazonaws.com/in-tone/Mid-Klai-Far.wav',
 		pitches: [0,0,252,245,244,244,238,235,231,228,226,225,222,219,219,217,216,215,214,214,213,211,210,207,205,206,207,207,207,207,206,206,205,202,203,203,204,204,206,209,209,209,206,206,206,206],
 		duration: 692.504,
 		englishTranslation: 'far',
