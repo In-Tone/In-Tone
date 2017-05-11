@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { processTargetData } from '../utils/ProcessTargetData';
 
-export const SET_TARGETS = 'SET_TARGETS'
+export const SET_TARGETS = 'SET_TARGETS';
 
 export const setTargets = (targets) => ({
 	type: SET_TARGETS,
@@ -10,9 +11,49 @@ export const setTargets = (targets) => ({
 export const fetchTargets = (language) =>
 	dispatch => {
 		axios.get(`api/targets/${language}`)
-			.then(targets => dispatch(setTargets(targets)))
-			.catch(err => console.error(err))
-	}
+			.then(res => {
+				return processTargetData(res);
+				// console.log('here is res: ', res);
+				// let data = [];
+				// for (let i = 0; i < res.data.length; i++) {
+				// 	console.log(res.data[i])
+				// 	// console.log(res.data[i].language);
+				// 	let targets = res.data[i].targets;
+				// 	// let dataPart1 = {};
+
+
+				// 	// dataPart1.tone_type_id = res.data[i].id;
+				// 	// console.log(res.data[i].language)
+				// 	// dataPart1.language = res.data[i].language;
+				// 	let dataPart1 = {
+				// 		tone_type_id: res.data[i].id,
+				// 		language: res.data[i].language,
+				// 		tone: res.data[i].tone
+				// 	};
+				// 	console.log('dataPart1: ', dataPart1, '\n\n\n')
+				// 	for (let j = 0; j < targets.length; j++) {
+				// 		console.log(targets);
+				// 		let dataPart2 = {
+				// 			englishTranslation: targets[j].englishTranslation,
+				// 			toneId: targets[j].id,
+				// 			pitches: targets[j].pitches,
+				// 			nativeSpelling: targets[j].thaiSpelling,
+				// 			transliteration: targets[j].transliteration,
+				// 			wav: targets[j].wav
+				// 		}
+				// 		let languageData = Object.assign(dataPart1, dataPart2);
+				// 		// console.log(languageData)
+				// 		data.push(languageData);
+				// 	}
+				// }
+				// return data;
+			})
+			.then(data => {
+				console.log(data);
+				dispatch(setTargets(data));
+			})
+			.catch(err => console.error(err));
+};
 
 const reducer = (state=[], action) => {
 	switch(action.type) {
@@ -23,4 +64,4 @@ const reducer = (state=[], action) => {
 	}
 }
 
-export default reducer
+export default reducer;
