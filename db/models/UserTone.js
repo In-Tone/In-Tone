@@ -9,7 +9,7 @@ module.exports = db => db.define('UserTone', {
 	},
 	wavblob: {
 		type: BLOB,
-		allowNull: false
+		// allowNull: false
 	}
 });
 
