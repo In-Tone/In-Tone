@@ -101,7 +101,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 641.587,
 		englishTranslation: 'yes',
 		transliteration: 'ch\u00CC',
-		nativeSpelling: 'http://i.imgur.com/TyMhrgJ.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/falling-chai-yet.png',
 		tone_type_id: 3
 	},
 	fallingHai: {
@@ -110,7 +110,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 645.029,
 		englishTranslation: 'give',
 		transliteration: '\u0127\u00EE',
-		nativeSpelling: 'http://i.imgur.com/heVUUL7.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/falling-hai-give.png',
 		tone_type_id: 3
 	},
 	highChai: {
@@ -119,7 +119,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 688.256,
 		englishTranslation: 'use',
 		transliteration: 'ch\u00CE',
-		nativeSpelling: 'http://i.imgur.com/HCtzCqF.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/high-chai-use.png',
 		tone_type_id: 4
 	},
 	highYai: {
@@ -128,7 +128,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 788.361,
 		englishTranslation: 'move',
 		transliteration: '\u0177\u0101y',
-		nativeSpelling: 'http://i.imgur.com/Ko7nwHD.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/high-yai-move.png',
 		tone_type_id: 4
 	},
 	lowLhai: {
@@ -137,7 +137,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 695.739,
 		englishTranslation: 'shoulder',
 		transliteration: 'l\u0300\u0127\u1ECB',
-		nativeSpelling: 'http://i.imgur.com/lsQnXts.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/low-lhai-shoulder.png',
 		tone_type_id: 2
 	},
 	lowMai: {
@@ -146,7 +146,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 674.849,
 		englishTranslation: 'new',
 		transliteration: 'm\u0300\u0127I',
-		nativeSpelling: 'http://i.imgur.com/j9jQHze.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/low-mai-new.png',
 		tone_type_id: 2
 	},
 	midKlai: {
@@ -155,7 +155,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 692.504,
 		englishTranslation: 'far',
 		transliteration: 'kl\u1ECB',
-		nativeSpelling: 'http://i.imgur.com/vgC7g3h.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/mid-klai-far.png',
 		tone_type_id: 1
 	},
 	midPai: {
@@ -164,7 +164,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 600.686,
 		englishTranslation: 'go',
 		transliteration: 'p\u1ECB',
-		nativeSpelling: 'http://i.imgur.com/Ktf4xwX.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/mid-pai-go.png',
 		tone_type_id: 1
 	},
 	risingNhai: {
@@ -173,7 +173,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 736.719,
 		englishTranslation: 'where',
 		transliteration: 'n\u0127\u1ECB',
-		nativeSpelling: 'http://i.imgur.com/Ht2BR2T.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/rising-nhai-where.png',
 		tone_type_id: 5
 	},
 	risingSai: {
@@ -182,7 +182,7 @@ const targets = seed(Target, ({toneTypes}) =>  ({
 		duration: 796.222,
 		englishTranslation: 'clear',
 		transliteration: 'sI',
-		nativeSpelling: 'http://i.imgur.com/fC1Eqi7.png',
+		nativeSpelling: 'https://s3.amazonaws.com/in-tone/rising-sai-clear.png',
 		tone_type_id: 5
 	}
 }))
