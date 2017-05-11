@@ -6,11 +6,6 @@
 body {
 	margin: 0;
 	padding: 0;
-	background-image: url('../icon.jpg');
-	background-repeat: no-repeat;
-	background-position: center;
-	background-attachment: fixed;
-	background-size: 35%
 }
 
 body, html {
@@ -44,9 +39,14 @@ button {
 	width: auto;
 }
 
-#canvas-container {
-   width: 100%;
-   text-align:center;
+#canvasContainer {
+  width: 100%;
+  text-align:center;
+	background-image: url('../icon.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+	background-size: 35%
 }
 
 #homeCanvas {
@@ -70,7 +70,7 @@ button {
 .studyDiv {
 	width: 80%;
 	margin: auto;
-	padding-top: 2%;
+	padding-top: 10%;
 }
 
 /* MODES COMPONENT STYLES */

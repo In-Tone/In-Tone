@@ -104,16 +104,16 @@ export default class Home extends React.Component {
                     <h1>What is a Tonal Language?</h1>
                     <br />
                     <p style={styles.p}>
-                    Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, 'ma'' spoken in a high tone would mean 'horse' and in a low tone would mean 'dog.' For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
+                    Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, <i>ma</i> spoken in a high tone would mean <i>horse</i> and in a rising tone would mean <i>dog</i>. For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
                     </p>
                 </div>
             </Paper>
              <Paper style={styles.card2}>
                 <div style={styles.textArea} >
-                    <h1>How InTone Works</h1>
+                    <h1>How In-Tone Works</h1>
                     <br />
                     <p style={styles.p}>
-                    InTone gives you the tools needed to perceive and reproduce a language's tones. You are provided a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and InTone will provide you with a graph comparing the target's pitch values alongside your own.
+                    In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.
                     </p>
                 </div>
             </Paper>
@@ -125,27 +125,27 @@ const styles = {
     card1: {
         backgroundColor: 'purple',
         color: 'white',
-        height: '250px',
-        padding: '10px',
+
 
     },
     card2: {
         backgroundColor: 'white',
         color: 'black',
-        height: '250px',
-        padding: '10px',
+
 
     },
     p: {
-        fontSize: '20px',
-        marginLeft: '100px',
-        marginRight: '100px',
+        fontSize: '30px',
+        marginLeft: '175px',
+        marginRight: '175px',
         textAlign: 'block',
         paddingTop: '0px'
 
     },
     textArea: {
-        paddingTop: '0px',
-        textAlign: 'center'
+        paddingTop: '80px',
+        textAlign: 'center',
+        height: '39vh',
+        // padding: '10px',
     }
 }
