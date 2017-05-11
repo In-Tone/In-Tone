@@ -39,11 +39,25 @@ class Study extends React.Component {
 			targetPitches: [83,87,87,87,87,87,87,87,87,92,281,281,283,281,277,276,276,276,276,277,277,279,279,281,281,277,277,272,271,264,261,255,246,231,208,193,170,155,145,142,142,142],
 			chartLabels: [],
 			audioBuffer: [],
-            targetDuration: 641.587
+            targetDuration: 641.587,
+      /// FROM THE STORE!!!!!  ///
+      targets: [],
+      tone_type_id: 0,
+      language: '',
+      tone: '',
+      englishTranslation: '',
+      toneId: '',
+      pitches: [],
+      nativeSpelling: '',
+      transliteration: '',
+      wav: ''
+
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
+    this.randomReset = this.randomReset.bind(this);
 
-    this.targets = this.props.targets;
+    // REMOVE ME
+    // this.targets = this.props.targets;
 
     // remove
     this.logger = this.logger.bind(this);
@@ -84,7 +98,44 @@ class Study extends React.Component {
     console.log(this.targets);
   }
 
+  randomReset() {
+    let currentToneId = this.state.toneId;
+    let randNum = Math.floor(Math.random()*targets.length);
+
+    while(currentToneId === randNum) {
+      randNum = Math.floor(Math.random()*targets.length);
+    };
+
+    this.setState({
+      tone_type_id: targets[randNum].tone_type_id,
+      language: targets[randNum].language,
+      tone: targets[randNum].tone,
+      englishTranslation: targets[randNum].englishTranslation,
+      toneId: targets[randNum].toneId,
+      pitches: targets[randNum].pitches,
+      nativeSpelling: targets[randNum].nativeSpelling,
+      transliteration: targets[randNum].transliteration,
+      wav: targets[randNum].wav
+    });
+  }
+
 	componentDidMount(){
+    const targets = this.props.targets;
+    this.setState({ targets });
+
+    let randNum = Math.floor(Math.random()*targets.length);
+
+    this.setState({
+      tone_type_id: targets[randNum].tone_type_id,
+      language: targets[randNum].language,
+      tone: targets[randNum].tone,
+      englishTranslation: targets[randNum].englishTranslation,
+      toneId: targets[randNum].toneId,
+      pitches: targets[randNum].pitches,
+      nativeSpelling: targets[randNum].nativeSpelling,
+      transliteration: targets[randNum].transliteration,
+      wav: targets[randNum].wav
+    });
 
     if (!window.AudioContext) {
         if (!window.webkitAudioContext) {
@@ -398,7 +449,7 @@ class Study extends React.Component {
 							<MenuItem value={3} primaryText='Chinese' />
 							<MenuItem value={4} primaryText='Hmong' />
 						</DropDownMenu>
-						<RaisedButton label='Next' />
+						<RaisedButton label='Next' onClick={this.randomReset}/>
 						<RaisedButton label='Overlay' />
 					</CardActions>
 				</Card>
