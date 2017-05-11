@@ -8,7 +8,8 @@
     "start": "node server/index.js",
     "start-watch": "nodemon server/index.js",
     "build-watch": "webpack -w",
-    "build": "webpack"
+    "build": "webpack",
+    "seed": "node db/seed.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,9 @@
   },
   "homepage": "https://github.com/In-Tone/In-Tone#readme",
   "dependencies": {
+    "audiobuffer-to-wav": "^1.0.0",
     "axios": "^0.16.1",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "chart.js": "^2.5.0",
     "crypto": "0.0.3",

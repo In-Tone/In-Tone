@@ -1,6 +1,6 @@
 'use strict';
 
-const {STRING, ARRAY, INTEGER} = require('sequelize');
+const {STRING, ARRAY, INTEGER, FLOAT} = require('sequelize');
 
 module.exports = db => db.define('target', {
   wav: {
@@ -14,6 +14,10 @@ module.exports = db => db.define('target', {
     type: ARRAY(INTEGER),
     allowNull: false
   },
+  duration: {
+    type: FLOAT,
+    allowNull: false
+  },
   englishTranslation: {
     type: STRING,
     allowNull: false
@@ -22,7 +26,7 @@ module.exports = db => db.define('target', {
     type: STRING,
     allowNull: false
   },
-  thaiSpelling: {
+  nativeSpelling: {
     type: STRING,
     validate: {
       isUrl: true // or unicode!
