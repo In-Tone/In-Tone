@@ -62,7 +62,7 @@ export default class Home extends React.Component {
                 } else {
                     ctx.lineTo(x, y);
                 }
-                
+
                 x += sliceWidth;
             }
 
@@ -96,7 +96,7 @@ export default class Home extends React.Component {
     render() {
         return (
         <div id='canvasContainer'>
-    		<canvas id='homeCanvas' width='1000' height='1000'></canvas>
+    		<canvas id='homeCanvas' width='1000' height='500'></canvas>
         </div>
     )}
 }
