@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { processTargetData } from '../utils/ProcessTargetData';
 
-export const SET_TARGETS = 'SET_TARGETS'
+export const SET_TARGETS = 'SET_TARGETS';
 
 export const setTargets = (targets) => ({
 	type: SET_TARGETS,
@@ -10,9 +11,14 @@ export const setTargets = (targets) => ({
 export const fetchTargets = (language) =>
 	dispatch => {
 		axios.get(`api/targets/${language}`)
-			.then(targets => dispatch(setTargets(targets)))
-			.catch(err => console.error(err))
-	}
+			.then(res => {
+				return processTargetData(res);
+			})
+			.then(data => {
+				dispatch(setTargets(data));
+			})
+			.catch(err => console.error(err));
+};
 
 const reducer = (state=[], action) => {
 	switch(action.type) {
@@ -21,6 +27,6 @@ const reducer = (state=[], action) => {
 		default:
 			return state;
 	}
-}
+};
 
-export default reducer
+export default reducer;
