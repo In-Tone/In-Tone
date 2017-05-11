@@ -19,12 +19,6 @@ body, html {
 	text-align: center;
 }
 
-button {
-	height: 40px;
-	width: 90px;
-	margin: auto;
-}
-
 #canvas {
 	background-image: url('../icon.jpg');
 	background-repeat: no-repeat;
@@ -56,14 +50,6 @@ button {
 	/*border: solid 5px black;*/
   /*position:absolute;*/
 	width: 100%;
-}
-
-#buttons {
-	border: solid 5px black;
-	width: 25%;
-	margin: auto;
-	text-align: center;
-	padding-bottom: 20px;
 }
 
 /* STUDY COMPONENT STYLES */
