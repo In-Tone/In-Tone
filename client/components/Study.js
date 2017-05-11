@@ -99,6 +99,7 @@ class Study extends React.Component {
   }
 
   randomReset() {
+	let target = this.state.target;
     let currentToneId = this.state.toneId;
     let randNum = Math.floor(Math.random()*targets.length);
 
