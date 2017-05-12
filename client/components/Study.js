@@ -246,7 +246,7 @@ class Study extends React.Component {
         // declare setInterval variable outside so we can kill the interval in a separate function
         var repeatDraw;
 
-        var duration = self.state.targetDuration;
+        var duration = self.state.duration;
 
         // onclick handler for record button
         record.onclick = function() {
@@ -269,14 +269,14 @@ class Study extends React.Component {
                 // viz.connect(context.destination);
                 // call .start on mediaRecorder instance
                 mediaRecorder.start();
-            }, 3500);
+            }, 3000);
             setTimeout(() => {
                 // setInterval to continually rerender waveform
             	record.style.background = "";
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, 3500+duration);
+            }, 4000+duration);
         };
 
         // onclick handler for stop button
@@ -393,7 +393,7 @@ class Study extends React.Component {
                     return avg;
                 }
 
-                // throw out outliers more than 2 * sd
+                // throw out outliers more than 1.5 * sd
                 for (var i = 0; i < results.length; i++) {
                     let curr = results[i];
                     if (isNaN(curr)) {
