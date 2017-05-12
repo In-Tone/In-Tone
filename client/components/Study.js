@@ -22,22 +22,21 @@ class Study extends React.Component {
 			targetPitches: [83,87,87,87,87,87,87,87,87,92,281,281,283,281,277,276,276,276,276,277,277,279,279,281,281,277,277,272,271,264,261,255,246,231,208,193,170,155,145,142,142,142],
 			chartLabels: [],
 			audioBuffer: [],
-            targetDuration: 641.587,
       /// FROM THE STORE!!!!!  ///
       // collection of targets for a given language; cycle through these;
-          targets: [],
-          // information for current target
-          duration: '',
-          englishTranslation: '',
-          language: '',
-          nativeSpelling: '',
-          pitches: [],
-          tone: '',
-          tone_type_id: 0, // id for toneType db model
-          toneId: '', // id for Target db model
-          transliteration: '',
-          wav: '',
-          previous: {}
+      targets: [],
+      // information for current target
+      duration: '',
+      englishTranslation: '',
+      language: '',
+      nativeSpelling: '',
+      pitches: [],
+      tone: '',
+      tone_type_id: 0, // id for toneType db model
+      toneId: '', // id for Target db model
+      transliteration: '',
+      wav: '',
+      previous: {}
 
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
@@ -62,7 +61,7 @@ class Study extends React.Component {
 	}
 
 	// record audio input
-	recordAudio() {
+	recordAudioSetup() {
 		// import and invoke the record audio function extracted from
 		// audioinput.js
 	}
@@ -170,6 +169,8 @@ class Study extends React.Component {
   }
 
   componentDidMount(){
+
+    console.log("STATE", this.state);
     const pitches = this.state.pitches;
 
     if (!window.AudioContext) {
@@ -209,11 +210,6 @@ class Study extends React.Component {
     // capture reference to this component so we can set state below
     var self = this;
 
-    var test = document.getElementById('soundSample');
-    test.onloadedmetadata = function() {
-        console.log('test.duration', test.duration)
-    }
-
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
     var constraints = { audio: true, video: false };
     // set up stream -- is a promise -- recording happens in .then off it
@@ -246,7 +242,7 @@ class Study extends React.Component {
         // declare setInterval variable outside so we can kill the interval in a separate function
         var repeatDraw;
 
-        var duration = self.state.targetDuration;
+        var duration = self.state.duration;
 
         // onclick handler for record button
         record.onclick = function() {
@@ -269,14 +265,14 @@ class Study extends React.Component {
                 viz.connect(context.destination);
                 // call .start on mediaRecorder instance
                 mediaRecorder.start();
-            }, 3500);
+            }, 3000);
             setTimeout(() => {
                 // setInterval to continually rerender waveform
             	record.style.background = "";
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, 3500+duration);
+            }, 4000+duration);
         };
 
         // onclick handler for stop button
@@ -356,42 +352,60 @@ class Study extends React.Component {
                     }
                 })
 
-                // filter out bad data - hacky for now, throws out nulls and high values
-                // frequencies = frequencies.filter(freq => {
-                // if (typeof freq === 'number') {
-                //   return freq < 1000
-                // }
-                // return false
-                // }).map(freq => Math.round(freq))
-
                 console.log('all freqs: ', frequencies);
                 console.log('target pitches', pitches);
                 console.log("results frequencies", results);
 
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                //////////////////////  CONTOUR ALGORITHM TAKE 1 (begin) ///////////////
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
 
+                // first, create empty array to put each difference between 
+                // the target pitch and user pitch at same index for each target pitch
                 var outerArray =[];
 
+                // map over target pitches on state. each pass og the differ
                 pitches.map((pitch, i) => {
                     var diff = Math.abs(pitch - results[i]);
-                    if (diff > 0 && diff < 10) {
+                    if (diff < 100) {
                         outerArray.push([diff, i]);
                     }
                 })
 
-                // for (let i = 0; i < pitches.length; i++) {
-                //     var innerArray =[];
-                //     if (pitches[i] === 0) {
-                //         continue;
+                // var pitchesCopy = pitches;
+                // var innerArray = [];
+
+                // pitches.map((pitch, i) => {
+                //     var diff = Math.abs(pitch - pitchesCopy[i-1]);
+                //     if (diff > 120) {
+                        
                 //     }
-                //     for (let k = 0; k < results.length; k++) {
-                //             if (Math.abs(pitches[i] - results[k]) < 20) {
-                //             innerArray.push(pitches[i]);
-                //             innerArray.push(results[k]);
-                //             outerArray.push(innerArray);
-                //         }
-                //         innerArray = [];
-                //     }
-                // }
+                // })
+
+                function getPitches(arr) {
+                  for (var k = 0; k<arr.length; k++) {
+                    var diff = Math.abs(arr[k] - arr[k-1]);
+                    if (diff > 80) {
+                      return arr.slice(k);
+                    }
+                  }
+                }
+
+                var arrayTarget = getPitches(pitches);
+                var arrayUser = getPitches(results);
+
+                console.log("arrayTarget", arrayTarget);
+                console.log("arrayUser", arrayUser);
+                
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                //////////////////////  CONTOUR ALGORITHM TAKE 1 (end) /////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
 
                 console.log("test comparison", outerArray);
 
@@ -409,16 +423,16 @@ class Study extends React.Component {
                 let myLineChart = new Chart(chartCtx, {
                 type: 'line',
                 data: {
-                	labels: one,
+                	labels: arrayTarget,
 	                datasets: [{
                         label: 'user pitch',
-                        data: one,
+                        data: arrayUser,
                         borderCapStyle: 'butt',
                         borderColor: 'blue'
                         },
                         {
 	                	label: 'target pitch',
-	                	data: two,
+	                	data: arrayTarget,
 	                	borderCapStyle: 'butt',
 	                	borderColor: 'red'
 	                },
