@@ -19113,10 +19113,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var SET_TARGETS = exports.SET_TARGETS = 'SET_TARGETS';
 
-var setTargets = exports.setTargets = function setTargets(targets) {
+var setTargets = exports.setTargets = function setTargets(allTargets) {
 	return {
 		type: SET_TARGETS,
-		targets: targets
+		allTargets: allTargets
 	};
 };
 
@@ -19124,8 +19124,8 @@ var fetchTargets = exports.fetchTargets = function fetchTargets(language) {
 	return function (dispatch) {
 		_axios2.default.get('api/targets/' + language).then(function (res) {
 			return (0, _ProcessTargetData.processTargetData)(res);
-		}).then(function (data) {
-			dispatch(setTargets(data));
+		}).then(function (allTargets) {
+			dispatch(setTargets(allTargets));
 		}).catch(function (err) {
 			return console.error(err);
 		});
@@ -19138,7 +19138,7 @@ var reducer = function reducer() {
 
 	switch (action.type) {
 		case SET_TARGETS:
-			return action.targets;
+			return action.allTargets;
 		default:
 			return state;
 	}
@@ -44764,7 +44764,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -44799,6 +44799,8 @@ var _pitchfinder2 = _interopRequireDefault(_pitchfinder);
 
 var _reactBootstrap = __webpack_require__(766);
 
+var _TargetToneList = __webpack_require__(919);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44810,682 +44812,647 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Chart = __webpack_require__(133);
 
 var Study = function (_React$Component) {
-  _inherits(Study, _React$Component);
-
-  function Study(props) {
-    _classCallCheck(this, Study);
-
-    var _this = _possibleConstructorReturn(this, (Study.__proto__ || Object.getPrototypeOf(Study)).call(this, props));
-
-    _this.state = {
-      languageValue: 1,
-
-      //EDITBRANCH: EVERYTHING BELOW THIS IS WHACK WHY DO WE STILL HAVE IT
-      targetIMG: '',
-      targetTranslation: '',
-      // chart data
-      userPitches: [],
-      targetPitches: [83, 87, 87, 87, 87, 87, 87, 87, 87, 92, 281, 281, 283, 281, 277, 276, 276, 276, 276, 277, 277, 279, 279, 281, 281, 277, 277, 272, 271, 264, 261, 255, 246, 231, 208, 193, 170, 155, 145, 142, 142, 142],
-      chartLabels: [],
-      audioBuffer: [],
-      // EDITBRANCH: THIS USED TO BE HARDCODED AT 647 AND WAS USED AS THE DURATION FOR OUR BETA WHICH IS WHY
-      // EVERYONE GOT CUT OFF UNLESS THE ONE WORD IT WAS HARD CODED TO WAS THE TARGET SMH ROOKIE MISTAKES 
-      targetDuration: 0,
-      // EDITBRANCH: EVERYTHING ABOVE THIS IS WHACK WHY DO WE STILL HAVE IT
-
-      /// FROM THE STORE!!!!!  ///
-      // collection of targets for a given language; cycle through these;
-      targets: [],
-      // information for current target
-      // EDITBRANCH: DURATION WAS INITIALIZED AS A STRING NOT A NUMBER ALSO IT WAS NEVER USED 
-      duration: 0,
-      englishTranslation: '',
-      language: '',
-      nativeSpelling: '',
-      pitches: [],
-      tone: '',
-      tone_type_id: 0, // id for toneType db model
-      toneId: '', // id for Target db model
-      transliteration: '',
-      wav: '',
-      previous: {}
-
-    };
-    _this.selectLanguage = _this.selectLanguage.bind(_this);
-    _this.randomReset = _this.randomReset.bind(_this);
-    _this.previous = _this.previous.bind(_this);
-
-    // REMOVE ME
-    // this.targets = this.props.targets;
-
-    // remove
-    _this.logger = _this.logger.bind(_this);
-    return _this;
-  }
-
-  _createClass(Study, [{
-    key: 'selectLanguage',
-    value: function selectLanguage(event, index, value) {
-      this.setState({ languageValue: value });
-      // mapDispatchToProps to get the right information for that language
-    }
-
-    // play target audio
-
-  }, {
-    key: 'getTargetAudio',
-    value: function getTargetAudio(targetWord) {}
-
-    // record audio input
-
-  }, {
-    key: 'recordAudio',
-    value: function recordAudio() {}
-    // import and invoke the record audio function extracted from
-    // audioinput.js
-
-
-    // select next word
-
-  }, {
-    key: 'nextWord',
-    value: function nextWord() {}
-
-    // go back to the previous word
-
-  }, {
-    key: 'previousWord',
-    value: function previousWord() {}
-
-    // toggle pitch contour graph (own, target, combined)
-
-  }, {
-    key: 'toggleOverlay',
-    value: function toggleOverlay() {}
-  }, {
-    key: 'logger',
-    value: function logger() {
-      console.log(this.state);
-    }
-  }, {
-    key: 'randomReset',
-    value: function randomReset() {
-
-      console.log(this.state.nativeSpelling);
-
-      var targets = this.state.targets;
-      var currentToneId = this.state.toneId;
-      var randNum = Math.floor(Math.random() * targets.length);
-
-      while (currentToneId === randNum) {
-        randNum = Math.floor(Math.random() * targets.length);
-      };
-
-      this.setState({
-        previous: {
-          duration: this.state.duration,
-          englishTranslation: this.state.englishTranslation,
-          language: this.state.language,
-          nativeSpelling: this.state.nativeSpelling,
-          pitches: this.state.pitches,
-          tone: this.state.tone,
-          tone_type_id: this.state.tone_type_id,
-          toneId: this.state.toneId,
-          transliteration: this.state.transliteration,
-          wav: this.state.wav
-        }
-      });
-
-      this.setState({
-        tone_type_id: targets[randNum].tone_type_id,
-        language: targets[randNum].language,
-        tone: targets[randNum].tone,
-        englishTranslation: targets[randNum].englishTranslation,
-        toneId: targets[randNum].toneId,
-        pitches: targets[randNum].pitches,
-        nativeSpelling: targets[randNum].nativeSpelling,
-        transliteration: targets[randNum].transliteration,
-        wav: targets[randNum].wav,
-        duration: targets[randNum].duration
-      });
-    }
-
-    // BETA VERSION ONLY
-
-  }, {
-    key: 'previous',
-    value: function previous() {
-      var previous = this.state.previous;
-
-      this.setState({
-        tone_type_id: previous.tone_type_id,
-        language: previous.language,
-        tone: previous.tone,
-        englishTranslation: previous.englishTranslation,
-        toneId: previous.toneId,
-        pitches: previous.pitches,
-        nativeSpelling: previous.nativeSpelling,
-        transliteration: previous.transliteration,
-        wav: previous.wav
-      });
-    }
-  }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      var targets = this.props.targets;
-      // EDITBRANCH: THIS EXACT VARIABLE IS ALSO DECLARED IN COMPONENTWILLMOUNT BUT ITS POSSIBLE I DID THIS
-      var pitches = this.state.pitches;
-
-      console.log('what is targets', targets);
-      this.setState({ targets: targets });
-
-      var randNum = Math.floor(Math.random() * targets.length);
-
-      this.setState({
-        tone_type_id: targets[randNum].tone_type_id,
-        language: targets[randNum].language,
-        tone: targets[randNum].tone,
-        englishTranslation: targets[randNum].englishTranslation,
-        toneId: targets[randNum].toneId,
-        pitches: targets[randNum].pitches,
-        nativeSpelling: targets[randNum].nativeSpelling,
-        transliteration: targets[randNum].transliteration,
-        wav: targets[randNum].wav,
-        duration: targets[randNum].duration
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      // EDITBRANCH: THIS EXACT VARIABLE IS ALSO DECLARED IN COMPONENTWILLMOUNT BUT ITS POSSIBLE I DID THIS
-      var pitches = this.state.pitches;
-
-      if (!window.AudioContext) {
-        if (!window.webkitAudioContext) {
-          alert('no audiocontext found');
-        }
-        window.AudioContext = window.webkitAudioContext;
-      }
-
-      // create audio context and canvas
-      var context = new AudioContext();
-
-      // create filter nodes
-      var hpFilter = context.createBiquadFilter();
-      hpFilter.type = "highpass";
-      hpFilter.frequency.value = 85;
-      hpFilter.gain.value = 10;
-
-      var lpFilter = context.createBiquadFilter();
-      lpFilter.type = "lowpass";
-      lpFilter.frequency.value = 900;
-      lpFilter.gain.value = 10;
-
-      // Create a compressor node
-      var compressor = context.createDynamicsCompressor();
-      compressor.threshold.value = -50;
-      compressor.knee.value = 40;
-      compressor.ratio.value = 12;
-      // compressor.reduction.value = -20;
-      compressor.attack.value = 0;
-      compressor.release.value = 0.25;
-
-      // create analyzer node
-      var viz = context.createAnalyser();
-      viz.fftSize = 2048;
-
-      // capture reference to this component so we can set state below
-      var self = this;
-
-      // EDITBRANCH: WE DONT NEED THIS ANYMORE NOW THAT WE HAVE DURATION AS A FIELD ON THE TARGET DB
-      var test = document.getElementById('soundSample');
-      test.onloadedmetadata = function () {
-        console.log('test.duration', test.duration);
-      };
-
-      // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
-      var constraints = { audio: true, video: false };
-      // set up stream -- is a promise -- recording happens in .then off it
-      navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-
-        // create MediaRecorder instance
-        var mediaRecorder = new MediaRecorder(stream);
-
-        // holder for audio
-        var recording = [];
-
-        // when data is available, push available data to recording array
-        // as written, data is available when 'stop' is clicked which calls .stop on the mediaRecorder instance
-        mediaRecorder.ondataavailable = function (e) {
-          recording.push(e.data);
-        };
-
-        // create audioNode stream source with stream so we can route it through the audioContext
-        var source = context.createMediaStreamSource(stream);
-        // connect it to the nodes
-        source.connect(viz);
-        // lpFilter.connect(hpFilter);
-        // hpFilter.connect(viz);
-        viz.connect(compressor);
-
-        // grab DOM buttons
-        var record = document.getElementById("Record");
-        // var stop = document.getElementById("stop");
-
-        // declare setInterval variable outside so we can kill the interval in a separate function
-        var repeatDraw;
-
-        // EDITBRANCH: THIS DURATION VARIABLE IS VERY MISLEADING
-        var fakeDuration = self.state.targetDuration;
-
-        var targetRunTime = self.state.duration;
-
-        // EDITBRANCH: LOG FOR THE DYNAMIC TARGET DURATION
-        console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
-        // onclick handler for record button
-
-        /****************** THE SET TIMEOUT IS WHACK USER INPUT GETS CUTOFF AF *************/
-        /**********************************************************************************/
-        /**********************************************************************************/
-        record.onclick = function () {
-          console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
-          var countdown = document.getElementById('countdown');
-          var seconds = 3;
-          countdown.innerHTML = seconds;
-          // EDITBRANCH: GENERAL QUESTION WHY IS THIS INCREMENTING FROM 1000 -> 3000 -> 3500 AND NOT 1000 -> 2000 -> 3000??
-          var countdownTimer = setInterval(function () {
-            seconds = seconds - 1;
-            countdown.innerHTML = seconds > 0 ? seconds : "Go!";
-          }, 1000);
-          setTimeout(function () {
-            clearInterval(countdownTimer);
-            record.style.background = "red";
-            record.style.color = "black";
-          }, 2000);
-          setTimeout(function () {
-            // connect stream to speakers, making it audible
-            viz.connect(context.destination);
-            // call .start on mediaRecorder instance
-            mediaRecorder.start();
-          }, 3000);
-          setTimeout(function () {
-            // setInterval to continually rerender waveform
-            record.style.background = "";
-            record.style.color = "";
-            mediaRecorder.stop();
-            viz.disconnect(context.destination);
-          }, 3000 + targetRunTime);
-        };
-
-        // onclick handler for stop button
-        // stop.onclick = function() {
-        //     // disconnect from speakers, effectively muting stream
-        //     viz.disconnect(context.destination);
-        //     // call stop on mediaRecorder, firing a "data available" event which trigger .ondataavailable
-        //     mediaRecorder.stop();
-        // record.style.background = "";
-        // record.style.color = "";
-        //     clearInterval(repeatDraw);
-        // }
-
-        // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
-        mediaRecorder.onstop = function (e) {
-          console.log("recorder stopped");
-
-          // prompt to name the file
-          // EDITBRANCH: THIS POPUP IS KIND OF ANNOYING SO I COMMENTED IT OUT BUT I THINK ITS A GOOD IDEA
-          // TO HAVE SOME KIND OF FEEDBACK WHEN THEIR DONE RECORDING. MAYBE WE SHOULD KEEP THIS OR HAVE SOME
-          // KIND OF TOAST OR OTHER POP UP SAYING GOOD JOB OR SOME SHIT IDC BUT FOR TESTING ITS ANNOYING
-          //var clipName = prompt('Enter a name for your sound clip');
-
-          // create audio element to post to page
-          var clipContainer = document.createElement('article');
-          var clipLabel = document.createElement('p');
-          var audio = document.getElementById('soundSample');
-          var deleteButton = document.createElement('button');
-
-          // add created audio element to page
-          clipContainer.classList.add('clip');
-          audio.setAttribute('controls', '');
-          deleteButton.innerHTML = "Delete";
-          // EDITBRANCH: NO CLIPLABEL B/C NO CLIPNAME
-          //clipLabel.innerHTML = clipName;
-
-          // clipContainer.appendChild(audio);
-          // clipContainer.appendChild(clipLabel);
-          // clipContainer.appendChild(deleteButton);
-          // soundClips.appendChild(clipContainer);
-
-          // create Blob for access by audio element, set as src for playback
-          var blob = new Blob(recording, { 'type': 'audio/ogg; codecs=opus' });
-          recording = [];
-          var audioURL = window.URL.createObjectURL(blob);
-          audio.src = audioURL;
-
-          // use FileReader to access the Blob data
-          var reader = new FileReader();
-          reader.addEventListener("loadend", function () {
-            // not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
-            // var buffer = new Uint8Array(reader.result);
-
-            context.decodeAudioData(reader.result).then(function (data) {
-
-              var detectPitch = new _pitchfinder2.default.YIN();
-              var detectors = [detectPitch, _pitchfinder2.default.AMDF()];
-
-              var float32Array = data.getChannelData(0); // get a single channel of sound
-              // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
-
-              // 500 bpm = 8.33 beats per second
-              // quantization = 4 --> 33.32 samples per second
-              var frequencies = _pitchfinder2.default.frequencies(detectors, float32Array, {
-                tempo: 500, // in BPM, defaults to 120
-                quantization: 8 }).map(function (freq) {
-                return Math.round(freq);
-              });
-
-              var results = [];
-
-              /**************************************************************************/
-              /**************************************************************************/
-              /************************algo editing starts here**************************/
-              /**************************************************************************/
-              /**************************************************************************/
-              /**************************************************************************/
-
-              frequencies.forEach(function (freq) {
-                if (typeof freq !== 'number' || freq > 1000 || isNaN(freq)) {
-                  if (!results.length) {
-                    results.push(0);
-                  } else {
-                    results.push(results[results.length - 1]);
-                  }
-                } else {
-                  results.push(freq);
-                }
-              });
-
-              // EDITBRANCH: filter out the zeros
-              results = results.filter(function (freq) {
-                return freq > 0;
-              });
-
-              // EDITBRANCH: create a 'difference' for each data set: n+1 - n
-              var resultsDiff = [];
-              var targetsDiff = [];
-
-              // EDITBRANCH: I initially had thse functions push the absolute value of the differences
-              // but that isn't accurate b/c it won't indicate if the graph is rising or falling. The
-              // difference graphs here now show the change of the contour arrays and can be meaningful
-              // for a user (diffArray decreases = contour increases and vice versa)
-              for (var i = 0; i < results.length; i++) {
-                // handle last value
-                if (i === results.length) {
-                  break;
-                }
-                resultsDiff.push(results[i + 1] - results[i]);
-              }
-
-              for (var i = 0; i < pitches.length; i++) {
-                // handle last value
-                if (i === pitches.length) {
-                  break;
-                }
-                targetsDiff.push(pitches[i + 1] - pitches[i]);
-              }
-
-              console.log("results frequencies", results);
-              console.log('pitches frequencies', pitches);
-
-              // EDITBRANCH: didn't implement it but heres the plan:
-              // THE IDEA: where the values for resultsDiff and targetsDiff at [i] are within a range of
-              // each other, we can determine accuracy of inputted tone (ex. 0 for best, 1-2 for decent, 3+ for bad)
-              // targetsDiff is also helpful b/c there is consistently a large spike in the target audio at the very beginning,
-              // which is usually around when the contour we're interested in starts. So we could slice the targetsDiff array starting
-              // from that index in the pitches array and then be able to accurately compare that to the resultsDiff array. Maybe. I'm not
-              // 100% on that logic holding water. 
-              // FOR USER UNDERSTANDING THERE COULD BE TWO VIEWS ON THE GRAPH (displayed via a toggle): 
-              //    by default it shows the two DIFFERENCE arrays, grading the users according to the rubric above
-              //    toggled option would be the contour overlays for more details. 
-              // ^^ the order could be reversed if people think it makes sense the other way
-
-              // ALTERNATIVE IDEA: Implement our super baller OG traffic light of success idea. Display the pitch contour color it
-              // according to what our diff arrays determine as good/bad. Green for good, yellow for decent, red for bad. THE TRICK
-              // HERE is making sure our data points lineup, but with the improved duration we're getting within 3-5 so some clever slicing
-              // could be beneficial orrrr just fuck it, it's an approximation we made this in 3 weeks do something about it. 
-              // how to implement: make THREE ARRAYS. a perfect array, a decent array, and a bad array. Bad pushes the value of pitches wherever
-              // (Math.abs(targetsDiff - resultsDiff)) >= 3, and zeroes otherwise. Decent does that for 1-2, perfect for 0. We graph all three and
-              // tell chart.js to IGNORE ZEROES. IT'LL BE SO LIT. I'M PRETTY SURE WE CAN DO THIS. FUCK YEAAAAAAAAAAA
-              // if we wanna get super fancy, we could find the difference w/o Math.abs and take note of positive/negative differences and somehow 
-              // indicate to the user that where negative, they need to raise their inflection and where positive they need to lower their inflection
-
-              console.log('resultsDiff values', resultsDiff);
-              console.log('targetsDiff values', targetsDiff);
-
-              var differenceScore = [];
-              // compare the Math.abs() diff between targetsDiff and resultsDiff ** HARD b/c length isn't equal..
-              // for now, just looping through resultsDiff since it's consistently shorter
-              for (var i = 0; i < resultsDiff.length; i++) {
-                differenceScore.push(Math.abs(resultsDiff[i] - targetsDiff[i]));
-              }
-
-              console.log('difference score is: ', differenceScore);
-
-              // create the three graphing arrays from differenceScore
-              var perfectScore = [];
-              var acceptableScore = [];
-              var failingScore = [];
-              var pointBackgroundColor = [];
-
-              // push values from pitches into the score arrays if their condition is met. else, push zeros
-              for (var i = 0; i < differenceScore.length; i++) {
-                // perfect condition: 0-1
-                if (differenceScore[i] <= 1) {
-                  perfectScore.push(pitches[i]);
-                  pointBackgroundColor.push('green');
-                } else {
-                  perfectScore.push(NaN);
-                }
-
-                // acceptable condition: 2-4
-                if (differenceScore[i] <= 4 && differenceScore[i] >= 2) {
-                  acceptableScore.push(pitches[i]);
-                  pointBackgroundColor.push('yellow');
-                } else {
-                  acceptableScore.push(NaN);
-                }
-
-                // failing condition: 5+
-                if (differenceScore[i] >= 5) {
-                  failingScore.push(pitches[i]);
-                  pointBackgroundColor.push('red');
-                } else {
-                  failingScore.push(NaN);
-                }
-              }
-
-              console.log('perfect score: ', perfectScore);
-              console.log('acceptableScore', acceptableScore);
-              console.log('failingScore', failingScore);
-
-              var pitchesShiftedUp = pitches.map(function (pitch) {
-                return pitch = pitch + 15;
-              });
-
-              var chartCtx = document.getElementById("studyChart").getContext("2d");
-
-              var myLineChart = new Chart(chartCtx, {
-                type: 'line',
-                data: {
-                  labels: pitches,
-                  datasets: [{
-                    label: 'perfect score - right on!',
-                    data: perfectScore,
-                    borderCapStyle: 'butt',
-                    borderColor: 'green',
-                    fill: false,
-                    elements: {
-                      point: {
-                        radius: 8,
-                        backgroundColor: 'green',
-                        borderWidth: 5
-                      }
-                    }
-                  }, {
-                    label: 'pretty close - getting there!',
-                    data: acceptableScore,
-                    borderCapStyle: 'butt',
-                    borderColor: 'yellow',
-                    fill: false
-                  }, {
-                    label: 'didnt get it - work on this part!',
-                    data: failingScore,
-                    borderCapStyle: 'butt',
-                    borderColor: 'red',
-                    fill: false,
-                    elements: {
-                      point: {
-                        radius: 8,
-                        backgroundColor: 'red',
-                        borderWidth: 5
-                      }
-                    }
-                  }, {
-                    label: 'Target Contour',
-                    data: pitchesShiftedUp,
-                    borderCapStyle: 'butt',
-                    borderColor: 'rgba(225, 225, 225, 0.6)',
-                    fill: false,
-                    pointBackgroundColor: pointBackgroundColor
-                  }]
-                },
-                options: {
-                  title: {
-                    display: 'true',
-                    position: 'top',
-                    text: 'PITCH CONTOUR SCORE',
-                    fontSize: 20
-                  }
-                }
-              });
-
-              self.setState({
-                arrayBuffer: data,
-                userPitches: frequencies,
-                chartLabels: frequencies
-              });
-
-              // close the decode audio data promise 
-            });
-            // close the readFile function
-          });
-
-          // once read, fires "loadend" event, then above callback runs to set state
-          reader.readAsArrayBuffer(blob);
-
-          // delete button
-          deleteButton.onclick = function (e) {
-            var evtTgt = e.target;
-            evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-          };
-        };
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var transliteration = this.state.transliteration;
-      var englishTranslation = this.state.englishTranslation;
-      var image = this.state.nativeSpelling;
-      var wav = this.state.wav;
-
-      var dropDownMenu = function dropDownMenu() {
-        return _react2.default.createElement(
-          _DropDownMenu2.default,
-          {
-            value: _this2.state.languageValue,
-            style: { width: '15%' },
-            autoWidth: false,
-            onChange: _this2.selectLanguage },
-          _react2.default.createElement(_MenuItem2.default, { value: 1, primaryText: 'Language' }),
-          _react2.default.createElement(_MenuItem2.default, { value: 2, primaryText: 'Thai' }),
-          _react2.default.createElement(_MenuItem2.default, { value: 3, primaryText: 'Chinese' }),
-          _react2.default.createElement(_MenuItem2.default, { value: 4, primaryText: 'Hmong' })
-        );
-      };
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'studyDiv' },
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          { className: 'show-grid' },
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { lg: 6 },
-            _react2.default.createElement(
-              _Paper2.default,
-              { zDepth: 1 },
-              _react2.default.createElement('img', { src: image }),
-              _react2.default.createElement(
-                'h1',
-                null,
-                transliteration
-              ),
-              _react2.default.createElement(
-                'h2',
-                null,
-                englishTranslation
-              )
-            )
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { lg: 6 },
-            _react2.default.createElement(
-              _Paper2.default,
-              { zDepth: 1 },
-              _react2.default.createElement(_RaisedButton2.default, { label: 'Previous', onClick: this.previous }),
-              _react2.default.createElement(
-                _RaisedButton2.default,
-                { id: 'Record' },
-                _react2.default.createElement(
-                  'p',
-                  { id: 'countdown' },
-                  'Record'
-                )
-              ),
-              _react2.default.createElement(_RaisedButton2.default, { label: 'Next', onClick: this.randomReset }),
-              _react2.default.createElement('audio', { controls: true, id: 'soundSample', src: wav }),
-              _react2.default.createElement('div', { id: 'soundClips' })
-            )
-          )
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          _Paper2.default,
-          { zDepth: 1 },
-          _react2.default.createElement('canvas', { id: 'studyChart' })
-        )
-      );
-    }
-  }]);
-
-  return Study;
+	_inherits(Study, _React$Component);
+
+	function Study(props) {
+		_classCallCheck(this, Study);
+
+		var _this = _possibleConstructorReturn(this, (Study.__proto__ || Object.getPrototypeOf(Study)).call(this, props));
+
+		_this.state = {
+			allTargets: [],
+			currentTarget: {},
+			previousTarget: {}
+		};
+
+		_this.selectLanguage = _this.selectLanguage.bind(_this);
+		_this.randomReset = _this.randomReset.bind(_this);
+		_this.previousTarget = _this.previousTarget.bind(_this);
+
+		// TESTING ONLY
+		_this.logState = _this.logState.bind(_this);
+		return _this;
+	}
+
+	_createClass(Study, [{
+		key: 'logState',
+		value: function logState() {
+			console.log(this.state);
+		}
+	}, {
+		key: 'selectLanguage',
+		value: function selectLanguage(event, index, value) {
+			this.setState({ languageValue: value });
+			// mapDispatchToProps to get the right information for that language
+		}
+
+		// play target audio
+
+	}, {
+		key: 'getTargetAudio',
+		value: function getTargetAudio(targetWord) {}
+
+		// record audio input
+
+	}, {
+		key: 'recordAudio',
+		value: function recordAudio() {}
+		// import and invoke the record audio function extracted from
+		// audioinput.js
+
+
+		// select next word
+
+	}, {
+		key: 'nextWord',
+		value: function nextWord() {}
+
+		// go back to the previous word
+
+	}, {
+		key: 'previousWord',
+		value: function previousWord() {}
+
+		// toggle pitch contour graph (own, target, combined)
+
+	}, {
+		key: 'toggleOverlay',
+		value: function toggleOverlay() {}
+
+		// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
+
+	}, {
+		key: 'randomReset',
+		value: function randomReset() {
+			var targets = this.state.allTargets;
+			var currentTarget = this.state.currentTarget;
+			var currentToneId = currentTarget.toneId;
+			var randNum = Math.floor(Math.random() * targets.length);
+
+			var previous = new _TargetToneList.TargetToneNode(currentTarget);
+			console.log(this.state.previousTarget);
+			this.state.previousTarget.addToHead(previous);
+			console.log(this.state.previousTarget);
+			if (this.state.previousTarget.length > 10) this.state.previousTarget.removeTail();
+
+			if (currentToneId === randNum) {
+				currentToneId = (currentToneId + 1) % targets.length;
+			}
+
+			// this.setState({
+			// 	previous: {
+			// 		duration: this.state.duration,
+			// 		englishTranslation: this.state.englishTranslation,
+			// 		language: this.state.language,
+			// 		nativeSpelling: this.state.nativeSpelling,
+			// 		pitches: this.state.pitches,
+			// 		tone: this.state.tone,
+			// 		tone_type_id: this.state.tone_type_id,
+			// 		toneId: this.state.toneId,
+			// 		transliteration: this.state.transliteration,
+			// 		wav: this.state.wav
+			// 	}
+			// });
+
+			currentTarget = targets[randNum];
+			this.setState({ currentTarget: currentTarget });
+		}
+
+		// BETA VERSION ONLY
+		// makes the next tone to study the tone that was just studied (i.e., studied prior to the current tone)
+
+	}, {
+		key: 'previousTarget',
+		value: function previousTarget() {
+			// console.log(this.state.previousTarget);
+			// console.log(this.state.previousTarget.head);
+			var currentTarget = this.state.previousTarget.head;
+			this.state.previousTarget.removeHead();
+			this.setState({ currentTarget: currentTarget });
+
+			// this.setState({
+			// 	tone_type_id: previous.tone_type_id,
+			// 	language: previous.language,
+			// 	tone: previous.tone,
+			// 	englishTranslation: previous.englishTranslation,
+			// 	toneId: previous.toneId,
+			// 	pitches: previous.pitches,
+			// 	nativeSpelling: previous.nativeSpelling,
+			// 	transliteration: previous.transliteration,
+			// 	wav: previous.wav
+			// });
+		}
+
+		// loads local state with all targets from the store; also sets current target
+
+	}, {
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			var allTargets = this.props.allTargets;
+			this.setState({ allTargets: allTargets });
+
+			var currentTarget = allTargets[Math.floor(Math.random() * allTargets.length)];
+			this.setState({ currentTarget: currentTarget });
+
+			// const linkedList = new TargetsLinkedList();
+			// const previousTarget = new TargetToneNode(null);
+			var initialNode = new _TargetToneList.TargetToneNode();
+			var previousTarget = new _TargetToneList.TargetsLinkedList(initialNode);
+			this.setState({ previousTarget: previousTarget });
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+
+			var pitches = this.state.currentTarget.pitches;
+
+			if (!window.AudioContext) {
+				if (!window.webkitAudioContext) {
+					alert('no audiocontext found');
+				}
+				window.AudioContext = window.webkitAudioContext;
+			}
+
+			// create audio context and canvas
+			var context = new AudioContext();
+
+			// create filter nodes
+			var hpFilter = context.createBiquadFilter();
+			hpFilter.type = "highpass";
+			hpFilter.frequency.value = 85;
+			hpFilter.gain.value = 10;
+
+			var lpFilter = context.createBiquadFilter();
+			lpFilter.type = "lowpass";
+			lpFilter.frequency.value = 900;
+			lpFilter.gain.value = 10;
+
+			// Create a compressor node
+			var compressor = context.createDynamicsCompressor();
+			compressor.threshold.value = -50;
+			compressor.knee.value = 40;
+			compressor.ratio.value = 12;
+			// compressor.reduction.value = -20;
+			compressor.attack.value = 0;
+			compressor.release.value = 0.25;
+
+			// create analyzer node
+			var viz = context.createAnalyser();
+			viz.fftSize = 2048;
+
+			// capture reference to this component so we can set state below
+			var self = this;
+
+			// EDITBRANCH: WE DONT NEED THIS ANYMORE NOW THAT WE HAVE DURATION AS A FIELD ON THE TARGET DB
+			var test = document.getElementById('soundSample');
+			test.onloadedmetadata = function () {
+				console.log('test.duration', test.duration);
+			};
+
+			// constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
+			var constraints = { audio: true, video: false };
+			// set up stream -- is a promise -- recording happens in .then off it
+			navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+
+				// create MediaRecorder instance
+				var mediaRecorder = new MediaRecorder(stream);
+
+				// holder for audio
+				var recording = [];
+
+				// when data is available, push available data to recording array
+				// as written, data is available when 'stop' is clicked which calls .stop on the mediaRecorder instance
+				mediaRecorder.ondataavailable = function (e) {
+					recording.push(e.data);
+				};
+
+				// create audioNode stream source with stream so we can route it through the audioContext
+				var source = context.createMediaStreamSource(stream);
+				// connect it to the nodes
+				source.connect(viz);
+				// lpFilter.connect(hpFilter);
+				// hpFilter.connect(viz);
+				viz.connect(compressor);
+
+				// grab DOM buttons
+				var record = document.getElementById("Record");
+				// var stop = document.getElementById("stop");
+
+				// declare setInterval variable outside so we can kill the interval in a separate function
+				var repeatDraw;
+
+				// EDITBRANCH: THIS DURATION VARIABLE IS VERY MISLEADING
+				var fakeDuration = self.state.targetDuration;
+
+				var targetRunTime = self.state.duration;
+
+				// EDITBRANCH: LOG FOR THE DYNAMIC TARGET DURATION
+				console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
+				// onclick handler for record button
+
+				/****************** THE SET TIMEOUT IS WHACK USER INPUT GETS CUTOFF AF *************/
+				/**********************************************************************************/
+				/**********************************************************************************/
+				record.onclick = function () {
+					console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
+					var countdown = document.getElementById('countdown');
+					var seconds = 3;
+					countdown.innerHTML = seconds;
+					// EDITBRANCH: GENERAL QUESTION WHY IS THIS INCREMENTING FROM 1000 -> 3000 -> 3500 AND NOT 1000 -> 2000 -> 3000??
+					var countdownTimer = setInterval(function () {
+						seconds = seconds - 1;
+						countdown.innerHTML = seconds > 0 ? seconds : "Go!";
+					}, 1000);
+					setTimeout(function () {
+						clearInterval(countdownTimer);
+						record.style.background = "red";
+						record.style.color = "black";
+					}, 2000);
+					setTimeout(function () {
+						// connect stream to speakers, making it audible
+						viz.connect(context.destination);
+						// call .start on mediaRecorder instance
+						mediaRecorder.start();
+					}, 3000);
+					setTimeout(function () {
+						// setInterval to continually rerender waveform
+						record.style.background = "";
+						record.style.color = "";
+						mediaRecorder.stop();
+						viz.disconnect(context.destination);
+					}, 3000 + targetRunTime);
+				};
+
+				// onclick handler for stop button
+				// stop.onclick = function() {
+				//     // disconnect from speakers, effectively muting stream
+				//     viz.disconnect(context.destination);
+				//     // call stop on mediaRecorder, firing a "data available" event which trigger .ondataavailable
+				//     mediaRecorder.stop();
+				// record.style.background = "";
+				// record.style.color = "";
+				//     clearInterval(repeatDraw);
+				// }
+
+				// onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
+				mediaRecorder.onstop = function (e) {
+					console.log("recorder stopped");
+
+					// prompt to name the file
+					// EDITBRANCH: THIS POPUP IS KIND OF ANNOYING SO I COMMENTED IT OUT BUT I THINK ITS A GOOD IDEA
+					// TO HAVE SOME KIND OF FEEDBACK WHEN THEIR DONE RECORDING. MAYBE WE SHOULD KEEP THIS OR HAVE SOME
+					// KIND OF TOAST OR OTHER POP UP SAYING GOOD JOB OR SOME SHIT IDC BUT FOR TESTING ITS ANNOYING
+					//var clipName = prompt('Enter a name for your sound clip');
+
+					// create audio element to post to page
+					var clipContainer = document.createElement('article');
+					var clipLabel = document.createElement('p');
+					var audio = document.getElementById('soundSample');
+					var deleteButton = document.createElement('button');
+
+					// add created audio element to page
+					clipContainer.classList.add('clip');
+					audio.setAttribute('controls', '');
+					deleteButton.innerHTML = "Delete";
+					// EDITBRANCH: NO CLIPLABEL B/C NO CLIPNAME
+					//clipLabel.innerHTML = clipName;
+
+					// clipContainer.appendChild(audio);
+					// clipContainer.appendChild(clipLabel);
+					// clipContainer.appendChild(deleteButton);
+					// soundClips.appendChild(clipContainer);
+
+					// create Blob for access by audio element, set as src for playback
+					var blob = new Blob(recording, { 'type': 'audio/ogg; codecs=opus' });
+					recording = [];
+					var audioURL = window.URL.createObjectURL(blob);
+					audio.src = audioURL;
+
+					// use FileReader to access the Blob data
+					var reader = new FileReader();
+					reader.addEventListener("loadend", function () {
+						// not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
+						// var buffer = new Uint8Array(reader.result);
+
+						context.decodeAudioData(reader.result).then(function (data) {
+
+							var detectPitch = new _pitchfinder2.default.YIN();
+							var detectors = [detectPitch, _pitchfinder2.default.AMDF()];
+
+							var float32Array = data.getChannelData(0); // get a single channel of sound
+							// const pitch = detectPitch(float32Array); // null if pitch cannot be identified
+
+							// 500 bpm = 8.33 beats per second
+							// quantization = 4 --> 33.32 samples per second
+							var frequencies = _pitchfinder2.default.frequencies(detectors, float32Array, {
+								tempo: 500, // in BPM, defaults to 120
+								quantization: 8 }).map(function (freq) {
+								return Math.round(freq);
+							});
+
+							var results = [];
+
+							/**************************************************************************/
+							/**************************************************************************/
+							/************************algo editing starts here**************************/
+							/**************************************************************************/
+							/**************************************************************************/
+							/**************************************************************************/
+
+							frequencies.forEach(function (freq) {
+								if (typeof freq !== 'number' || freq > 1000 || isNaN(freq)) {
+									if (!results.length) {
+										results.push(0);
+									} else {
+										results.push(results[results.length - 1]);
+									}
+								} else {
+									results.push(freq);
+								}
+							});
+
+							// EDITBRANCH: filter out the zeros
+							results = results.filter(function (freq) {
+								return freq > 0;
+							});
+
+							// EDITBRANCH: create a 'difference' for each data set: n+1 - n
+							var resultsDiff = [];
+							var targetsDiff = [];
+
+							// EDITBRANCH: I initially had thse functions push the absolute value of the differences
+							// but that isn't accurate b/c it won't indicate if the graph is rising or falling. The
+							// difference graphs here now show the change of the contour arrays and can be meaningful
+							// for a user (diffArray decreases = contour increases and vice versa)
+							for (var i = 0; i < results.length; i++) {
+								// handle last value
+								if (i === results.length) {
+									break;
+								}
+								resultsDiff.push(results[i + 1] - results[i]);
+							}
+
+							for (var i = 0; i < pitches.length; i++) {
+								// handle last value
+								if (i === pitches.length) {
+									break;
+								}
+								targetsDiff.push(pitches[i + 1] - pitches[i]);
+							}
+
+							console.log("results frequencies", results);
+							console.log('pitches frequencies', pitches);
+
+							// EDITBRANCH: didn't implement it but heres the plan:
+							// THE IDEA: where the values for resultsDiff and targetsDiff at [i] are within a range of
+							// each other, we can determine accuracy of inputted tone (ex. 0 for best, 1-2 for decent, 3+ for bad)
+							// targetsDiff is also helpful b/c there is consistently a large spike in the target audio at the very beginning,
+							// which is usually around when the contour we're interested in starts. So we could slice the targetsDiff array starting
+							// from that index in the pitches array and then be able to accurately compare that to the resultsDiff array. Maybe. I'm not
+							// 100% on that logic holding water. 
+							// FOR USER UNDERSTANDING THERE COULD BE TWO VIEWS ON THE GRAPH (displayed via a toggle): 
+							//    by default it shows the two DIFFERENCE arrays, grading the users according to the rubric above
+							//    toggled option would be the contour overlays for more details. 
+							// ^^ the order could be reversed if people think it makes sense the other way
+
+							// ALTERNATIVE IDEA: Implement our super baller OG traffic light of success idea. Display the pitch contour color it
+							// according to what our diff arrays determine as good/bad. Green for good, yellow for decent, red for bad. THE TRICK
+							// HERE is making sure our data points lineup, but with the improved duration we're getting within 3-5 so some clever slicing
+							// could be beneficial orrrr just fuck it, it's an approximation we made this in 3 weeks do something about it. 
+							// how to implement: make THREE ARRAYS. a perfect array, a decent array, and a bad array. Bad pushes the value of pitches wherever
+							// (Math.abs(targetsDiff - resultsDiff)) >= 3, and zeroes otherwise. Decent does that for 1-2, perfect for 0. We graph all three and
+							// tell chart.js to IGNORE ZEROES. IT'LL BE SO LIT. I'M PRETTY SURE WE CAN DO THIS. FUCK YEAAAAAAAAAAA
+							// if we wanna get super fancy, we could find the difference w/o Math.abs and take note of positive/negative differences and somehow 
+							// indicate to the user that where negative, they need to raise their inflection and where positive they need to lower their inflection
+
+							console.log('resultsDiff values', resultsDiff);
+							console.log('targetsDiff values', targetsDiff);
+
+							var differenceScore = [];
+							// compare the Math.abs() diff between targetsDiff and resultsDiff ** HARD b/c length isn't equal..
+							// for now, just looping through resultsDiff since it's consistently shorter
+							for (var i = 0; i < resultsDiff.length; i++) {
+								differenceScore.push(Math.abs(resultsDiff[i] - targetsDiff[i]));
+							}
+
+							console.log('difference score is: ', differenceScore);
+
+							// create the three graphing arrays from differenceScore
+							var perfectScore = [];
+							var acceptableScore = [];
+							var failingScore = [];
+							var pointBackgroundColor = [];
+
+							// push values from pitches into the score arrays if their condition is met. else, push zeros
+							for (var i = 0; i < differenceScore.length; i++) {
+								// perfect condition: 0-1
+								if (differenceScore[i] <= 1) {
+									perfectScore.push(pitches[i]);
+									pointBackgroundColor.push('green');
+								} else {
+									perfectScore.push(NaN);
+								}
+
+								// acceptable condition: 2-4
+								if (differenceScore[i] <= 4 && differenceScore[i] >= 2) {
+									acceptableScore.push(pitches[i]);
+									pointBackgroundColor.push('yellow');
+								} else {
+									acceptableScore.push(NaN);
+								}
+
+								// failing condition: 5+
+								if (differenceScore[i] >= 5) {
+									failingScore.push(pitches[i]);
+									pointBackgroundColor.push('red');
+								} else {
+									failingScore.push(NaN);
+								}
+							}
+
+							console.log('perfect score: ', perfectScore);
+							console.log('acceptableScore', acceptableScore);
+							console.log('failingScore', failingScore);
+
+							var pitchesShiftedUp = pitches.map(function (pitch) {
+								return pitch = pitch + 15;
+							});
+
+							var chartCtx = document.getElementById("studyChart").getContext("2d");
+
+							var myLineChart = new Chart(chartCtx, {
+								type: 'line',
+								data: {
+									labels: pitches,
+									datasets: [{
+										label: 'perfect score - right on!',
+										data: perfectScore,
+										borderCapStyle: 'butt',
+										borderColor: 'green',
+										fill: false,
+										elements: {
+											point: {
+												radius: 8,
+												backgroundColor: 'green',
+												borderWidth: 5
+											}
+										}
+									}, {
+										label: 'pretty close - getting there!',
+										data: acceptableScore,
+										borderCapStyle: 'butt',
+										borderColor: 'yellow',
+										fill: false
+									}, {
+										label: 'didnt get it - work on this part!',
+										data: failingScore,
+										borderCapStyle: 'butt',
+										borderColor: 'red',
+										fill: false,
+										elements: {
+											point: {
+												radius: 8,
+												backgroundColor: 'red',
+												borderWidth: 5
+											}
+										}
+									}, {
+										label: 'Target Contour',
+										data: pitchesShiftedUp,
+										borderCapStyle: 'butt',
+										borderColor: 'rgba(225, 225, 225, 0.6)',
+										fill: false,
+										pointBackgroundColor: pointBackgroundColor
+									}]
+								},
+								options: {
+									title: {
+										display: 'true',
+										position: 'top',
+										text: 'PITCH CONTOUR SCORE',
+										fontSize: 20
+									}
+								}
+							});
+
+							self.setState({
+								arrayBuffer: data,
+								userPitches: frequencies,
+								chartLabels: frequencies
+							});
+
+							// close the decode audio data promise 
+						});
+						// close the readFile function
+					});
+
+					// once read, fires "loadend" event, then above callback runs to set state
+					reader.readAsArrayBuffer(blob);
+
+					// delete button
+					deleteButton.onclick = function (e) {
+						var evtTgt = e.target;
+						evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
+					};
+				};
+			}).catch(function (err) {
+				console.log(err);
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			var transliteration = this.state.currentTarget.transliteration;
+			var englishTranslation = this.state.currentTarget.englishTranslation;
+			var image = this.state.currentTarget.nativeSpelling;
+			var wav = this.state.currentTarget.wav;
+
+			var dropDownMenu = function dropDownMenu() {
+				return _react2.default.createElement(
+					_DropDownMenu2.default,
+					{
+						value: _this2.state.languageValue,
+						style: { width: '15%' },
+						autoWidth: false,
+						onChange: _this2.selectLanguage },
+					_react2.default.createElement(_MenuItem2.default, { value: 1, primaryText: 'Language' }),
+					_react2.default.createElement(_MenuItem2.default, { value: 2, primaryText: 'Thai' }),
+					_react2.default.createElement(_MenuItem2.default, { value: 3, primaryText: 'Chinese' }),
+					_react2.default.createElement(_MenuItem2.default, { value: 4, primaryText: 'Hmong' })
+				);
+			};
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'studyDiv' },
+				_react2.default.createElement(
+					_reactBootstrap.Row,
+					{ className: 'show-grid' },
+					_react2.default.createElement(
+						_reactBootstrap.Col,
+						{ lg: 6 },
+						_react2.default.createElement(
+							_Paper2.default,
+							{ zDepth: 1 },
+							_react2.default.createElement('img', { src: image }),
+							_react2.default.createElement(
+								'h1',
+								null,
+								transliteration
+							),
+							_react2.default.createElement(
+								'h2',
+								null,
+								englishTranslation
+							)
+						)
+					),
+					_react2.default.createElement(
+						_reactBootstrap.Col,
+						{ lg: 6 },
+						_react2.default.createElement(
+							_Paper2.default,
+							{ zDepth: 1 },
+							_react2.default.createElement(_RaisedButton2.default, { label: 'LOG STATE', onClick: this.logState }),
+							_react2.default.createElement(_RaisedButton2.default, { label: 'Previous', onClick: this.previousTarget }),
+							_react2.default.createElement(
+								_RaisedButton2.default,
+								{ id: 'Record' },
+								_react2.default.createElement(
+									'p',
+									{ id: 'countdown' },
+									'Record'
+								)
+							),
+							_react2.default.createElement(_RaisedButton2.default, { label: 'Next', onClick: this.randomReset }),
+							_react2.default.createElement('audio', { controls: true, id: 'soundSample', src: wav }),
+							_react2.default.createElement('div', { id: 'soundClips' })
+						)
+					)
+				),
+				_react2.default.createElement('br', null),
+				_react2.default.createElement(
+					_Paper2.default,
+					{ zDepth: 1 },
+					_react2.default.createElement('canvas', { id: 'studyChart' })
+				)
+			);
+		}
+	}]);
+
+	return Study;
 }(_react2.default.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {
-    targets: state.targets
-  };
+	return {
+		allTargets: state.allTargets
+	};
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {};
+	return {};
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Study);
@@ -45548,7 +45515,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var rootReducer = (0, _redux.combineReducers)({
   language: _Language2.default,
-  targets: _Targets2.default
+  allTargets: _Targets2.default
 });
 
 exports.default = rootReducer;
@@ -104682,6 +104649,89 @@ module.exports = function() {
 	throw new Error("define cannot be used indirect");
 };
 
+
+/***/ }),
+/* 919 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TargetToneNode = exports.TargetToneNode = function TargetToneNode() {
+	var val = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+	_classCallCheck(this, TargetToneNode);
+
+	this.value = val;
+	this.next = null;
+	this.previous = null;
+};
+
+var TargetsLinkedList = exports.TargetsLinkedList = function () {
+	function TargetsLinkedList() {
+		var val = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+		_classCallCheck(this, TargetsLinkedList);
+
+		this.head = val;
+		this.tail = null;
+		this.length = 0;
+	}
+
+	_createClass(TargetsLinkedList, [{
+		key: "addToHead",
+		value: function addToHead(target) {
+			var targetNode = new TargetToneNode(target);
+			if (!this.head) {
+				this.head = targetNode;
+				this.tail = targetNode;
+			} else {
+				var oldHead = this.head;
+				this.head.next = oldHead;
+				this.head.previous = targetNode;
+				this.head = targetNode;
+				this.head.next = oldHead;
+			}
+			this.length++;
+		}
+	}, {
+		key: "removeHead",
+		value: function removeHead() {
+			if (!this.head) return;
+
+			var toRemove = this.head;
+			this.head = this.head.next;
+			if (!this.head) this.tail = null;else this.head.previous = null;
+
+			this.length--;
+
+			return toRemove;
+		}
+	}, {
+		key: "removeTail",
+		value: function removeTail() {
+			if (!this.tail) return;
+
+			var toRemove = this.tail;
+			this.tail = this.tail.previous;
+			if (!this.tail) this.head = null;else this.tail.next = null;
+
+			this.length--;
+
+			return toRemove;
+		}
+	}]);
+
+	return TargetsLinkedList;
+}();
 
 /***/ })
 /******/ ]);

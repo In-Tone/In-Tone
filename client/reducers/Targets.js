@@ -3,9 +3,9 @@ import { processTargetData } from '../utils/ProcessTargetData';
 
 export const SET_TARGETS = 'SET_TARGETS';
 
-export const setTargets = (targets) => ({
+export const setTargets = (allTargets) => ({
 	type: SET_TARGETS,
-	targets
+	allTargets
 });
 
 export const fetchTargets = (language) =>
@@ -14,8 +14,8 @@ export const fetchTargets = (language) =>
 			.then(res => {
 				return processTargetData(res);
 			})
-			.then(data => {
-				dispatch(setTargets(data));
+			.then(allTargets => {
+				dispatch(setTargets(allTargets));
 			})
 			.catch(err => console.error(err));
 };
@@ -23,7 +23,7 @@ export const fetchTargets = (language) =>
 const reducer = (state=[], action) => {
 	switch(action.type) {
 		case SET_TARGETS:
-			return action.targets;
+			return action.allTargets;
 		default:
 			return state;
 	}
