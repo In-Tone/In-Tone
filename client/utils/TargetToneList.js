@@ -15,17 +15,10 @@ export class TargetsLinkedList {
 
 	addToHead(target) {
 		let targetNode = new TargetToneNode(target);
-		if (!this.head) {
-			this.head = targetNode;
-			this.tail = targetNode;
-		}
-		else {
-			let oldHead = this.head;
-			this.head.next = oldHead;
-			this.head.previous = targetNode;
-			this.head = targetNode;
-			this.head.next = oldHead;
-		}
+		let oldNode = this.head;
+		this.head = targetNode;
+		this.head.next = oldNode;
+		oldNode.previous = this.head;
 		this.length++;
 	}
 

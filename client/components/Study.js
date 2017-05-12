@@ -19,7 +19,7 @@ class Study extends React.Component {
 		this.state = {
 			allTargets: [], 
 			currentTarget: {},
-			previousTarget: {}
+			previousTargets: []
 		};
 
 		this.selectLanguage = this.selectLanguage.bind(this);
@@ -34,97 +34,32 @@ class Study extends React.Component {
 		console.log(this.state);
 	}
 
-
-	selectLanguage(event, index, value) {
-		this.setState({languageValue: value})
-		// mapDispatchToProps to get the right information for that language
-	}
-
-	// play target audio
-	getTargetAudio(targetWord) {
-
-	}
-
-	// record audio input
-	recordAudio() {
-		// import and invoke the record audio function extracted from
-		// audioinput.js
-	}
-
-	// select next word
-	nextWord() {
-
-	}
-
-	// go back to the previous word
-	previousWord() {
-
-	}
-
-	// toggle pitch contour graph (own, target, combined)
-	toggleOverlay() {
-
-	}
-
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
 	randomReset() {
-		let targets = this.state.allTargets;
+		let allTargets = this.state.allTargets;
 		let currentTarget = this.state.currentTarget;
+
+		let previousTargets = this.state.previousTargets;
+
+		previousTargets.push(currentTarget);
+		this.setState({ previousTargets });
+
 		let currentToneId = currentTarget.toneId;
-		let randNum = Math.floor(Math.random()*targets.length);
-
-		let previous = new TargetToneNode(currentTarget);
-		console.log(this.state.previousTarget);
-		this.state.previousTarget.addToHead(previous);
-		console.log(this.state.previousTarget);
-		if (this.state.previousTarget.length > 10) this.state.previousTarget.removeTail();
-
-		if (currentToneId === randNum) {
-			currentToneId = (currentToneId + 1) % targets.length; 
-		}
-
-		// this.setState({
-		// 	previous: {
-		// 		duration: this.state.duration,
-		// 		englishTranslation: this.state.englishTranslation,
-		// 		language: this.state.language,
-		// 		nativeSpelling: this.state.nativeSpelling,
-		// 		pitches: this.state.pitches,
-		// 		tone: this.state.tone,
-		// 		tone_type_id: this.state.tone_type_id,
-		// 		toneId: this.state.toneId,
-		// 		transliteration: this.state.transliteration,
-		// 		wav: this.state.wav
-		// 	}
-		// });
-
-		currentTarget = targets[randNum];
+		let randNum = Math.floor(Math.random()*allTargets.length);
+		if (currentToneId === randNum) randNum = (randNum + 1) % allTargets.length;
+		currentTarget = allTargets[randNum];
 		this.setState({ currentTarget });
-
 	}
 
 	// BETA VERSION ONLY
 	// makes the next tone to study the tone that was just studied (i.e., studied prior to the current tone)
 	previousTarget () {
-		// console.log(this.state.previousTarget);
-		// console.log(this.state.previousTarget.head);
-		let currentTarget = this.state.previousTarget.head;
-		this.state.previousTarget.removeHead();
+		console.log('here');
+		let previousTargets = this.state.previousTargets;
+		if (!previousTargets.length) return;
+		let currentTarget = previousTargets.pop();
+		this.setState({ previousTargets });
 		this.setState({ currentTarget });
-
-
-		// this.setState({
-		// 	tone_type_id: previous.tone_type_id,
-		// 	language: previous.language,
-		// 	tone: previous.tone,
-		// 	englishTranslation: previous.englishTranslation,
-		// 	toneId: previous.toneId,
-		// 	pitches: previous.pitches,
-		// 	nativeSpelling: previous.nativeSpelling,
-		// 	transliteration: previous.transliteration,
-		// 	wav: previous.wav
-		// });
-
 	}
 
 	// loads local state with all targets from the store; also sets current target
@@ -134,12 +69,6 @@ class Study extends React.Component {
 
 		const currentTarget = allTargets[Math.floor(Math.random()*allTargets.length)];
 		this.setState({ currentTarget });
-
-		// const linkedList = new TargetsLinkedList();
-		// const previousTarget = new TargetToneNode(null);
-		const initialNode = new TargetToneNode();
-		const previousTarget = new TargetsLinkedList(initialNode);
-		this.setState({ previousTarget });
 	}
 
 	componentDidMount(){
