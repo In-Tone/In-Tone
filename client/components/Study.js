@@ -14,7 +14,9 @@ class Study extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			languageValue: 1,
+      languageValue: 1,
+
+      //EDITBRANCH: EVERYTHING BELOW THIS IS WHACK WHY DO WE STILL HAVE IT
 			targetIMG: '',
 			targetTranslation: '',
 			// chart data
@@ -22,22 +24,27 @@ class Study extends React.Component {
 			targetPitches: [83,87,87,87,87,87,87,87,87,92,281,281,283,281,277,276,276,276,276,277,277,279,279,281,281,277,277,272,271,264,261,255,246,231,208,193,170,155,145,142,142,142],
 			chartLabels: [],
 			audioBuffer: [],
-            targetDuration: 641.587,
+      // EIDTBRANCH: THIS USED TO BE HARDCODED AT 647 AND WAS USED AS THE DURATION FOR OUR BETA WHICH IS WHY
+      // EVERYONE GOT CUT OFF UNLESS THE ONE WORD IT WAS HARD CODED TO WAS THE TARGET SMH ROOKIE MISTAKES 
+      targetDuration: 0,
+      // EDITBRANCH: EVERYTHING ABOVE THIS IS WHACK WHY DO WE STILL HAVE IT
+
       /// FROM THE STORE!!!!!  ///
       // collection of targets for a given language; cycle through these;
-          targets: [],
-          // information for current target
-          duration: '',
-          englishTranslation: '',
-          language: '',
-          nativeSpelling: '',
-          pitches: [],
-          tone: '',
-          tone_type_id: 0, // id for toneType db model
-          toneId: '', // id for Target db model
-          transliteration: '',
-          wav: '',
-          previous: {}
+      targets: [],
+      // information for current target
+      // EDITBRANCH: DURATION WAS INITIALIZED AS A STRING NOT A NUMBER ALSO IT WAS NEVER USED 
+      duration: 0,
+      englishTranslation: '',
+      language: '',
+      nativeSpelling: '',
+      pitches: [],
+      tone: '',
+      tone_type_id: 0, // id for toneType db model
+      toneId: '', // id for Target db model
+      transliteration: '',
+      wav: '',
+      previous: {}
 
 		}
 		this.selectLanguage = this.selectLanguage.bind(this);
@@ -148,6 +155,7 @@ class Study extends React.Component {
 
   componentWillMount() {
     const targets = this.props.targets;
+    // EDITBRANCH: THIS EXACT VARIABLE IS ALSO DECLARED IN COMPONENTWILLMOUNT BUT ITS POSSIBLE I DID THIS
     const pitches = this.state.pitches;
 
     console.log('what is targets', targets)
@@ -170,6 +178,7 @@ class Study extends React.Component {
   }
 
   componentDidMount(){
+    // EDITBRANCH: THIS EXACT VARIABLE IS ALSO DECLARED IN COMPONENTWILLMOUNT BUT ITS POSSIBLE I DID THIS
     const pitches = this.state.pitches;
 
     if (!window.AudioContext) {
@@ -209,6 +218,7 @@ class Study extends React.Component {
     // capture reference to this component so we can set state below
     var self = this;
 
+    // EDITBRANCH: WE DONT NEED THIS ANYMORE NOW THAT WE HAVE DURATION AS A FIELD ON THE TARGET DB
     var test = document.getElementById('soundSample');
     test.onloadedmetadata = function() {
         console.log('test.duration', test.duration)
@@ -246,15 +256,23 @@ class Study extends React.Component {
         // declare setInterval variable outside so we can kill the interval in a separate function
         var repeatDraw;
 
-        var duration = self.state.targetDuration;
+        // EDITBRANCH: THIS DURATION VARIABLE IS VERY MISLEADING
+        var fakeDuration = self.state.targetDuration;
 
+        let targetRunTime = self.state.duration
+
+        // EDITBRANCH: LOG FOR THE DYNAMIC TARGET DURATION
+        console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
         // onclick handler for record button
+        /****************** THE SET TIMEOUT IS WHACK USER INPUT GETS CUTOFF AF *************/
+        /**********************************************************************************/
+        /**********************************************************************************/
         record.onclick = function() {
-            console.log('duration', duration);
+            console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
             var countdown = document.getElementById('countdown');
-            console.log(countdown);
             var seconds = 3;
             countdown.innerHTML = seconds;
+            // EDITBRANCH: GENERAL QUESTION WHY IS THIS INCREMENTING FROM 1000 -> 3000 -> 3500 AND NOT 1000 -> 2000 -> 3000??
             var countdownTimer = setInterval(() => {
                 seconds = seconds-1;
                 countdown.innerHTML = (seconds > 0) ? seconds : "Go!";
@@ -263,20 +281,20 @@ class Study extends React.Component {
                 clearInterval(countdownTimer);
                 record.style.background = "red";
                 record.style.color = "black";
-            }, 3000);
+            }, 2000);
             setTimeout(() => {
                 // connect stream to speakers, making it audible
                 viz.connect(context.destination);
                 // call .start on mediaRecorder instance
                 mediaRecorder.start();
-            }, 3500);
+            }, 3000);
             setTimeout(() => {
                 // setInterval to continually rerender waveform
             	record.style.background = "";
             	record.style.color = "";
             	mediaRecorder.stop();
             	viz.disconnect(context.destination);
-            }, 3500+duration);
+            }, 3000+targetRunTime);
         };
 
         // onclick handler for stop button
@@ -295,7 +313,10 @@ class Study extends React.Component {
             console.log("recorder stopped");
 
             // prompt to name the file
-            var clipName = prompt('Enter a name for your sound clip');
+            // EDITBRANCH: THIS POPUP IS KIND OF ANNOYING SO I COMMENTED IT OUT BUT I THINK ITS A GOOD IDEA
+            // TO HAVE SOME KIND OF FEEDBACK WHEN THEIR DONE RECORDING. MAYBE WE SHOULD KEEP THIS OR HAVE SOME
+            // KIND OF TOAST OR OTHER POP UP SAYING GOOD JOB OR SOME SHIT IDC BUT FOR TESTING ITS ANNOYING
+            //var clipName = prompt('Enter a name for your sound clip');
 
             // create audio element to post to page
             var clipContainer = document.createElement('article');
@@ -307,7 +328,9 @@ class Study extends React.Component {
             clipContainer.classList.add('clip');
             audio.setAttribute('controls', '');
             deleteButton.innerHTML = "Delete";
-            clipLabel.innerHTML = clipName;
+            // EDITBRANCH: NO CLIPLABEL B/C NO CLIPNAME
+            //clipLabel.innerHTML = clipName;
+
             // clipContainer.appendChild(audio);
             // clipContainer.appendChild(clipLabel);
             // clipContainer.appendChild(deleteButton);
@@ -319,130 +342,152 @@ class Study extends React.Component {
             var audioURL = window.URL.createObjectURL(blob);
             audio.src = audioURL;
 
-            console.log("blob", blob);
-
             // use FileReader to access the Blob data
             var reader = new FileReader();
             reader.addEventListener("loadend", function() {
                 // not sure yet if we need the raw reader.result or the Uint8Array version on state, and if it matters
                 // var buffer = new Uint8Array(reader.result);
 
-                context.decodeAudioData(reader.result).then((data) => {
+                context.decodeAudioData(reader.result).then(data => {
 
-                const detectPitch = new Pitchfinder.YIN();
-                const detectors = [detectPitch, Pitchfinder.AMDF()];
+                  const detectPitch = new Pitchfinder.YIN();
+                  const detectors = [detectPitch, Pitchfinder.AMDF()];
 
-                const float32Array = data.getChannelData(0); // get a single channel of sound
-                // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
+                  const float32Array = data.getChannelData(0); // get a single channel of sound
+                  // const pitch = detectPitch(float32Array); // null if pitch cannot be identified
 
-                // 500 bpm = 8.33 beats per second
-                // quantization = 4 --> 33.32 samples per second
-                let frequencies = Pitchfinder.frequencies(detectors, float32Array, {
-                tempo: 500, // in BPM, defaults to 120
-                quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
-                }).map(freq => Math.round(freq));
+                  // 500 bpm = 8.33 beats per second
+                  // quantization = 4 --> 33.32 samples per second
+                  let frequencies = Pitchfinder.frequencies(detectors, float32Array, {
+                  tempo: 500, // in BPM, defaults to 120
+                  quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
+                  }).map(freq => Math.round(freq));
 
-                let results = [];
+                  let results = [];
 
-                frequencies.forEach(freq => {
-                    if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
-                        if (!results.length) {
-                            results.push(0);
-                        } else {
-                            results.push(results[results.length - 1])
-                        }
-                    } else {
-                        results.push(freq);
+                  /**************************************************************************/
+                  /**************************************************************************/
+                  /************************algo editing starts here**************************/
+                  /**************************************************************************/
+                  /**************************************************************************/
+                  /**************************************************************************/
+
+                  frequencies.forEach(freq => {
+                      if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
+                          if (!results.length) {
+                              results.push(0);
+                          } else {
+                              results.push(results[results.length - 1])
+                          }
+
+                      } else {
+                          results.push(freq);
+                      }
+                  })
+
+                  // EDITBRANCH: filter out the zeros
+                  results = results.filter(freq => freq > 0)
+
+                  // EDITBRANCH: create a 'difference' for each data set: n+1 - n
+                  let resultsDiff = [];
+                  let targetsDiff = [];
+
+                  // EDITBRANCH: I initially had thse functions push the absolute value of the differences
+                  // but that isn't accurate b/c it won't indicate if the graph is rising or falling. The
+                  // difference graphs here now show the change of the contour arrays and can be meaningful
+                  // for a user (diffArray decreases = contour increases and vice versa)
+                  for(var i = 0; i < results.length; i++){
+                    // handle last value
+                    if(i === results.length){
+                      break
                     }
-                })
+                    resultsDiff.push((results[i + 1] - results[i]))
+                  }
 
-                // filter out bad data - hacky for now, throws out nulls and high values
-                // frequencies = frequencies.filter(freq => {
-                // if (typeof freq === 'number') {
-                //   return freq < 1000
-                // }
-                // return false
-                // }).map(freq => Math.round(freq))
-
-                console.log('all freqs: ', frequencies);
-                console.log('target pitches', pitches);
-                console.log("results frequencies", results);
-
-
-                var outerArray =[];
-
-                pitches.map((pitch, i) => {
-                    var diff = Math.abs(pitch - results[i]);
-                    if (diff > 0 && diff < 10) {
-                        outerArray.push([diff, i]);
+                  for(var i = 0; i < pitches.length; i++){
+                    // handle last value
+                    if(i === pitches.length){
+                      break
                     }
-                })
+                    targetsDiff.push((pitches[i + 1] - pitches[i]))
+                  }
 
-                // for (let i = 0; i < pitches.length; i++) {
-                //     var innerArray =[];
-                //     if (pitches[i] === 0) {
-                //         continue;
-                //     }
-                //     for (let k = 0; k < results.length; k++) {
-                //             if (Math.abs(pitches[i] - results[k]) < 20) {
-                //             innerArray.push(pitches[i]);
-                //             innerArray.push(results[k]);
-                //             outerArray.push(innerArray);
-                //         }
-                //         innerArray = [];
-                //     }
-                // }
+                  console.log("results frequencies", results);
+                  console.log('pitches frequencies', pitches);
 
-                console.log("test comparison", outerArray);
+                  // EDITBRANCH: didn't implement it but heres the plan:
+                  // THE IDEA: where the values for resultsDiff and targetsDiff at [i] are within a range of
+                  // each other, we can determine accuracy of inputted tone (ex. 0 for best, 1-2 for decent, 3+ for bad)
+                  // targetsDiff is also helpful b/c there is consistently a large spike in the target audio at the very beginning,
+                  // which is usually around when the contour we're interested in starts. So we could slice the targetsDiff array starting
+                  // from that index in the pitches array and then be able to accurately compare that to the resultsDiff array. Maybe. I'm not
+                  // 100% on that logic holding water. 
+                  // FOR USER UNDERSTANDING THERE COULD BE TWO VIEWS ON THE GRAPH (displayed via a toggle): 
+                  //    by default it shows the two DIFFERENCE arrays, grading the users according to the rubric above
+                  //    toggled option would be the contour overlays for more details. 
+                  // ^^ the order could be reversed if people think it makes sense the other way
 
-                var chartCtx = document.getElementById("studyChart").getContext("2d");
+                  console.log('resultsDiff values', resultsDiff);
+                  console.log('targetsDiff values', targetsDiff);
 
-                var index = outerArray[0][1];
+                  var chartCtx = document.getElementById("studyChart").getContext("2d");
 
-                var one = results.slice(index);
-                var two = pitches.slice(index);
-                var three = outerArray.map(arr => arr[0]);
+                  let myLineChart = new Chart(chartCtx, {
+                    type: 'line',
+                    data: {
+                    	labels: pitches,
+    	                datasets: [
+                          {
+                            label: 'targetsDiff',
+                            data: targetsDiff,
+                            borderCapStyle: 'butt',
+                            borderColor: 'blue',
+                            fill: false
+                          },
+                          {
+        	                	label: 'resultsDiff',
+        	                	data: resultsDiff,
+        	                	borderCapStyle: 'butt',
+        	                	borderColor: 'red',
+                            fill: false
+    	                    },
+                          {
+                            label: 'Your Contour',
+                            data: results,
+                            borderCapStyle: 'butt',
+                            borderColor: 'yellow',
+                            fill: false
+                          },
+                          {
+                            label: 'Target Contour',
+                            data: pitches,
+                            borderCapStyle: 'butt',
+                            borderColor: 'green',
+                            fill: false
+                          }
+                      ]
+                    },
+                    options: {
+                      title: {
+                        display: 'true',
+                        position: 'top',
+                        text: 'PITCH CONTOURS',
+                        fontSize: 20
+                      }
+                    }
+                  });
 
-                console.log("one", one);
-                console.log("two", two);
+                  self.setState({
+                      arrayBuffer: data,
+                      userPitches: frequencies,
+                      chartLabels: frequencies
+                  });
 
-                let myLineChart = new Chart(chartCtx, {
-                type: 'line',
-                data: {
-                	labels: one,
-	                datasets: [{
-                        label: 'user pitch',
-                        data: one,
-                        borderCapStyle: 'butt',
-                        borderColor: 'blue'
-                        },
-                        {
-	                	label: 'target pitch',
-	                	data: two,
-	                	borderCapStyle: 'butt',
-	                	borderColor: 'red'
-	                },
-                    {
-                        label: 'difference',
-                        data: three,
-                        borderCapStyle: 'butt',
-                        borderColor: 'green'
-                    }]
-                }
+                // close the decode audio data promise 
                 });
-
-
-
-                    console.log("data", data);
-                    self.setState({
-                        arrayBuffer: data,
-                        userPitches: frequencies,
-                        chartLabels: frequencies
-                    });
-                    console.log("state: ", self.state);
-                });
-
+            // close the readFile function
             });
+
             // once read, fires "loadend" event, then above callback runs to set state
             reader.readAsArrayBuffer(blob);
 
