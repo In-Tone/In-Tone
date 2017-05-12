@@ -4,7 +4,7 @@ import targetsReducer from './Targets';
 
 const rootReducer = combineReducers({
   language: languageReducer,
-  targets: targetsReducer
+  allTargets: targetsReducer
 });
 
 export default rootReducer;
