@@ -36864,6 +36864,16 @@ var Study = function (_React$Component) {
                             //    toggled option would be the contour overlays for more details. 
                             // ^^ the order could be reversed if people think it makes sense the other way
 
+                            // ALTERNATIVE IDEA: Implement our super baller OG traffic light of success idea. Display the pitch contour color it
+                            // according to what our diff arrays determine as good/bad. Green for good, yellow for decent, red for bad. THE TRICK
+                            // HERE is making sure our data points lineup, but with the improved duration we're getting within 3-5 so some clever slicing
+                            // could be beneficial orrrr just fuck it, it's an approximation we made this in 3 weeks do something about it. 
+                            // how to implement: make THREE ARRAYS. a perfect array, a decent array, and a bad array. Bad pushes the value of pitches wherever
+                            // (Math.abs(targetsDiff - resultsDiff)) >= 3, and zeroes otherwise. Decent does that for 1-2, perfect for 0. We graph all three and
+                            // tell chart.js to IGNORE ZEROES. IT'LL BE SO LIT. I'M PRETTY SURE WE CAN DO THIS. FUCK YEAAAAAAAAAAA
+                            // if we wanna get super fancy, we could find the difference w/o Math.abs and take note of positive/negative differences and somehow 
+                            // indicate to the user that where negative, they need to raise their inflection and where positive they need to lower their inflection
+
                             console.log('resultsDiff values', resultsDiff);
                             console.log('targetsDiff values', targetsDiff);
 
