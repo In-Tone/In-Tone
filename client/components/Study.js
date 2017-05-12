@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 const Chart = require('chart.js');
 import Pitchfinder from 'pitchfinder';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { TargetToneNode, TargetsLinkedList } from '../utils/TargetToneList';
+import { targetWord, button } from '../utils/StudyDivs.js';
 
 
 class Study extends React.Component {
@@ -22,7 +22,6 @@ class Study extends React.Component {
 			previousTargets: []
 		};
 
-		this.selectLanguage = this.selectLanguage.bind(this);
 		this.randomReset = this.randomReset.bind(this);
 		this.previousTarget = this.previousTarget.bind(this);
 
@@ -476,6 +475,9 @@ class Study extends React.Component {
 		const englishTranslation = this.state.currentTarget.englishTranslation;
 		const image = this.state.currentTarget.nativeSpelling;
 		const wav = this.state.currentTarget.wav;
+		const logState = this.logState;
+		const previousTarget = this.previousTarget;
+		const randomReset = this.randomReset;
 
 		const dropDownMenu = () => (
 			<DropDownMenu
@@ -494,20 +496,16 @@ class Study extends React.Component {
 			<div className='studyDiv'>
 				<Row className='show-grid'>
 					<Col lg={6}>
-						<Paper zDepth={1}>
-							<img src={image} />
-							<h1>{transliteration}</h1>
-							<h2>{englishTranslation}</h2>
-						</Paper>
+						{targetWord(image, transliteration, englishTranslation)}
 					</Col>
 					<Col lg={6}>
 						<Paper zDepth={1}>
-							<RaisedButton label='LOG STATE' onClick={this.logState}/>
-							<RaisedButton label='Previous' onClick={this.previousTarget}/>
+							{button('LOG STATE', logState)}
+							{button('PREVIOUS', previousTarget)}
 							<RaisedButton id='Record'>
 								<p id="countdown">Record</p>
 							</RaisedButton>
-							<RaisedButton label='Next' onClick={this.randomReset}/>
+							{button('NEXT', randomReset)}
 							<audio controls id='soundSample' src={wav}/>
 							<div id='soundClips'></div>
 						</Paper>
