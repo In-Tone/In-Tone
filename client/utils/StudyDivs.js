@@ -2,11 +2,12 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export const targetWord = (image, transliteration, englishTranslation) => (
+export const targetWord = (image, transliteration, englishTranslation, tone) => (
 	<Paper zDepth={1}>
 		<img src={image} />
-		<h1>{transliteration}</h1>
-		<h2>{englishTranslation}</h2>
+		<h1>Transliteration: {transliteration}</h1>
+		<h2>English Translations: {englishTranslation}</h2>
+		<h2>Tone: {tone}</h2>
 	</Paper>
 );
 
