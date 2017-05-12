@@ -24,7 +24,7 @@ class Study extends React.Component {
 			targetPitches: [83,87,87,87,87,87,87,87,87,92,281,281,283,281,277,276,276,276,276,277,277,279,279,281,281,277,277,272,271,264,261,255,246,231,208,193,170,155,145,142,142,142],
 			chartLabels: [],
 			audioBuffer: [],
-      // EIDTBRANCH: THIS USED TO BE HARDCODED AT 647 AND WAS USED AS THE DURATION FOR OUR BETA WHICH IS WHY
+      // EDITBRANCH: THIS USED TO BE HARDCODED AT 647 AND WAS USED AS THE DURATION FOR OUR BETA WHICH IS WHY
       // EVERYONE GOT CUT OFF UNLESS THE ONE WORD IT WAS HARD CODED TO WAS THE TARGET SMH ROOKIE MISTAKES 
       targetDuration: 0,
       // EDITBRANCH: EVERYTHING ABOVE THIS IS WHACK WHY DO WE STILL HAVE IT
@@ -264,6 +264,7 @@ class Study extends React.Component {
         // EDITBRANCH: LOG FOR THE DYNAMIC TARGET DURATION
         console.log('THE ACTUAL, DYNAMIC TARGET DURATION', targetRunTime);
         // onclick handler for record button
+
         /****************** THE SET TIMEOUT IS WHACK USER INPUT GETS CUTOFF AF *************/
         /**********************************************************************************/
         /**********************************************************************************/
@@ -440,6 +441,54 @@ class Study extends React.Component {
                   console.log('resultsDiff values', resultsDiff);
                   console.log('targetsDiff values', targetsDiff);
 
+                  let differenceScore = [];
+                  // compare the Math.abs() diff between targetsDiff and resultsDiff ** HARD b/c length isn't equal..
+                  // for now, just looping through resultsDiff since it's consistently shorter
+                  for(var i = 0; i < resultsDiff.length; i++){
+                    differenceScore.push(Math.abs(resultsDiff[i] - targetsDiff[i]))
+                  }
+
+                  console.log('difference score is: ', differenceScore)
+
+                  // create the three graphing arrays from differenceScore
+                  let perfectScore = [];
+                  let acceptableScore = [];
+                  let failingScore = [];
+                  let pointBackgroundColor = [];
+
+                  // push values from pitches into the score arrays if their condition is met. else, push zeros
+                  for(var i = 0; i < differenceScore.length; i++){
+                    // perfect condition: 0-1
+                    if(differenceScore[i] <= 1){
+                      perfectScore.push(pitches[i]);
+                      pointBackgroundColor.push('green');
+                    }else{
+                      perfectScore.push(NaN)
+                    }
+                    
+                    // acceptable condition: 2-4
+                    if(differenceScore[i] <= 4 && differenceScore[i] >= 2){
+                      acceptableScore.push(pitches[i])
+                      pointBackgroundColor.push('yellow');
+                    }else{
+                      acceptableScore.push(NaN)
+                    }
+
+                    // failing condition: 5+
+                    if(differenceScore[i] >= 5){
+                      failingScore.push(pitches[i])
+                      pointBackgroundColor.push('red');
+                    }else{
+                      failingScore.push(NaN)
+                    }
+                  }
+
+                  console.log('perfect score: ', perfectScore);
+                  console.log('acceptableScore', acceptableScore);
+                  console.log('failingScore', failingScore);
+
+                  const pitchesShiftedUp = pitches.map(pitch => pitch = pitch + 15)
+
                   var chartCtx = document.getElementById("studyChart").getContext("2d");
 
                   let myLineChart = new Chart(chartCtx, {
@@ -448,32 +497,47 @@ class Study extends React.Component {
                     	labels: pitches,
     	                datasets: [
                           {
-                            label: 'targetsDiff',
-                            data: targetsDiff,
+                            label: 'perfect score - right on!',
+                            data: perfectScore,
                             borderCapStyle: 'butt',
-                            borderColor: 'blue',
-                            fill: false
+                            borderColor: 'green',
+                            fill: false,
+                            elements: {
+                              point: {
+                                radius: 8,
+                                backgroundColor: 'green',
+                                borderWidth: 5
+                              }
+                            }
                           },
                           {
-        	                	label: 'resultsDiff',
-        	                	data: resultsDiff,
+        	                	label: 'pretty close - getting there!',
+        	                	data: acceptableScore,
         	                	borderCapStyle: 'butt',
-        	                	borderColor: 'red',
+        	                	borderColor: 'yellow',
                             fill: false
     	                    },
                           {
-                            label: 'Your Contour',
-                            data: results,
+                            label: 'didnt get it - work on this part!',
+                            data: failingScore,
                             borderCapStyle: 'butt',
-                            borderColor: 'yellow',
-                            fill: false
+                            borderColor: 'red',
+                            fill: false,
+                            elements: {
+                              point: {
+                                radius: 8,
+                                backgroundColor: 'red',
+                                borderWidth: 5
+                              }
+                            }
                           },
                           {
                             label: 'Target Contour',
-                            data: pitches,
+                            data: pitchesShiftedUp,
                             borderCapStyle: 'butt',
-                            borderColor: 'green',
-                            fill: false
+                            borderColor: 'rgba(225, 225, 225, 0.6)',
+                            fill: false,
+                            pointBackgroundColor: pointBackgroundColor
                           }
                       ]
                     },
@@ -481,7 +545,7 @@ class Study extends React.Component {
                       title: {
                         display: 'true',
                         position: 'top',
-                        text: 'PITCH CONTOURS',
+                        text: 'PITCH CONTOUR SCORE',
                         fontSize: 20
                       }
                     }
