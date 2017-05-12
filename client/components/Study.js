@@ -88,7 +88,7 @@ class Study extends React.Component {
 
   randomReset() {
 
-    console.log(this.state.nativeSpelling);
+    // console.log(this.state.nativeSpelling);
 
     let targets = this.state.targets;
     let currentToneId = this.state.toneId;
@@ -150,7 +150,7 @@ class Study extends React.Component {
     const targets = this.props.targets;
     const pitches = this.state.pitches;
 
-    console.log('what is targets', targets)
+    // console.log('what is targets', targets)
     this.setState({ targets });
 
     let randNum = Math.floor(Math.random()*targets.length);
@@ -211,7 +211,7 @@ class Study extends React.Component {
 
     var test = document.getElementById('soundSample');
     test.onloadedmetadata = function() {
-        console.log('test.duration', test.duration)
+        // console.log('test.duration', test.duration)
     }
 
     // constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
@@ -250,9 +250,9 @@ class Study extends React.Component {
 
         // onclick handler for record button
         record.onclick = function() {
-            console.log('duration', duration);
+            // console.log('duration', duration);
             var countdown = document.getElementById('countdown');
-            console.log(countdown);
+            // console.log(countdown);
             var seconds = 3;
             countdown.innerHTML = seconds;
             var countdownTimer = setInterval(() => {
@@ -266,7 +266,7 @@ class Study extends React.Component {
             }, 3000);
             setTimeout(() => {
                 // connect stream to speakers, making it audible
-                viz.connect(context.destination);
+                // viz.connect(context.destination);
                 // call .start on mediaRecorder instance
                 mediaRecorder.start();
             }, 3500);
@@ -292,7 +292,7 @@ class Study extends React.Component {
 
         // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
         mediaRecorder.onstop = function(e) {
-            console.log("recorder stopped");
+            // console.log("recorder stopped");
 
             // prompt to name the file
             var clipName = prompt('Enter a name for your sound clip');
@@ -319,7 +319,7 @@ class Study extends React.Component {
             var audioURL = window.URL.createObjectURL(blob);
             audio.src = audioURL;
 
-            console.log("blob", blob);
+            // console.log("blob", blob);
 
             // use FileReader to access the Blob data
             var reader = new FileReader();
@@ -342,104 +342,135 @@ class Study extends React.Component {
                 quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
                 }).map(freq => Math.round(freq));
 
-                let results = [];
-
-                frequencies.forEach(freq => {
-                    if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
-                        if (!results.length) {
-                            results.push(0);
-                        } else {
-                            results.push(results[results.length - 1])
-                        }
-                    } else {
-                        results.push(freq);
-                    }
-                })
-
-                // filter out bad data - hacky for now, throws out nulls and high values
-                // frequencies = frequencies.filter(freq => {
-                // if (typeof freq === 'number') {
-                //   return freq < 1000
-                // }
-                // return false
-                // }).map(freq => Math.round(freq))
-
                 console.log('all freqs: ', frequencies);
                 console.log('target pitches', pitches);
-                console.log("results frequencies", results);
 
-
-                var outerArray =[];
-
-                pitches.map((pitch, i) => {
-                    var diff = Math.abs(pitch - results[i]);
-                    if (diff > 0 && diff < 10) {
-                        outerArray.push([diff, i]);
+                // pim's filtering:
+                // we can use span gaps so NaN is not a problem:
+                // filter out pitches above 500 and below 70:
+                const results = frequencies.map(freq => {
+                    if (freq > 500 || freq < 70) {
+                        return NaN
                     }
-                })
+                    else {
+                        return freq
+                    }
+                });
+                console.log('frequencies post throwing out highs an dlows: ', results)
 
-                // for (let i = 0; i < pitches.length; i++) {
-                //     var innerArray =[];
-                //     if (pitches[i] === 0) {
-                //         continue;
-                //     }
-                //     for (let k = 0; k < results.length; k++) {
-                //             if (Math.abs(pitches[i] - results[k]) < 20) {
-                //             innerArray.push(pitches[i]);
-                //             innerArray.push(results[k]);
-                //             outerArray.push(innerArray);
-                //         }
-                //         innerArray = [];
+                // get only nums to get avg and sd
+                const nums = results.filter(elem => !isNaN(elem));
+                const avg = Math.round(average(nums))
+                console.log('nums: ', nums)
+                console.log('avg: ', avg)
+
+
+                // get the standard deviation:
+                let sd = Math.round(standardDeviation(nums));
+                console.log('SD: ', sd)
+
+                function standardDeviation(values){
+                    var avg = average(values);
+
+                    var squareDiffs = values.map(function(value){
+                        var diff = value - avg;
+                        var sqrDiff = diff * diff;
+                        return sqrDiff;
+                    });
+
+                    var avgSquareDiff = average(squareDiffs);
+
+                    var stdDev = Math.sqrt(avgSquareDiff);
+                    return stdDev;
+                }
+
+                function average(data){
+                    var sum = data.reduce(function(sum, value){
+                        return sum + value;
+                    }, 0);
+
+                    var avg = sum / data.length;
+                    return avg;
+                }
+
+                // throw out outliers more than 2 * sd
+                for (var i = 0; i < results.length; i++) {
+                    let curr = results[i];
+                    if (isNaN(curr)) {
+                        continue;
+                    }
+                    else if (Math.abs(avg - curr) > 1.5 * sd) {
+                        results[i] = NaN
+                    }
+                }
+
+                console.log('results post filtering: ', results)
+
+                // create ms labels for x axis:
+                // console.log('TARGET DURATION: ', duration)
+                // console.log('PITCHES.LENGTH: ', pitches.length)
+                let increment = Math.floor(duration / pitches.length)
+                let ms = increment
+                let xLabels = []
+
+                for (let i = 0; i < pitches.length; i++) {
+                    xLabels.push(ms + ' ms')
+                    ms += increment
+                }
+                console.log('XLABELS: ', xLabels)
+
+                // // set minimum for a tick to appear:
+
+                // let min;
+                // for (let i = 1; i < results.length; i++) {
+                //     if (Math.abs(results[i] - results [i-1]) > 100) {
+                //         min = results[i];
+                //         break;
                 //     }
                 // }
 
-                console.log("test comparison", outerArray);
+                // console.log('MIN: ', min)
 
                 var chartCtx = document.getElementById("studyChart").getContext("2d");
 
-                var index = outerArray[0][1];
-
-                var one = results.slice(index);
-                var two = pitches.slice(index);
-                var three = outerArray.map(arr => arr[0]);
-
-                console.log("one", one);
-                console.log("two", two);
-
                 let myLineChart = new Chart(chartCtx, {
-                type: 'line',
-                data: {
-                	labels: one,
-	                datasets: [{
-                        label: 'user pitch',
-                        data: one,
-                        borderCapStyle: 'butt',
-                        borderColor: 'blue'
-                        },
-                        {
-	                	label: 'target pitch',
-	                	data: two,
-	                	borderCapStyle: 'butt',
-	                	borderColor: 'red'
-	                },
-                    {
-                        label: 'difference',
-                        data: three,
-                        borderCapStyle: 'butt',
-                        borderColor: 'green'
-                    }]
-                }
-                });
+                    type: 'line',
+                    data: {
+                        // labels for the X axis:
+                        labels: xLabels,
+                        datasets: [{
+                            label: 'user pitch',
+                            data: results,
+                            borderCapStyle: 'butt',
+                            borderColor: 'blue',
+                            spanGaps: true
+                        },{
+                            label: 'target pitch',
+                            data: pitches,
+                            borderCapStyle: 'butt',
+                            borderColor: 'red',
+                            spanGaps: true
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    // min: min,
+                                    max: 400
+                                }
+                            }]
+                        }
+                    }
+                })
 
-
-
-                    console.log("data", data);
+                    // console.log("data", data);
                     self.setState({
                         arrayBuffer: data,
                         userPitches: frequencies,
                         chartLabels: frequencies
                     });
-                    console.log("state: ", self.state);
+                    // console.log("state: ", self.state);
                 });
 
             });
