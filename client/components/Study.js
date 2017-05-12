@@ -262,7 +262,7 @@ class Study extends React.Component {
             }, 3000);
             setTimeout(() => {
                 // connect stream to speakers, making it audible
-                viz.connect(context.destination);
+                // viz.connect(context.destination);
                 // call .start on mediaRecorder instance
                 mediaRecorder.start();
             }, 3000);
@@ -338,23 +338,82 @@ class Study extends React.Component {
                 quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
                 }).map(freq => Math.round(freq));
 
-                let results = [];
+                let oldResults = [];
 
                 frequencies.forEach(freq => {
                     if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
-                        if (!results.length) {
-                            results.push(0);
+                        if (!oldResults.length) {
+                            oldResults.push(0);
                         } else {
-                            results.push(results[results.length - 1])
+                            oldResults.push(oldResults[oldResults.length - 1])
                         }
                     } else {
-                        results.push(freq);
+                        oldResults.push(freq);
                     }
                 })
 
-                console.log('all freqs: ', frequencies);
-                console.log('target pitches', pitches);
-                console.log("results frequencies", results);
+                let results = frequencies.map(freq => {
+                    if (freq > 500 || freq < 70) {
+                        return NaN
+                    }
+                    else {
+                        return freq
+                    }
+                });
+
+                console.log('USER PITCHES FROM PITCHFINDER', frequencies);
+                console.log('TARGET PITCHES', pitches);
+                console.log("BEFORE SD USER PITCHES", results);
+                console.log("OLD RESULTS", oldResults);
+
+                // // get only nums to get avg and sd
+                // const nums = results.filter(elem => !isNaN(elem));
+                // const avg = Math.round(average(nums))
+                // console.log('nums: ', nums)
+                // console.log('avg: ', avg)
+
+
+                // // get the standard deviation:
+                // let sd = Math.round(standardDeviation(nums));
+                // console.log('SD: ', sd)
+
+                // function standardDeviation(values){
+                //     var avg = average(values);
+
+                //     var squareDiffs = values.map(function(value){
+                //         var diff = value - avg;
+                //         var sqrDiff = diff * diff;
+                //         return sqrDiff;
+                //     });
+
+                //     var avgSquareDiff = average(squareDiffs);
+
+                //     var stdDev = Math.sqrt(avgSquareDiff);
+                //     return stdDev;
+                // }
+
+                // function average(data){
+                //     var sum = data.reduce(function(sum, value){
+                //         return sum + value;
+                //     }, 0);
+
+                //     var avg = sum / data.length;
+                //     return avg;
+                // }
+
+                // // throw out outliers more than 1.5 * sd
+                // for (var i = 0; i < results.length; i++) {
+                //     let prev = results[i-1]
+                //     let curr = results[i];
+                //     if (isNaN(curr)) {
+                //         continue;
+                //     }
+                //     else if (Math.abs(prev - curr) > 1.75 * sd || Math.abs(avg - curr) > 1.75 * sd) {
+                //         results[i] = NaN
+                //     }
+                // }
+
+                console.log('RESULTS AFTER SD: ', results)
 
                 ////////////////////////////////////////////////////////////////////////
                 ////////////////////////////////////////////////////////////////////////
@@ -394,11 +453,22 @@ class Study extends React.Component {
                   }
                 }
 
+                function alignCurve(arr) {
+                  for (var i = 0; i<arr.length; i++) {
+                    if (!isNaN(arr[i])) {
+                      return arr.slice(i);
+                    }
+                  }
+                  return arr;
+                }
+
                 var arrayTarget = getPitches(pitches);
-                var arrayUser = getPitches(results);
+                var arrayUser = alignCurve(results);
+                var oldResultsGraph = getPitches(oldResults);
 
                 console.log("arrayTarget", arrayTarget);
                 console.log("arrayUser", arrayUser);
+                console.log("oldResultsGraph", oldResultsGraph);
                 
                 ////////////////////////////////////////////////////////////////////////
                 ////////////////////////////////////////////////////////////////////////
@@ -428,14 +498,23 @@ class Study extends React.Component {
                         label: 'user pitch',
                         data: arrayUser,
                         borderCapStyle: 'butt',
-                        borderColor: 'blue'
+                        borderColor: 'blue',
+                         spanGaps: true
                         },
                         {
 	                	label: 'target pitch',
 	                	data: arrayTarget,
 	                	borderCapStyle: 'butt',
-	                	borderColor: 'red'
+	                	borderColor: 'red',
+                   spanGaps: true
 	                },
+                                          {
+                    label: 'old way',
+                    data: oldResultsGraph,
+                    borderCapStyle: 'butt',
+                    borderColor: 'purple',
+                   spanGaps: true
+                  },
                     {
                         label: 'difference',
                         data: three,
