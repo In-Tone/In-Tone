@@ -71,16 +71,16 @@ class Footer extends Component {
 								label='Study'
 								labelStyle={{fontSize: '24px'}}
 								onClick={() => {
-								console.log('this inside Study click: ', this)
-								this.refs.train.hide()
 								this.refs.howItWorks.hide()
 								this.refs.mode.hide()
+								this.refs.train.hide()
+								console.log('this inside Study click: ', this)
 								}}
 							style={styles.modalButton}/></Link>
 						</div>
 					</SkyLight>
 					<FlatButton onClick={() => {
-						console.log('this: ', this)
+						console.log('this inside Train button: ', this)
 						this.refs.train.show()
 					}}  className="col-xs-4" style={styles.button}>Train</FlatButton>
 			</footer>
