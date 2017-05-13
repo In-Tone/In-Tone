@@ -98,54 +98,7 @@ export default class Home extends React.Component {
     render() {
         return (
         <div id='canvasContainer'>
-    		<canvas id='homeCanvas' width='1000' height='600'></canvas>
-            <Paper style={styles.card1}>
-                <div style={styles.textArea} >
-                    <h1>What is a Tonal Language?</h1>
-                    <br />
-                    <p style={styles.p}>
-                    Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, <i>ma</i> spoken in a high tone would mean <i>horse</i> and in a rising tone would mean <i>dog</i>. For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
-                    </p>
-                </div>
-            </Paper>
-             <Paper style={styles.card2}>
-                <div style={styles.textArea} >
-                    <h1>How In-Tone Works</h1>
-                    <br />
-                    <p style={styles.p}>
-                    In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.
-                    </p>
-                </div>
-            </Paper>
+    	    <canvas id='homeCanvas' width='1000' height='600'></canvas>
         </div>
     )}
-}
-
-const styles = {
-    card1: {
-        backgroundColor: 'purple',
-        color: 'white',
-
-
-    },
-    card2: {
-        backgroundColor: 'white',
-        color: 'black',
-
-
-    },
-    p: {
-        fontSize: '30px',
-        marginLeft: '175px',
-        marginRight: '175px',
-        textAlign: 'block',
-        paddingTop: '0px'
-
-    },
-    textArea: {
-        paddingTop: '80px',
-        textAlign: 'center',
-        height: '39vh',
-        // padding: '10px',
-    }
 }

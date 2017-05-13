@@ -16,12 +16,28 @@ class Navbar extends Component {
 	render() {
 		return (
 			<AppBar
-			style={{position: 'fixed'}}
-			title={<Link to='/modes'><FlatButton style={{color:'white'}}>Train</FlatButton></Link>}
-			iconElementLeft={<Link to='/'><FlatButton label="Home" style={{color:'white'}} /></Link>}
-			iconElementRight={<Link to='/'><FlatButton label="Login" style={{color:'white'}} /></Link>}
+			style={styles.navbar}
+			title={<h1 style={styles.header}>In-Tone</h1>}
+			iconElementLeft={<Link to='/'><FlatButton label="Home" style={styles.button} /></Link>}
+			iconElementRight={<Link to='/'><FlatButton label="Login" style={styles.button} /></Link>}
 			/>
 		)
+	}
+
+}
+
+const styles = {
+	navbar: {
+		position: 'fixed',
+		height: '100px',
+	},
+	header: {
+		color: 'white',
+		margin: '30px'
+	},
+	button: {
+		color: 'white',
+		margin: '30px'
 	}
 
 }
