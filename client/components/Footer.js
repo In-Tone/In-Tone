@@ -42,7 +42,7 @@ class Footer extends Component {
 			<footer className="col-xs-12" style={styles.footer}>
 
 					<FlatButton onClick={() => this.refs.tonalLanguages.show()} className="col-xs-4" style={styles.button}>What are Tonal Languages?</FlatButton>
-					<SkyLight dialogStyles={myDialog} hideOnOverlayClicked={ttrue} ref="tonalLanguages" title="What are Tonal Languages?">
+					<SkyLight dialogStyles={myDialog} hideOnOverlayClicked ref="tonalLanguages" title="What are Tonal Languages?">
           	Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, <i>ma</i> spoken in a high tone would mean <i>horse</i> and in a rising tone would mean <i>dog</i>. For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
         	</SkyLight>
 					<FlatButton onClick={() => this.refs.howItWorks.show()} className="col-xs-4" style={styles.button}>How In-Tone Works</FlatButton>
