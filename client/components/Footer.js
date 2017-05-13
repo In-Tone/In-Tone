@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
@@ -14,14 +15,16 @@ import Paper from 'material-ui/Paper';
 import SkyLight from 'react-skylight';
 
 import store from '../store';
+import {fetchTargets} from '../reducers/Targets';
 
 class Footer extends Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 	}
 
-	onStudyClick() {
-		return store.dispatch(setModalVisibility(false))
+	onLanguageClick(button) {
+		const language = button.props.label.toLowerCase();
+		this.props.fetchTargets(language)
 	}
 
 	render() {
@@ -36,42 +39,46 @@ class Footer extends Component {
 					<SkyLight  dialogStyles={myDialog} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
           	In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.
 						<br />
-						<FlatButton
+						<RaisedButton
+							label='Train Now'
 							onClick={() => {
+								console.log('this: ', this)
 								this.refs.train.show()
 							}}
-							style={styles.overlayButton}><u>Train Now</u></FlatButton>
+							style={styles.overlayButton} />
 						<SkyLight dialogStyles={myDialog} hideOnOverlayClicked ref="train" title="Choose a Language:">
 							<div style={styles.buttonSection}>
-								<FlatButton style={styles.overlayButton}><u>Mandarin</u></FlatButton>
-								<br />
-								<FlatButton
+								<RaisedButton label='Mandarin' style={styles.overlayButton} />
+								<RaisedButton
+									label='Thai'
+									ref={(button) => {this.thaiButton = button;}}
 									onClick={() => {
+										console.log('this inside Thai click: ', this)
 										this.refs.mode.show()
-
-									}}
-									style={styles.overlayButton}>
-									<u>Thai</u>
-								</FlatButton>
-								<br />
-								<FlatButton style={styles.overlayButton}><u>Hmong</u></FlatButton>
-								<br />
+										this.onLanguageClick(this.thaiButton)
+										console.log('this after eventHandler: ', this)
+									}} />
+								<RaisedButton label='Hmong' style={styles.overlayButton} />
 							</div>
 						</SkyLight>
         	</SkyLight>
 					<SkyLight dialogStyles={myDialog} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
-						<FlatButton style={styles.overlayButton}><u>Play</u></FlatButton>
-						<br />
+						<RaisedButton label='Play' style={styles.overlayButton} />
 						{/* need to change Study button to link to Study but study right now is broken. Need to set the modal to be invisible once this is clicked*/}
-						<Link to='/modes'><FlatButton onClick={() => {
+						<Link to='/study'> <RaisedButton
+							label='Study'
+							onClick={() => {
+							console.log('this inside Study click: ', this)
 							this.refs.train.hide()
 							this.refs.howItWorks.hide()
 							this.refs.mode.hide()
 							}}
-						style={styles.overlayButton}><u>Study</u></FlatButton></Link>
-						<br />
+						style={styles.overlayButton}/></Link>
 					</SkyLight>
-					<Link to='/modes'><FlatButton className="col-xs-4" style={styles.button}>Train</FlatButton></Link>
+					<FlatButton onClick={() => {
+						console.log('this: ', this)
+						this.refs.train.show()
+					}}  className="col-xs-4" style={styles.button}>Train</FlatButton>
 			</footer>
 		)
 	}
@@ -118,13 +125,6 @@ const myDialog = {
 };
 
 
-const mapStateToProps = state => ({
-	modalVisible: state.modalVisible
-});
+const mapDispatchToProps = {fetchTargets};
 
-const mapDispatchToProps = dispatch => {
-	return {
-	}
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Footer);
+export default connect(null, mapDispatchToProps)(Footer);
