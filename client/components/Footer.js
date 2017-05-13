@@ -8,22 +8,30 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
+
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import SkyLight from 'react-skylight';
+
+import store from '../store';
+import {setModalVisibility} from '../reducers/Modals';
 
 class Footer extends Component {
 	constructor() {
 		super()
 
-		this.state = {
-			modalVisible: false
-		}
+		// this.state = {
+		// 	modalVisible: true
+		// }
 
 	}
 
+	onStudyClick() {
+		return store.dispatch(setModalVisibility(false))
+	}
+
 	render() {
-		console.log('refs: ', this.refs)
+		console.log('this.state: ', this.state)
 
 		var myDialog = {
       backgroundColor: '#00897B',
@@ -46,7 +54,7 @@ class Footer extends Component {
           	Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, <i>ma</i> spoken in a high tone would mean <i>horse</i> and in a rising tone would mean <i>dog</i>. For people who don't speak tonal languages, these tones are hard to perceive and reproduce.
         	</SkyLight>
 					<FlatButton onClick={() => this.refs.howItWorks.show()} className="col-xs-4" style={styles.button}>How In-Tone Works</FlatButton>
-					<SkyLight dialogStyles={myDialog} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
+					<SkyLight isVisible={this.props.modalVisible} dialogStyles={myDialog} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
           	In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.
 						<br />
 						<FlatButton onClick={() => this.refs.train.show()} style={styles.overlayButton}><u>Train Now</u></FlatButton>
@@ -61,11 +69,11 @@ class Footer extends Component {
 							</div>
 						</SkyLight>
         	</SkyLight>
-					<SkyLight dialogStyles={myDialog} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
+					<SkyLight isVisible={this.props.modalVisible} dialogStyles={myDialog} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
 						<FlatButton style={styles.overlayButton}><u>Play</u></FlatButton>
 						<br />
-						{/* need to change Study button to link to Study but study right now is broken*/}
-						<Link to='/modes'><FlatButton style={styles.overlayButton}><u>Study</u></FlatButton></Link>
+						{/* need to change Study button to link to Study but study right now is broken. Need to set the modal to be invisible once this is clicked*/}
+						<Link to='/modes'><FlatButton onClick={this.onStudyClick} style={styles.overlayButton}><u>Study</u></FlatButton></Link>
 						<br />
 					</SkyLight>
 					<Link to='/modes'><FlatButton className="col-xs-4" style={styles.button}>Train</FlatButton></Link>
@@ -74,7 +82,7 @@ class Footer extends Component {
 	}
 }
 
-export default Footer;
+
 
 const styles = {
 	footer: {
@@ -101,3 +109,15 @@ const styles = {
 		marginTop: '30px'
 	}
 }
+
+
+const mapStateToProps = state => ({
+	modalVisible: state.modalVisible
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
