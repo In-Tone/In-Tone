@@ -65,3 +65,15 @@ body, html {
 	padding: 5% 0 5% 0;
 	height: 15;
 }
+
+audio::-internal-media-controls-download-button {
+    display:none;
+}
+
+audio::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+audio::-webkit-media-controls-panel {
+    width: calc(100% + 30px); /* Adjust as needed */
+}

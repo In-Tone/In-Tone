@@ -8,7 +8,7 @@ export const setTargets = (allTargets) => ({
 	allTargets
 });
 
-export const fetchTargets = (language) =>
+export const fetchTargets = (language) => 
 	dispatch => {
 		axios.get(`api/targets/${language}`)
 			.then(res => {
