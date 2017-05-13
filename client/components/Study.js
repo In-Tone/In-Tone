@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import {Card, CardActions, CardMedia, CardTitle} from 'material-ui/Card';
+import { Card, CardActions, CardMedia, CardTitle } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-const Chart = require('chart.js');
-// import Pitchfinder from 'pitchfinder';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { targetWord, button } from '../utils/StudyDivs.js';
-import Record from '../utils/Record';
-
+import { targetWord, button } from './StudyElements';
+import Record from './Record';
+import Graph from './Graph';
+import { setUserTone } from '../reducers/UserTone';
+import { deleteAudioNode } from '../utils/RecordingUtils';
 
 class Study extends React.Component {
 
@@ -35,13 +35,15 @@ class Study extends React.Component {
 	}
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
-	randomReset() {
+	randomReset(e) {
+		let dispatchUserTones = this.props.dispatchUserTones;
 		let allTargets = this.state.allTargets;
 		let currentTarget = this.state.currentTarget;
 
 		let previousTargets = this.state.previousTargets;
 
 		previousTargets.push(currentTarget);
+		if (previousTargets.length > 10) previousTargets.shift();
 		this.setState({ previousTargets });
 
 		let currentToneId = currentTarget.toneId;
@@ -49,6 +51,9 @@ class Study extends React.Component {
 		if (currentToneId === randNum) randNum = (randNum + 1) % allTargets.length;
 		currentTarget = allTargets[randNum];
 		this.setState({ currentTarget });
+		dispatchUserTones([]);
+
+		deleteAudioNode('soundClips', 'clip');
 	}
 
 	// BETA VERSION ONLY
@@ -106,32 +111,27 @@ class Study extends React.Component {
 						<Paper zDepth={1}>
 							{button('LOG STATE', logState)}
 							{button('PREVIOUS', previousTarget)}
-
 							<Record 
 								duration={this.state.currentTarget.duration}
 								targetPitches={this.state.currentTarget.pitches}
 								/>
-							
-							<RaisedButton id='Record'>
-								<p id="countdown">Record</p>
-							</RaisedButton>
 							{button('NEXT', randomReset)}
+							<h4>TARGET AUDIO</h4>
 							<audio controls id='soundSample' src={wav}/>
 							<div id='soundClips'></div>
-						</Paper>å
+						</Paper>
 					</Col>
 				</Row>
 
 				<br />
-
-				<Paper zDepth={1}>
-					<canvas id='studyChart' ></canvas>
-				</Paper>
+				<Graph
+					targetPitches={this.state.currentTarget.pitches}
+					duration={this.state.currentTarget.duration}
+				/>
 			</div>
 		);
 	}
 }
-
 
 const mapStateToProps = state => ({
 	allTargets: state.allTargets
@@ -139,6 +139,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
 	return {
+		dispatchUserTones: userTones => {
+			dispatch(setUserTone(userTones));
+		}
 	}
 };
 

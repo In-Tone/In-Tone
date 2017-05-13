@@ -100,6 +100,8 @@ export const recorder = () => {
         mediaRecorder.onstop = function(e) {
             console.log("recorder stopped");
 
+            var soundClips = document.querySelector('soundClips');
+
             // prompt to name the file
             var clipName = prompt('Enter a name for your sound clip');
             
