@@ -24,14 +24,19 @@ export default class Record extends React.Component {
 		// set up stream -- is a promise -- recording happens in .then off it
 		navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 
-			const contexts = CreateAudioContext();
-			// create audioNode stream source with stream so we can route it through the audioContext
-			var source = contexts[0].createMediaStreamSource(stream);
-			// connect it to the nodes
-			source.connect(contexts[4]);
-			// lpFilter.connect(hpFilter);
-			// hpFilter.connect(viz);
-			contexts[4].connect(contexts[3]);
+			const [context, hpFilter, lpFilter, compressor, viz] = CreateAudioContext();
+			const source = context.createMediaStreamSource(stream);
+			source.connect(viz);
+			viz.connect(compressor);
+
+			// const contexts = CreateAudioContext();
+			// 	// create audioNode stream source with stream so we can route it through the audioContext
+			// var source = contexts[0].createMediaStreamSource(stream);
+			// 	// connect it to the nodes
+			// source.connect(contexts[4]);
+			// 	// lpFilter.connect(hpFilter);
+			// 	// hpFilter.connect(viz);
+			// contexts[4].connect(contexts[3]);
 
 			// grab "record" button
 			var record = document.getElementById("Record");
@@ -65,7 +70,8 @@ export default class Record extends React.Component {
 			// as written, data is available when 'stop' is clicked which calls .stop on the mediaRecorder instance
 			mediaRecorder.ondataavailable = function(e) {
 					recording.push(e.data);
-					stopMedia(mediaRecorder, recording, contexts[0]);
+					stopMedia(mediaRecorder, recording, context);
+					// stopMedia(mediaRecorder, recording, contexts[0]);
 			};
 			// onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
 
