@@ -32,7 +32,7 @@ class Record extends React.Component {
 			const source = context.createMediaStreamSource(stream);
 			source.connect(viz);
 			viz.connect(compressor);
-			// hpFilter.connect(viz);	
+			// hpFilter.connect(viz);
 			// lpFilter.connect(hpFilter);
 
 			////////////////////////////////////
@@ -76,7 +76,7 @@ class Record extends React.Component {
 			mediaRecorder.onstop = function(e) {
 				blob = stopAndReturnMedia(recording, context);
 				processMedia(blob, context)
-					.then(frequencies => dispatchUserTones(frequencies));
+					.then(frequencies => dispatchUserTones(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
 			}
 		}).catch(function(err) {
 				console.log(err);
