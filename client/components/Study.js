@@ -259,13 +259,13 @@ class Study extends React.Component {
                 clearInterval(countdownTimer);
                 record.style.background = "red";
                 record.style.color = "black";
-            }, 3000);
-            setTimeout(() => {
-                // connect stream to speakers, making it audible
-                // viz.connect(context.destination);
-                // call .start on mediaRecorder instance
                 mediaRecorder.start();
             }, 3000);
+            // setTimeout(() => {
+            //     // connect stream to speakers, making it audible
+            //     // viz.connect(context.destination);
+            //     // call .start on mediaRecorder instance
+            // }, 3000);
             setTimeout(() => {
                 // setInterval to continually rerender waveform
             	record.style.background = "";
