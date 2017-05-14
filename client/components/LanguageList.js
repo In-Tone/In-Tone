@@ -13,17 +13,13 @@ function wrapState(ComposedComponent) {
       this.state = {
         selectedIndex: 1
       }
+
+      this.handleRequestChange = this.handleRequestChange.bind(this)
     }
 
-    componentWillMount() {
+    handleRequestChange (event, index) {
       this.setState({
-        selectedIndex: this.props.defaultValue,
-      });
-    }
-
-    handleRequestChange = (event, index) => {
-      this.setState({
-        selectedIndex: index,
+        selectedIndex: index
       });
     };
 
@@ -32,6 +28,7 @@ function wrapState(ComposedComponent) {
         <ComposedComponent
           value={this.state.selectedIndex}
           onChange={this.handleRequestChange}
+          style={{borderTop:'thin solid black'}}
         >
           {this.props.children}
         </ComposedComponent>
@@ -45,7 +42,7 @@ SelectableList = wrapState(SelectableList);
 const UserLanguageList = () => (
   <div>
     <SelectableList defaultValue={1}>
-      <Subheader>Your Languages</Subheader>
+      <h3>Your Languages</h3>
       <ListItem
         value={1}
         primaryText="User Language 1"

@@ -14,6 +14,7 @@ import { Row, Col } from 'react-bootstrap';
 
 // our modules
 import Graph from './Graph';
+import UserLanguageList from './LanguageList'
 
 
 class Profile extends Component {
@@ -22,8 +23,13 @@ class Profile extends Component {
 		this.state = {
 
 		}
+		this.selectTone = this.selectTone.bind(this)
 	}
 	// methods
+	selectTone(event) {
+		console.log('tone button clicked')
+		console.log(event);
+	}
 
 	render() {
 		return(
@@ -37,43 +43,46 @@ class Profile extends Component {
 									style={styles.avatarStyles}
 								/>
 								<div style={styles.userInfoStyles}>
-									<h4 style={{paddingRight:'1%'}}>Name: </h4>
+									<h4 style={styles.infoBuffer}>Name: </h4>
 									<h4>Users Name</h4>
 								</div>
 
 								<div style={styles.userInfoStyles}>
-									<h4 style={{paddingRight:'1%'}}>Rank: </h4>
+									<h4 style={styles.infoBuffer}>Rank: </h4>
 									<h4> Users Rank </h4>
 								</div>
+
+								<UserLanguageList />
 						</Paper>
 					</Col>
 
 					<Col lg={8}>
-						<Paper style={{display:'flex'}}>
-							<h2> L1T1 </h2>
-							<h2> L1T2 </h2>
-							<h2> L1T3 </h2>
-							<h2> L1T4 </h2>
-							<h2> L1T5 </h2>
-						</Paper>
 						<Paper>
-							<h1> Word </h1>
+							{/* this can definitely be refactored into a loop */}
+							<div style={styles.bottomBorders}>
+								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T1 </FlatButton>
+								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T2 </FlatButton>
+								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T3 </FlatButton>
+								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T4 </FlatButton>
+								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T5 </FlatButton>
+							</div>
+							<h2> L1T1Word1 </h2>
 							<Row>
 								<Col md={6}>
 									{/*THIS CAN AND NEEDS TO BE MODULARIZED*/}
-									<div style={{display:'flex', justifyContent:'center', paddingBottom:'1%'}}>
-										<h4>Target Audio:</h4>
+									<div style={styles.wordInfo}>
+										<h4 style={styles.infoBuffer}>Target Audio:</h4>
 										<audio controls id='profileTarget' style={{width: '50%'}}/>
 									</div>
-									<div style={{display:'flex', justifyContent:'center', paddingBottom:'1%'}}>
-										<h4>User Audio:</h4>
+									<div style={styles.wordInfo}>
+										<h4 style={styles.infoBuffer}>User Audio:</h4>
 										<audio controls id='profileUser' style={{width: '50%'}}/>
 									</div>
-									<div style={{display:'flex', justifyContent:'center', paddingBottom:'1%'}}>
-										<Link to='/'><h4>Re-Try</h4></Link>
+									<div style={styles.wordInfo}>
+										<Link to='/'><h4>Retry</h4></Link>
 									</div>
-									<div style={{display:'flex', justifyContent:'center', paddingBottom:'1%'}}>
-										<h4>Number of Attempts: </h4>
+									<div style={styles.wordInfo}>
+										<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
 										<h4> 69 </h4>
 									</div>
 								</Col>
@@ -96,11 +105,26 @@ class Profile extends Component {
 const styles = {
 	avatarStyles: {
 		margin: 5,
-		borderBottomStyle: 'solid'
 	},
 	userInfoStyles: {
 		display: 'flex',
 		justifyContent: 'center'
+	},
+	tones: {
+		paddingRight: '4%',
+		paddingLeft: '4%',
+		fontSize: '24px'
+	},
+	wordInfo: {
+		display:'flex', 
+		justifyContent:'center', 
+		paddingBottom:'1%'
+	},
+	bottomBorders: {
+		borderBottom:'thin solid black'
+	},
+	infoBuffer: {
+		paddingRight: '2%'
 	}
 }
 
