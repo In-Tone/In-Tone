@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import {login} from '../reducers/Auth';
+import {login, logout} from '../reducers/Auth';
 import {connect} from 'react-redux';
 
 const styles = {
@@ -20,17 +20,17 @@ const styles = {
   },
 };
 
-const Login = ({ login }) => (
+const Login = ({ login, logout }) => (
 <div className='container text-center'>
   <div id="login-signup">
     <h1>Please log in</h1>
     <form onSubmit={evt => {
       evt.preventDefault()
-      login(evt.target.username.value, evt.target.password.value)
+      login(evt.target.email.value, evt.target.password.value)
     } }>
       <TextField
-        hintText="username"
-        name="username"
+        hintText="email"
+        name="email"
       />
       <br/>
       <TextField
@@ -41,11 +41,12 @@ const Login = ({ login }) => (
       <br/>
       <RaisedButton type="submit" label="Login" backgroundColor='#3C3970' labelColor='white' style={{marginRight: '20px'}} />
     </form>
+    <RaisedButton label="Logout" onClick={logout}/>
   </div>
 </div>
 )
 
 export default connect(
   state => ({}),
-  {login},
+  {login, logout},
 )(Login)

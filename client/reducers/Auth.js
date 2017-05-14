@@ -17,10 +17,10 @@ export const authenticated = user => ({
 /////////////////////////////////////////
 
 // DISPATCHERS //////////////////////////
-export const login = (username, password) =>
+export const login = (email, password) =>
   dispatch =>
     axios.post('/api/login',
-      {username, password})
+      {email, password})
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
 

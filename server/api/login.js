@@ -1,7 +1,54 @@
+const db = require('../../db/index');
 const router = require('express').Router();
-const User = require('../../db/models/User');
+// const User = require('../../db/models/User');
+const User = db.model('user');
+const passport = require('passport')
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+})
+
+passport.deserializeUser(
+  (id, done) => {
+    User.findById(id)
+      .then(user => {
+        if (!user) console.log("No match.");
+        else console.log("Here is the user: ", user);
+        done(null, user)
+      })
+      .catch(err => {
+        console.log(err);
+        done(err);
+      });
+  }
+);
+
+// require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
+passport.use(new (require('passport-local').Strategy)(
+  (email, password, done) => {
+    User.findOne({where: {email}})
+      .then(user => {
+      	console.log("user", user);
+        if (!user) {
+          console.log("No match.");
+          return done(null, false, { message: 'Login incorrect' });
+        }
+        return user.authenticate(password)
+          .then(ok => {
+            if (!ok) {
+              console.log("Bad password.")
+              return done(null, false, { message: 'Login incorrect' })
+            }
+            console.log('Login successful', email, user.id)
+            done(null, user)
+          })
+      })
+      .catch(done)
+  }
+))
 
 router.post('/', (req, res, next) => {
+		console.log("req.user", req.user);
 	User.findOne({
 		where: {
 			email: req.body.email
@@ -33,6 +80,7 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
 	req.logout();
+	console.log("req.user after logout", req.user);
 	res.sendStatus(200);
 });
 
