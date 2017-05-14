@@ -4,35 +4,42 @@ import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph } from '../utils/GraphingUtils';
 
+//////////////////////////////////////////
+// this component draws the pitch graph //
+//////////////////////////////////////////
 class Graph extends React.Component {
 
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			targetPitches: [],
-			userPitches: [],
-			duration: 0
-		}
-
 	}
 
+	////////////////////////////////////////////////////
+	// grab pitches and duration from props on mount, //
+	// then draw the current target graph ONLY /////////
+	////////////////////////////////////////////////////
 	componentDidMount() {
 		const targetPitches = this.props.targetPitches;
-		const userPitches = this.props.userTones;
 		const duration = this.props.duration;
 
-		this.setState({ targetPitches, userPitches, duration });
+		// slice target pitch array
+		const targetTone = pitchSlicing(targetPitches);
+		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
-		let xLabels = getXLabels(duration, targetPitches);
-		drawGraph(chartCtx, xLabels, [], targetPitches);  // pim: should be sliced targetsPitches?
+		// create ms x-axis labels
+		let xLabels = getXLabels(duration, targetTone);
+		// draw graph
+		drawGraph(chartCtx, xLabels, [], targetTone);
 	}
 
+	////////////////////////////////////////////////////////////
+	// grab new pitches and duration from props, ///////////////
+	// then redraw graph with current target AND user pitches //
+	////////////////////////////////////////////////////////////
 	componentDidUpdate() {
 		const targetPitches = this.props.targetPitches;
 		const duration = this.props.duration;
-
 		const userPitches = this.props.userTones;
+<<<<<<< HEAD
 		const [oldResults, newResults] = pitchFiltering(userPitches);
 
 		// const results = pitchSlicing(oldResults);
@@ -51,8 +58,17 @@ class Graph extends React.Component {
 		// const targets = pitchSlicing(targetPitches);
 		// const smoothResults = pitchSmoothing(results)
 		// const smoothTargets = pitchSmoothing(targets)
+=======
+>>>>>>> master
 
+		// filter user pitches and slice both target and user pitches
+		// this processing returns the userTone and targetTone
+		const [oldResults, newResults] = pitchFiltering(userPitches);
+		const userTone = pitchSlicing(oldResults);
+		const targetTone = pitchSlicing(targetPitches);
+		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
+<<<<<<< HEAD
 		let xLabels = getXLabels(duration, targets);
 
 		// results = userResults post processing likewise for targets
@@ -61,13 +77,18 @@ class Graph extends React.Component {
 
 		// pim's testing:
 		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+=======
+		// create ms x-axis labels
+		let xLabels = getXLabels(duration, targetTone);
+		// draw graph
+		drawGraph(chartCtx, xLabels, userTone, targetTone);
+>>>>>>> master
 	}
 
+	//////////////////////////
+	// render the component //
+	//////////////////////////
 	render() {
-		const graph = () => (
-			<canvas id='studyChart' ></canvas>
-		);
-
 		return (
 			<Paper zDepth={1}>
 				<canvas id='studyChart' ></canvas>
@@ -76,10 +97,11 @@ class Graph extends React.Component {
 	}
 }
 
+////////////////////////////////////////
+// get userTones from the store state //
+////////////////////////////////////////
 const mapStateToProps = state => ({
 	userTones: state.userTones
 });
 
 export default connect(mapStateToProps, null)(Graph);
-
-// tried componentWilLReceiveProps; componentWillUpdate
