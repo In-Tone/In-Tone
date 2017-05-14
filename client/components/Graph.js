@@ -35,10 +35,13 @@ class Graph extends React.Component {
 		const userPitches = this.props.userTones;
 		const [oldResults, newResults] = pitchFiltering(userPitches);
 		const results = pitchSlicing(oldResults);
+		const targets = pitchSlicing(targetPitches);
 
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
-		let xLabels = getXLabels(duration, targetPitches);
-		drawGraph(chartCtx, xLabels, results, targetPitches);
+		let xLabels = getXLabels(duration, targets);
+		// results = userResults post processing likewise for targets
+		// graph is getting target data from Study.js and user data from the store
+		drawGraph(chartCtx, xLabels, results, targets);
 	}
 
 	render() {
