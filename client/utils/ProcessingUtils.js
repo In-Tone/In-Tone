@@ -1,4 +1,5 @@
 import Pitchfinder from 'pitchfinder';
+import timeseries from 'timeseries-analysis';
 
 export const processMedia = (audioBlob, audioContext) => {
 	let blob = audioBlob;
@@ -46,14 +47,26 @@ export const pitchFiltering = frequencies => {
 		}
 	});
 
-	// "Pim's voice filter": filters any frequencies outside human voice range; replaces them with NaN's. 
-	let results = frequencies.map( freq => {
+	// "Pim's voice filter": filters any frequencies outside human voice range; replaces them with NaN's.
+	let newResults = frequencies.map( freq => {
 		if (freq > 500 || freq < 70) return NaN;
 		else return freq;
 	});
 
-	return [oldResults, results];
+	return [oldResults, newResults];
 };
+
+export const pitchSmoothing = array => {
+	const t = new timeseries.main(timeseries.adapter.fromArray(array))
+
+	const processed = t.ma({period: 6}).output();
+	const chart = t.ma({period: 6}).chart({main: true});
+	const results = processed.map(subArr => Math.round(subArr[1]))
+	console.log('data pre smoothing: ', array)
+	console.log('data post smoothing: ', results)
+	console.log('chart', chart)
+	return results;
+}
 
 export const pitchSlicing = array => {
 	for (let i = 0; i < array.length; i++) {

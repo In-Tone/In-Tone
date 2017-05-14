@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
-import { pitchFiltering, pitchSlicing, getXLabels } from '../utils/ProcessingUtils';
+import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing } from '../utils/ProcessingUtils';
 import { drawGraph } from '../utils/GraphingUtils';
 
 class Graph extends React.Component {
@@ -25,7 +25,7 @@ class Graph extends React.Component {
 		this.setState({ targetPitches, userPitches, duration });
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		let xLabels = getXLabels(duration, targetPitches);
-		drawGraph(chartCtx, xLabels, [], targetPitches);
+		drawGraph(chartCtx, xLabels, [], targetPitches);  // pim: should be sliced targetsPitches?
 	}
 
 	componentDidUpdate() {
@@ -34,14 +34,25 @@ class Graph extends React.Component {
 
 		const userPitches = this.props.userTones;
 		const [oldResults, newResults] = pitchFiltering(userPitches);
-		const results = pitchSlicing(oldResults);
+
+		// const results = pitchSlicing(oldResults);
+		// const targets = pitchSlicing(targetPitches);
+
+		// pim's testing;
+		const results = pitchSlicing(newResults);
 		const targets = pitchSlicing(targetPitches);
+		const smoothResults = pitchSmoothing(results)
+		const smoothTargets = pitchSmoothing(targets)
 
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		let xLabels = getXLabels(duration, targets);
+
 		// results = userResults post processing likewise for targets
 		// graph is getting target data from Study.js and user data from the store
-		drawGraph(chartCtx, xLabels, results, targets);
+		// drawGraph(chartCtx, xLabels, results, targets);
+
+		// pim's testing:
+		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
 	}
 
 	render() {

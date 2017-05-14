@@ -18,6 +18,19 @@ export const drawGraph = (context, xLabels, results, targetPitches) => {
 					borderColor: 'blue',
 					spanGaps: true
 				}]
+			},
+			options: {   // pim: added fixed y labels
+				scales: {
+					yAxes: [
+						{
+							ticks: {
+								max: 500,
+								min: 75,
+								stepSize: 50
+							}
+						}
+					]
+				}
 			}
 		}
 
