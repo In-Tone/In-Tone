@@ -42,31 +42,31 @@ class Footer extends Component {
 							label='Train Now'
 							labelStyle={{fontSize: '24px'}}
 							onClick={() => {
-								console.log('this: ', this)
+								console.log('this inside train now button: ', this)
 								this.refs.train.show()
 							}}
 							style={styles.modalButton} />
 						<SkyLight dialogStyles={styles.myDialog} hideOnOverlayClicked ref="train" title="Choose a Language:">
 							<div style={styles.buttonSection}>
-								<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} />
+								<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 								<RaisedButton
 									label='Thai'
 									labelStyle={{fontSize: '24px'}}
 									ref={(button) => {this.thaiButton = button;}}
-									onClick={() => {
+									onClick={(evt) => {
+										console.log('evt: ', evt.target)
 										console.log('this inside Thai click: ', this)
 										this.refs.mode.show()
 										this.onLanguageClick(this.thaiButton)
 										console.log('this after eventHandler: ', this)
 									}} />
-								<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} />
+								<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 							</div>
 						</SkyLight>
         	</SkyLight>
 					<SkyLight dialogStyles={styles.myDialog} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
 						<div style={styles.buttonSection}>
-							<RaisedButton label='Play' labelStyle={{fontSize: '24px'}} style={styles.modalButton} />
-							{/* need to change Study button to link to Study but study right now is broken. Need to set the modal to be invisible once this is clicked*/}
+							<RaisedButton label='Play' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 							<Link to='/study'> <RaisedButton
 								label='Study'
 								labelStyle={{fontSize: '24px'}}
@@ -118,10 +118,20 @@ const styles = {
 		color: '#ffffff',
 		width: '70%',
 		height: '450px',
-		marginTop: '-300px',
-		marginLeft: '-35%',
 		fontSize: '28px',
-		padding: '50px',
+		paddingTop: '50px',
+		paddingLeft: '75px',
+		paddingRight: '75px',
+		position: 'fixed',
+		zIndex: 999999999999999,
+	  // line spacing that's easier to read
+    lineHeight: '45px',
+    // vertical alignment
+    top:0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
 	}
 }
 
