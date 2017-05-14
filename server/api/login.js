@@ -36,4 +36,8 @@ router.post('/logout', (req, res, next) => {
 	res.sendStatus(200);
 });
 
+router.get('/whoami', (req, res) => {
+  res.send(req.user)
+})
+
 module.exports = router;

@@ -34,7 +34,7 @@ class Navbar extends Component {
 					</Col>
 
 					<Col lg={4}>
-						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Login </FlatButton></Link>
+						<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Login </FlatButton></Link>
 					</Col>
 
 				</Row>
