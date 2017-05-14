@@ -1,13 +1,18 @@
 import Pitchfinder from 'pitchfinder';
 
+///////////////////////////////////////////////////////
+/// deletes audio node when Next or Prev is clicked ///
+///////////////////////////////////////////////////////
 export const deleteAudioNode = (parentId, childClassName) => {
 	let parent = document.getElementById(parentId);
 	let child = document.getElementsByClassName(childClassName);
 	child.length && parent.removeChild(child[0]);
 };
 
+///////////////////////////////////////////
+/// creates audioContext and audioNodes ///
+///////////////////////////////////////////
 export const CreateAudioContext = () => {
-
 	if (!window.AudioContext) {
 		if (!window.webkitAudioContext) {
 			alert('no audiocontext found');
@@ -22,7 +27,6 @@ export const CreateAudioContext = () => {
 	hpFilter.type = "highpass";
 	hpFilter.frequency.value = 85;
 	hpFilter.gain.value = 10;
-
 	let lpFilter = context.createBiquadFilter();
 	lpFilter.type = "lowpass";
 	lpFilter.frequency.value = 900;
@@ -33,7 +37,6 @@ export const CreateAudioContext = () => {
 	compressor.threshold.value = -50;
 	compressor.knee.value = 40;
 	compressor.ratio.value = 12;
-	// compressor.reduction.value = -20;
 	compressor.attack.value = 0;
 	compressor.release.value = 0.25;
 
@@ -45,6 +48,9 @@ export const CreateAudioContext = () => {
 
 };
 
+/////////////////////////////////////////////////////////////////////////////////
+/// on stop helper that creates user audio element and returns the audio blob ///
+/////////////////////////////////////////////////////////////////////////////////
 export const stopAndReturnMedia = (audioRecording) => {
 	// create user audio element to post to page
 	let soundClips = document.getElementById('soundClips');

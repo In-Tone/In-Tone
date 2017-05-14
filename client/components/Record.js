@@ -10,52 +10,64 @@ class Record extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {};
-
 		this.duration = this.props.duration;
-		this.dispatchUserTones = this.props.dispatchUserTones;
+		this.dispatchUserTone = this.props.dispatchUserTone;
 	}
 
 	componentDidMount() {
 
+		// get duration from props
 		const duration = this.props.duration;
-		// constraints object for getUserMedia stream (tells the getUserMedia what kind of data object it will receive)
-		//////////////////////////////////////
+		// get dispatchUserTone from props
+		const dispatchUserTone = this.dispatchUserTone;
+
+		///////////////////////////////////////
 		//////////// SET UP STREAM ////////////
 		///////////////////////////////////////
+		// constraints object for getUserMedia stream
+		// i.e., tells the getUserMedia what kind of data object it will receive)
 		var constraints = { audio: true, video: false };
-		const dispatchUserTones = this.dispatchUserTones;
 		// set up stream -- is a promise -- recording happens in .then off it
 		navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-			// create audioNode stream source with stream so we can route it through the audioContext then connect it to the nodes
+			// create AudioContext and audioNodes by calling helper function CreateAudioContext();
 			const [context, hpFilter, lpFilter, compressor, viz] = CreateAudioContext();
+			// create audioNode stream source with stream to route it through the audioContext and nodes
 			const source = context.createMediaStreamSource(stream);
-			source.connect(viz);
-			viz.connect(compressor);
-			// hpFilter.connect(viz);
-			// lpFilter.connect(hpFilter);
+			source.connect(compressor);
+			compressor.connect(hpFilter);
+			hpFilter.connect(lpFilter);
+			lpFilter.connect(viz);
 
 			////////////////////////////////////
-			/////// RECORD BUTTON //////////////
+			/////// SET UP RECORD BUTTON ///////
 			////////////////////////////////////
 			// grab "record" button
 			var record = document.getElementById("Record");
-			// record button click handler;
+			// record button click handler
 			record.onclick = function() {
+				// remove existing user audio (so when you hit next it resets)
 				deleteAudioNode('soundClips', 'clip');
+				// grab countdown element
 				var countdown = document.getElementById('countdown');
+				// initialize seconds variable for countdown
 				var seconds = 3;
+				// set innerHTML of countdown element to seconds
 				countdown.innerHTML = seconds;
+				// create countdown timer
 				var countdownTimer = setInterval(() => {
 						seconds = seconds-1;
 						countdown.innerHTML = (seconds > 0) ? seconds : "GO!";
 				}, 1000);
+				// create record initializer to fire at same time as setInterval reaches 3 seconds
+				// also clear that interval
+				// start recording
 				setTimeout(() => {
 						clearInterval(countdownTimer);
 						record.style.background = "red";
 						record.style.color = "black";
 						mediaRecorder.start();
 				}, 3000);
+				// create recording stop, which fires exactly 1 second + duration of target after start
 				setTimeout(() => {
 					record.style.background = "";
 					record.style.color = "";
@@ -63,27 +75,41 @@ class Record extends React.Component {
 				}, 4000+duration);
 			};
 
-			///////////////////////////////////////
-			////////// MEDIA RECORD //////////////
+			//////////////////////////////////////
+			/////// SET UP MEDIA RECORDER ////////
 			//////////////////////////////////////
 			var mediaRecorder = new MediaRecorder(stream);
 			// when data is available, push available data to recording array
 			var recording = [];
-			let blob, userTones;
+			let blob;
+			let userTones;
+
+			// .ondataavailable event precedes .on stop, grabs blob from recording array
 			mediaRecorder.ondataavailable = function(e) {
 				recording.push(e.data);
 			};
+
+			// .onstop event fires after .stop is called and after .ondatavailable fires
 			mediaRecorder.onstop = function(e) {
+				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
+				// also returns that blob
 				blob = stopAndReturnMedia(recording, context);
+				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
 				processMedia(blob, context)
-					.then(frequencies => dispatchUserTones(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
-			}
+					// set currentUserTone in store to the returned array of pitches
+					.then(frequencies => dispatchUserTone(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
+			};
+			
+		// END OF .getUserMedia PROMISE
 		}).catch(function(err) {
 				console.log(err);
 		});
 
 	}
 
+	//////////////////////////////////////
+	/////// render record component //////
+	//////////////////////////////////////
 	render() {
 		return (
 			<RaisedButton id='Record' className='studyButtons'>
@@ -93,10 +119,13 @@ class Record extends React.Component {
 	}
 }
 
+//////////////////////////////////////
+// grab current userTone from store //
+//////////////////////////////////////
 const mapDispatchToProps = dispatch => {
 	return {
-		dispatchUserTones: userTones => {
-			dispatch(setUserTone(userTones));
+		dispatchUserTone: userTone => {
+			dispatch(setUserTone(userTone));
 		}
 	}
 };

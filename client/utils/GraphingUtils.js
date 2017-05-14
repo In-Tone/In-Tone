@@ -1,5 +1,6 @@
 import Chart from 'chart.js';
 
+// draw graph function using chart.js
 export const drawGraph = (context, xLabels, results, targetPitches) => {
 	let graphObject = {
 			type: 'line',
@@ -21,6 +22,6 @@ export const drawGraph = (context, xLabels, results, targetPitches) => {
 			}
 		}
 
+		// create graph object, which draws the chart on the canvas element
 		let pitchesGraph = new Chart(context, graphObject);
-		// return pitchesGraph;
 };
