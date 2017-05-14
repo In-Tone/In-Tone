@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
-import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing } from '../utils/ProcessingUtils';
+import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph } from '../utils/GraphingUtils';
 
 class Graph extends React.Component {
@@ -38,11 +38,19 @@ class Graph extends React.Component {
 		// const results = pitchSlicing(oldResults);
 		// const targets = pitchSlicing(targetPitches);
 
-		// pim's testing;
-		const results = pitchSlicing(newResults);
+		// pim's testing - fix halves and doubles:
+		const results = pitchSlicing(oldResults);
 		const targets = pitchSlicing(targetPitches);
-		const smoothResults = pitchSmoothing(results)
-		const smoothTargets = pitchSmoothing(targets)
+		const smoothResults = pitchFix(results)
+		const smoothTargets = pitchFix(targets)
+
+
+
+		// pim's testing - fix by time series analysis:
+		// const results = pitchSlicing(oldResults);
+		// const targets = pitchSlicing(targetPitches);
+		// const smoothResults = pitchSmoothing(results)
+		// const smoothTargets = pitchSmoothing(targets)
 
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		let xLabels = getXLabels(duration, targets);

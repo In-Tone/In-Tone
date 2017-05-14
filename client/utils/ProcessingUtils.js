@@ -56,18 +56,6 @@ export const pitchFiltering = frequencies => {
 	return [oldResults, newResults];
 };
 
-export const pitchSmoothing = array => {
-	const t = new timeseries.main(timeseries.adapter.fromArray(array))
-
-	const processed = t.ma({period: 6}).output();
-	const chart = t.ma({period: 6}).chart({main: true});
-	const results = processed.map(subArr => Math.round(subArr[1]))
-	console.log('data pre smoothing: ', array)
-	console.log('data post smoothing: ', results)
-	console.log('chart', chart)
-	return results;
-}
-
 export const pitchSlicing = array => {
 	for (let i = 0; i < array.length; i++) {
 		let diff = Math.abs(array[i] - array[i - 1]);
@@ -76,6 +64,7 @@ export const pitchSlicing = array => {
 		}
 	}
 };
+
 
 export const getXLabels = (duration, targetPitches) => {
 	let pitchesLength = targetPitches.length;
@@ -89,4 +78,37 @@ export const getXLabels = (duration, targetPitches) => {
 	}
 
 	return xLabels
+};
+
+// pim's testing:
+export const pitchSmoothing = array => {
+	const t = new timeseries.main(timeseries.adapter.fromArray(array))
+	const processed = t.ma({period: 6}).output();
+	const chart = t.ma({period: 6}).chart({main: true});
+	const results = processed.map(subArr => Math.round(subArr[1]))
+	console.log('data pre smoothing: ', array)
+	console.log('data post smoothing: ', results)
+	console.log('chart', chart)
+	return results;
+};
+
+export const pitchFix = array => {
+	let rejects = []
+
+	for (let i = 1; i < array.length; i++) {
+		var prev = rejects.indexOf(array[i-1]) >=0 ? prev : array[i-1]
+		let curr = array[i]
+		let half = prev/2;
+		let double = prev*2;
+
+		if ( half + 10 > curr && curr > half - 10 || double + 10 > curr && curr > double - 10 ) {
+			rejects.push(array[i]);
+		}
+	}
+
+	console.log('inside pitch fix!')
+	return array.map(freq => {
+		if (rejects.indexOf(freq) >= 0) return NaN;
+    else return freq;
+ })
 };
