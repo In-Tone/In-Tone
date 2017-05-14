@@ -48,17 +48,27 @@ export const CreateAudioContext = () => {
 export const stopAndReturnMedia = (audioRecording) => {
 	// create user audio element to post to page
 	let soundClips = document.getElementById('soundClips');
-	let clipContainer = document.createElement('article');
+	// clipContainer is now a div to fit w/target audio in study component
+	let clipContainer = document.createElement('div');
 	let clipLabel = document.createElement('h4');
 	let audio = document.createElement('audio');
 
 	// add created user audio element to page
 	clipContainer.classList.add('clip');
+
+	// style clipContainer to display correctly underneath the target audio
+	clipContainer.style.display = 'flex';
+	clipContainer.style.justifyContent = 'center';
+
 	audio.setAttribute('controls', '');
-	clipLabel.innerHTML = "YOUR AUDIO";
+	// set audio width to match target audio width
+	audio.style.width = '50%';
+	clipLabel.innerHTML = "Your Audio:";
 
 	clipContainer.appendChild(clipLabel);
 	clipContainer.appendChild(audio);
+
+	// add the user audio to the existing audio div
 	soundClips.appendChild(clipContainer);
 
 	// create Blob for access by user audio element, set as src for playback

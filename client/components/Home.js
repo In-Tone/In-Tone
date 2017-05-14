@@ -13,9 +13,6 @@ export default class Home extends React.Component {
         }
     }
 
-    componentWillMount() {
-    }
-
     componentDidMount() {
 	// for edge case browser compatibility
         if (!window.AudioContext) {
@@ -98,7 +95,7 @@ export default class Home extends React.Component {
     render() {
         return (
         <div id='canvasContainer'>
-    	    <canvas id='homeCanvas' width='1000' height='600'></canvas>
+    	    <canvas id='homeCanvas' width='1050' height='500'></canvas>
         </div>
     )}
 }

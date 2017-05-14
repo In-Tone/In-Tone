@@ -92,14 +92,14 @@ class Footer extends Component {
 
 const styles = {
 	footer: {
-		height: '100px',
+		height: '65px',
 		backgroundColor: 'purple',
 		position: 'fixed',
 		bottom: '0',
 	},
 	button: {
 		fontSize: '24px',
-		color: 'white',
+		color: 'white',	
 		display: 'in-line',
 		height: '100%',
 	},
