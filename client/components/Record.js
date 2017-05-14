@@ -86,7 +86,7 @@ class Record extends React.Component {
 
 	render() {
 		return (
-			<RaisedButton id='Record'>
+			<RaisedButton id='Record' className='studyButtons'>
 				<p id="countdown">RECORD</p>
 			</RaisedButton>
 		)

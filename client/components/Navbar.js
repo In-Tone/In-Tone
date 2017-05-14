@@ -7,20 +7,38 @@ import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class Navbar extends Component {
 	constructor() {
 		super()
 	}
+/*			<AppBar
+			style={styles.navbar}
+			title={<Link to='/'><FlatButton style={styles.elements}>In-Tone</FlatButton></Link>}
+			iconElementRight={<Link to='/'><FlatButton label="Login" style={styles.elements}/></Link>}
+			/>*/
 
 	render() {
 		return (
-			<AppBar
-			style={styles.navbar}
-			title={<h1 style={styles.header}>In-Tone</h1>}
-			iconElementLeft={<Link to='/'><FlatButton label="Home" style={styles.button} /></Link>}
-			iconElementRight={<Link to='/'><FlatButton label="Login" style={styles.button} /></Link>}
-			/>
+			<Grid style={styles.navbar}>
+				<Row>
+
+					<Col lg={4}>
+						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
+					</Col>
+
+					<Col lg={4}>
+						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
+					</Col>
+
+					<Col lg={4}>
+						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Login </FlatButton></Link>
+					</Col>
+
+				</Row>
+			</Grid>
 		)
 	}
 
@@ -28,18 +46,24 @@ class Navbar extends Component {
 
 const styles = {
 	navbar: {
+		backgroundColor: 'rgba(82, 0, 124, 1)',
 		position: 'fixed',
-		height: '100px',
+		width: '100%',
+		boxShadow: '0px 8px 10px -4px rgba(0,0,0,0.75)'
 	},
-	header: {
-		color: 'white',
-		margin: '30px'
+	navElements: {
+		width: '100%',
+		fontSize: '24px',
+		color: 'white',	
+		height: '65px'
 	},
-	button: {
+	navLogo: {
+		width: '100%',
+		height: '65px',
+		fontSize: '42px',
 		color: 'white',
-		margin: '30px'
+		fontWeight: 550
 	}
-
 }
 
 export default Navbar;

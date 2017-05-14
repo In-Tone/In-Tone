@@ -17,18 +17,19 @@ const thaiLexicon = {
 };
 
 const nativeSpellingStyle = {
-	fontSize: 75,
+	fontSize: 85
 }
 
 export const targetWord = (image, transliteration, englishTranslation, tone) => (
-	<Paper zDepth={1}>
-		<h1 style={nativeSpellingStyle}>{thaiLexicon[transliteration]}</h1>
-		<h1>Transliteration: {transliteration}</h1>
-		<h2>English Translations: {englishTranslation}</h2>
-		<h2>Tone: {tone}</h2>
+	// w/o a border, the Paper renders in study with uneditable padding on top. Defining a porder seems to fix it 
+	<Paper zDepth={1} style={{borderStyle:'solid', borderColor:'white'}}>
+		<h1 style={nativeSpellingStyle} className='studyDefinitions'>{thaiLexicon[transliteration]}</h1>
+		<h2 className='studyDefinitions'>Transliteration: {transliteration}</h2>
+		<h2 className='studyDefinitions'>English Translation: {englishTranslation}</h2>
+		<h2 className='studyDefinitions'>Tone: {tone}</h2>
 	</Paper>
 );
 
 export const button = (label, onClickFunc) => (
-	<RaisedButton label={label} onClick={onClickFunc} />
+	<RaisedButton label={label} labelStyle={{fontSize: '15px'}} onClick={onClickFunc} className='studyButtons' />
 );
