@@ -103,31 +103,31 @@ class Study extends React.Component {
 
 		return (
 			<div className='studyDiv'>
-				<Row className='show-grid'>
-					<Col lg={6}>
+				<Row>
+					<Col lg={4} style={{/*borderStyle:'dotted', borderColor:'blue'*/}}>
 						{targetWord(image, transliteration, englishTranslation, tone)}
-					</Col>
-					<Col lg={6}>
-						<Paper zDepth={1}>
-							{button('LOG STATE', logState)}
+						<Paper zDepth={1} style={{marginTop:'10px'}}>
+							<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
+								<div style={{display:'flex', justifyContent:'center', paddingBottom:'5%'}}>
+									<h4>Target Audio:</h4>
+									<audio controls id='soundSample' src={wav} style={{width: '50%'}}/>
+								</div>
+							</div>
 							{button('PREVIOUS', previousTarget)}
 							<Record 
 								duration={this.state.currentTarget.duration}
 								targetPitches={this.state.currentTarget.pitches}
 								/>
 							{button('NEXT', randomReset)}
-							<h4>TARGET AUDIO</h4>
-							<audio controls id='soundSample' src={wav}/>
-							<div id='soundClips'></div>
 						</Paper>
 					</Col>
+					<Col lg={8}>
+						<Graph
+							targetPitches={this.state.currentTarget.pitches}
+							duration={this.state.currentTarget.duration}
+						/>
+					</Col>
 				</Row>
-
-				<br />
-				<Graph
-					targetPitches={this.state.currentTarget.pitches}
-					duration={this.state.currentTarget.duration}
-				/>
 			</div>
 		);
 	}
