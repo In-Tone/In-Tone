@@ -80,18 +80,16 @@ export const getXLabels = (duration, targetPitches) => {
 	return xLabels
 };
 
-// pim's testing:
+// time series analysis, another option maybe:
 export const pitchSmoothing = array => {
 	const t = new timeseries.main(timeseries.adapter.fromArray(array))
 	const processed = t.ma({period: 6}).output();
 	const chart = t.ma({period: 6}).chart({main: true});
 	const results = processed.map(subArr => Math.round(subArr[1]))
-	console.log('data pre smoothing: ', array)
-	console.log('data post smoothing: ', results)
-	console.log('chart', chart)
 	return results;
 };
 
+// throw out halves and doubles:
 export const pitchFix = array => {
 	let rejects = []
 
