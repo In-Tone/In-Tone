@@ -13,8 +13,7 @@ passport.deserializeUser(
     User.findById(id)
       .then(user => {
         if (!user) console.log("No match.");
-        else console.log("Here is the user: ", user);
-        done(null, user)
+        else done(null, user)
       })
       .catch(err => {
         console.log(err);
@@ -23,12 +22,10 @@ passport.deserializeUser(
   }
 );
 
-// require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(new (require('passport-local').Strategy)(
   (email, password, done) => {
     User.findOne({where: {email}})
       .then(user => {
-      	console.log("user", user);
         if (!user) {
           console.log("No match.");
           return done(null, false, { message: 'Login incorrect' });
@@ -47,8 +44,11 @@ passport.use(new (require('passport-local').Strategy)(
   }
 ))
 
+router.get('/whoami', (req, res) => {
+  res.send(req.user)
+})
+
 router.post('/', (req, res, next) => {
-		console.log("req.user", req.user);
 	User.findOne({
 		where: {
 			email: req.body.email
@@ -80,12 +80,7 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
 	req.logout();
-	console.log("req.user after logout", req.user);
 	res.sendStatus(200);
 });
-
-router.get('/whoami', (req, res) => {
-  res.send(req.user)
-})
 
 module.exports = router;
