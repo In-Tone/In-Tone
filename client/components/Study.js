@@ -226,7 +226,7 @@ class Study extends React.Component {
 /////////////////////////////////
 const mapStateToProps = state => ({
 	allTargets: state.allTargets,
-	currentTarget: state.currentTarget
+	currentTarget: state.currentTarget,
 	url: state.url
 });
 
