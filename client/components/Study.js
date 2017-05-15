@@ -35,7 +35,7 @@ class Study extends React.Component {
 	}
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
-	randomReset(e) {
+	randomReset = e => {
 		let dispatchUserTone = this.props.dispatchUserTone;
 		let allTargets = this.state.allTargets;
 		let currentTarget = this.state.currentTarget;
@@ -81,11 +81,13 @@ class Study extends React.Component {
 	////////////////////////////
 	render() {
 
-		const transliteration = this.state.currentTarget.transliteration;
-		const englishTranslation = this.state.currentTarget.englishTranslation;
-		const image = this.state.currentTarget.nativeSpelling;
-		const wav = this.state.currentTarget.wav;
-		const tone = this.state.currentTarget.tone;
+		const {
+			transliteration,
+			englishTranslation,
+			nativeSpelling:image,
+			wav,
+			tone
+		} = this.state.currentTarget;
 
 		const logState = this.logState;
 		const previousTarget = this.previousTarget;
