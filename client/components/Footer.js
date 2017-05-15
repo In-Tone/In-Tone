@@ -36,10 +36,9 @@ class Footer extends Component {
 					<SkyLight  dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
 						<div>
 							<p>In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.</p>
-							<br />
-							<RaisedButton label='Train Now' labelStyle={{fontSize: '24px'}} onClick={() => {this.refs.train.show()}}
-							style={styles.modalButton} />
 						</div>
+        	</SkyLight>
+					<FlatButton onClick={() => {this.refs.train.show()}}  className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'}>Train</FlatButton>
 						<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="train" title="Choose a Language:">
 							<div style={styles.buttonSection}>
 								<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
@@ -54,8 +53,7 @@ class Footer extends Component {
 								<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 							</div>
 						</SkyLight>
-        	</SkyLight>
-					<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
+						<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
 						<div style={styles.buttonSection}>
 							<RaisedButton label='Play' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 							<Link to='/study'>
@@ -72,7 +70,6 @@ class Footer extends Component {
 							</Link>
 						</div>
 					</SkyLight>
-					<FlatButton onClick={() => {this.refs.train.show()}}  className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'}>Train</FlatButton>
 			</footer>
 		)
 	}
@@ -98,8 +95,8 @@ const styles = {
 		color: 'white',
 		display: 'in-line',
 		height: '100%',
-		borderLeft: 'thick solid white',
-		borderRight: 'thick solid white'
+		borderLeft: 'medium solid white',
+		borderRight: 'medium solid white'
 	},
 	modalButton: {
 		color: 'white',
@@ -112,7 +109,7 @@ const styles = {
 		backgroundColor: 'rgba(0, 137, 123, 1)',
 		color: '#ffffff',
 		width: '70%',
-		minHeight: '450px',
+		height: '320px',
 		fontSize: '20px',
 		paddingTop: '50px',
 		paddingLeft: '75px',
