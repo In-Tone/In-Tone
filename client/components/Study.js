@@ -35,7 +35,7 @@ class Study extends React.Component {
 	}
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
-	randomReset = e => {
+	randomReset(e) {
 		let dispatchUserTone = this.props.dispatchUserTone;
 		let allTargets = this.state.allTargets;
 		let currentTarget = this.state.currentTarget;
