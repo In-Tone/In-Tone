@@ -106,7 +106,6 @@ export const pitchFix = array => {
 		}
 	}
 
-	console.log('inside pitch fix!')
 	return array.map(freq => {
 		if (rejects.indexOf(freq) >= 0) return NaN;
     else return freq;
