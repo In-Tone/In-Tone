@@ -47,6 +47,7 @@
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
     "sequelize": "^3.30.4",
+    "timeseries-analysis": "^1.0.12",
     "volleyball": "^1.4.1"
   },
   "devDependencies": {

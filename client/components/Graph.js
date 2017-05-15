@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
-import { pitchFiltering, pitchSlicing, getXLabels } from '../utils/ProcessingUtils';
+import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph } from '../utils/GraphingUtils';
 
 //////////////////////////////////////////
@@ -23,12 +23,14 @@ class Graph extends React.Component {
 
 		// slice target pitch array
 		const targetTone = pitchSlicing(targetPitches);
+		// smooth target pitch array
+		const smoothTargets = pitchFix(targetTone)
 		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		// create ms x-axis labels
-		let xLabels = getXLabels(duration, targetTone);
+		let xLabels = getXLabels(duration, smoothTargets);
 		// draw graph
-		drawGraph(chartCtx, xLabels, [], targetTone);
+		drawGraph(chartCtx, xLabels, [], smoothTargets);
 	}
 
 	////////////////////////////////////////////////////////////
@@ -40,17 +42,35 @@ class Graph extends React.Component {
 		const duration = this.props.duration;
 		const userPitches = this.props.userTones;
 
-		// filter user pitches and slice both target and user pitches
-		// this processing returns the userTone and targetTone
+		// // filter user pitches and slice both target and user pitches
+		// // this processing returns the userTone and targetTone
+		// const [oldResults, newResults] = pitchFiltering(userPitches);
+		// const userTone = pitchSlicing(oldResults);
+		// const targetTone = pitchSlicing(targetPitches);
+		// // grab chart element
+		// let chartCtx = document.getElementById('studyChart').getContext('2d');
+		// // create ms x-axis labels
+		// let xLabels = getXLabels(duration, targetTone);
+		// // draw graph
+		// drawGraph(chartCtx, xLabels, userTone, targetTone);
+
+			// pim's testing - fix halves and doubles:
 		const [oldResults, newResults] = pitchFiltering(userPitches);
 		const userTone = pitchSlicing(oldResults);
 		const targetTone = pitchSlicing(targetPitches);
-		// grab chart element
+		const smoothResults = pitchFix(userTone)
+		const smoothTargets = pitchFix(targetTone)
+
+		// pim's testing - fix by time series analysis:
+		// const results = pitchSlicing(oldResults);
+		// const targets = pitchSlicing(targetPitches);
+		// const smoothResults = pitchSmoothing(results)
+		// const smoothTargets = pitchSmoothing(targets)
+
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
-		// create ms x-axis labels
 		let xLabels = getXLabels(duration, targetTone);
-		// draw graph
-		drawGraph(chartCtx, xLabels, userTone, targetTone);
+		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+
 	}
 
 	//////////////////////////
