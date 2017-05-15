@@ -20,7 +20,7 @@ const nativeSpellingStyle = {
 	fontSize: 85
 }
 
-export const targetWord = (image, transliteration, englishTranslation, tone) => (
+export const targetWord = (image=null, transliteration=null, englishTranslation=null, tone=null) => (
 	// w/o a border, the Paper renders in study with uneditable padding on top. Defining a porder seems to fix it 
 	<Paper zDepth={1} style={{borderStyle:'solid', borderColor:'white'}}>
 		<h1 style={nativeSpellingStyle} className='studyDefinitions'>{thaiLexicon[transliteration]}</h1>

@@ -11,6 +11,68 @@ import Record from './Record';
 import Graph from './Graph';
 import { setUserTone } from '../reducers/UserTone';
 import { deleteAudioNode } from '../utils/RecordingUtils';
+import {fetchTargets} from '../reducers/Targets';
+import SkyLight from 'react-skylight';
+import { setCurrentTarget } from '../reducers/CurrentTarget';
+
+const styles = {
+	footer: {
+		height: '55px',
+		backgroundColor: 'purple',
+		position: 'fixed',
+		bottom: '0',
+		zIndex: 500
+	},
+	button: {
+		fontSize: '24px',
+		color: 'white',
+		display: 'in-line',
+		height: '100%',
+	},
+	middleButton: {
+		fontSize: '24px',
+		color: 'white',
+		display: 'in-line',
+		height: '100%',
+		borderLeft: 'medium solid white',
+		borderRight: 'medium solid white'
+	},
+	modalButton: {
+		color: 'white',
+		margin: '30px',
+	},
+	buttonSection: {
+		marginTop: '40px',
+	},
+	myDialog: {
+		backgroundColor: 'rgba(0, 137, 123, 1)',
+		color: '#ffffff',
+		width: '70%',
+		height: '320px',
+		fontSize: '20px',
+		paddingTop: '50px',
+		paddingLeft: '75px',
+		paddingRight: '75px',
+		position: 'fixed',
+		zIndex: 999999999999999,
+    lineHeight: '32px',
+    // vertical alignment
+    top:0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
+	},
+	overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 0,
+    backgroundColor: 'rgba(0,0,0,0.7)'
+  }
+}
 
 class Study extends React.Component {
 
@@ -18,13 +80,15 @@ class Study extends React.Component {
 		super(props);
 
 		this.state = {
-			allTargets: [], 
-			currentTarget: {},
 			previousTargets: [],
+			language: '',
+			index: 0
 		};
 
 		this.randomReset = this.randomReset.bind(this);
 		this.previousTarget = this.previousTarget.bind(this);
+		this.languageDropDownChange = this.languageDropDownChange.bind(this);
+		this.onLanguageClick = this.onLanguageClick.bind(this);
 
 		// TESTING ONLY
 		this.logState = this.logState.bind(this);
@@ -36,44 +100,38 @@ class Study extends React.Component {
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
 	randomReset(e) {
-		let dispatchUserTone = this.props.dispatchUserTone;
-		let allTargets = this.state.allTargets;
-		let currentTarget = this.state.currentTarget;
-
+		let allTargets = this.props.allTargets;
 		let previousTargets = this.state.previousTargets;
+		let currentTarget = this.props.currentTarget;
 
 		previousTargets.push(currentTarget);
 		if (previousTargets.length > 10) previousTargets.shift();
-		this.setState({ previousTargets });
 
-		let currentToneId = currentTarget.toneId;
-		let randNum = Math.floor(Math.random()*allTargets.length);
-		if (currentToneId === randNum) randNum = (randNum + 1) % allTargets.length;
-		currentTarget = allTargets[randNum];
-		this.setState({ currentTarget });
-		dispatchUserTone([]);
-
-		deleteAudioNode('soundClips', 'clip');
+		let index = (this.state.index + 1) % this.props.allTargets.length;
+		this.props.setCurrentTarget(this.props.allTargets[index]);
+		this.setState({index, previousTargets});
 	}
 
 	// BETA VERSION ONLY
 	// makes the next tone to study the tone that was just studied (i.e., studied prior to the current tone)
 	previousTarget () {
-		console.log('here');
 		let previousTargets = this.state.previousTargets;
 		if (!previousTargets.length) return;
 		let currentTarget = previousTargets.pop();
 		this.setState({ previousTargets });
-		this.setState({ currentTarget });
+		this.props.setCurrentTarget(currentTarget);
+
 	}
 
-	// loads local state with all targets from the store; also sets current target
-	componentWillMount() {
-		const allTargets = this.props.allTargets;
-		this.setState({ allTargets });
+	languageDropDownChange(event, index, value) {
+		let language = event.target.innerHTML.toLowerCase();
+		this.setState({language: value});
+		this.props.fetchTargets(language);
+	}
 
-		const currentTarget = allTargets[Math.floor(Math.random()*allTargets.length)];
-		this.setState({ currentTarget });
+	onLanguageClick(language) {
+		this.props.fetchTargets(language)
+		this.setState({language});
 	}
 
 	////////////////////////////
@@ -81,60 +139,81 @@ class Study extends React.Component {
 	////////////////////////////
 	render() {
 
-		const {
-			transliteration,
-			englishTranslation,
-			nativeSpelling:image,
-			wav,
-			tone
-		} = this.state.currentTarget;
+		if (Object.keys(this.props.currentTarget).length) {
+			let {
+				transliteration,
+				englishTranslation,
+				nativeSpelling:image,
+				wav,
+				tone
+			} = this.props.currentTarget;
 
-		const logState = this.logState;
-		const previousTarget = this.previousTarget;
-		const randomReset = this.randomReset;
+			let logState = this.logState;
+			let previousTarget = this.previousTarget;
+			let randomReset = this.randomReset;
+			let languageDropDownChange = this.languageDropDownChange;
 
-		const dropDownMenu = () => (
-			<DropDownMenu
-				value={this.state.languageValue}
-				style={{width:'15%'}}
-				autoWidth={false}
-				onChange={this.selectLanguage} >
-				<MenuItem value={1} primaryText='Language' />
-				<MenuItem value={2} primaryText='Thai' />
-				<MenuItem value={3} primaryText='Chinese' />
-				<MenuItem value={4} primaryText='Hmong' />
-			</DropDownMenu>
-		);
-
-		return (
-			<div className='studyDiv'>
-				<Col lg={12}>
-					<Col lg={4}>
-						{targetWord(image, transliteration, englishTranslation, tone)}
-						<Paper zDepth={1} style={{marginTop:'10px'}}>
-							<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
-								<div style={{display:'flex', justifyContent:'center', paddingBottom:'5%'}}>
-									<h4>Target Audio:</h4>
-									<audio controls id='soundSample' src={wav} style={{width: '50%'}}/>
+			const dropDownMenu = () => (
+				<Paper zDepth={1} style={{marginTop:'10px'}}>
+					<DropDownMenu
+						value={1}
+						style={{width:'100%'}}
+						autoWidth={false}
+						onChange={this.languageDropDownChange} >
+						<MenuItem value={1} primaryText='Thai' />
+						{/* <MenuItem value={2} primaryText='Chinese' />
+						<MenuItem value={3} primaryText='Hmong' /> */}
+					</DropDownMenu>
+				</Paper>
+			);
+			return (
+				<div className='studyDiv'>
+					<Col lg={12}>
+						<Col lg={4}>
+							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tone)}
+							{dropDownMenu()}
+							<Paper zDepth={1} style={{marginTop:'10px'}}>
+								<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
+									<div style={{display:'flex', justifyContent:'center', paddingBottom:'5%'}}>
+										<h4>Target Audio:</h4>
+										<audio controls id='soundSample' src={wav} style={{width: '50%'}}/>
+									</div>
 								</div>
-							</div>
-							{button('PREVIOUS', previousTarget)}
-							<Record 
-								duration={this.state.currentTarget.duration}
-								targetPitches={this.state.currentTarget.pitches}
-								/>
-							{button('NEXT', randomReset)}
-						</Paper>
+								{button('PREVIOUS', previousTarget)}
+								<Record 
+									duration={this.props.currentTarget && this.props.currentTarget.duration}
+									targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
+									/>
+								{button('NEXT', randomReset)}
+							</Paper>
+						</Col>
+						<Col lg={8} style={{paddingLeft:0}}>
+							<Graph
+								targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
+								duration={this.props.currentTarget && this.props.currentTarget.duration}
+							/>
+						</Col>
 					</Col>
-					<Col lg={8} style={{paddingLeft:0}}>
-						<Graph
-							targetPitches={this.state.currentTarget.pitches}
-							duration={this.state.currentTarget.duration}
-						/>
-					</Col>
-				</Col>
-			</div>
-		);
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<Paper zDepth={1} style={{marginTop:'10px'}}>
+						<div style={styles.buttonSection}>
+							<h1>Choose a language:</h1>
+							<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
+							<RaisedButton
+								label='Thai'
+								labelStyle={{fontSize: '24px'}}
+								onClick={() => {
+									this.onLanguageClick("thai")
+								}} />
+							<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
+						</div>
+					</Paper>
+				</div>)
+		}
 	}
 }
 
@@ -142,16 +221,23 @@ class Study extends React.Component {
 // grab all targets from store //
 /////////////////////////////////
 const mapStateToProps = state => ({
-	allTargets: state.allTargets
+	allTargets: state.allTargets,
+	currentTarget: state.currentTarget
 });
 
-//////////////////////////////////////
-// grab current userTone from store //
-//////////////////////////////////////
+///////////////////////////////////////////////////////////
+// grab current userTone and dispatch methods from store //
+///////////////////////////////////////////////////////////
 const mapDispatchToProps = dispatch => {
 	return {
 		dispatchUserTone: userTone => {
 			dispatch(setUserTone(userTone));
+		},
+		fetchTargets: language => {
+			dispatch(fetchTargets(language))
+		},
+		setCurrentTarget: currentTarget => {
+			dispatch(setCurrentTarget(currentTarget))
 		}
 	}
 };
