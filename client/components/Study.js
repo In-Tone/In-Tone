@@ -106,8 +106,8 @@ class Study extends React.Component {
 
 		return (
 			<div className='studyDiv'>
-				<Row>
-					<Col lg={4} style={{/*borderStyle:'dotted', borderColor:'blue'*/}}>
+				<Col lg={12}>
+					<Col lg={4}>
 						{targetWord(image, transliteration, englishTranslation, tone)}
 						<Paper zDepth={1} style={{marginTop:'10px'}}>
 							<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
@@ -124,13 +124,13 @@ class Study extends React.Component {
 							{button('NEXT', randomReset)}
 						</Paper>
 					</Col>
-					<Col lg={8}>
+					<Col lg={8} style={{paddingLeft:0}}>
 						<Graph
 							targetPitches={this.state.currentTarget.pitches}
 							duration={this.state.currentTarget.duration}
 						/>
 					</Col>
-				</Row>
+				</Col>
 			</div>
 		);
 	}
