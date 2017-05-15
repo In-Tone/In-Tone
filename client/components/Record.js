@@ -31,6 +31,7 @@ class Record extends React.Component {
 		navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 			// create AudioContext and audioNodes by calling helper function CreateAudioContext();
 			const [context, hpFilter, lpFilter, compressor, viz] = CreateAudioContext();
+			// pass stream to CreateAudioContext -- connect there -- return only context??
 			// create audioNode stream source with stream to route it through the audioContext and nodes
 			const source = context.createMediaStreamSource(stream);
 			source.connect(compressor);
@@ -44,6 +45,7 @@ class Record extends React.Component {
 			// grab "record" button
 			var record = document.getElementById("Record");
 			// record button click handler
+			// ** make this onClick on react component
 			record.onclick = function() {
 				// remove existing user audio (so when you hit next it resets)
 				deleteAudioNode('soundClips', 'clip');
@@ -95,7 +97,7 @@ class Record extends React.Component {
 				// also returns that blob
 				blob = stopAndReturnMedia(recording, context);
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
-				processMedia(blob, context)
+				processMedia(blob, context) // second promise for blob
 					// set currentUserTone in store to the returned array of pitches
 					.then(frequencies => dispatchUserTone(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};

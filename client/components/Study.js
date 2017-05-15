@@ -81,11 +81,13 @@ class Study extends React.Component {
 	////////////////////////////
 	render() {
 
-		const transliteration = this.state.currentTarget.transliteration;
-		const englishTranslation = this.state.currentTarget.englishTranslation;
-		const image = this.state.currentTarget.nativeSpelling;
-		const wav = this.state.currentTarget.wav;
-		const tone = this.state.currentTarget.tone;
+		const {
+			transliteration,
+			englishTranslation,
+			nativeSpelling:image,
+			wav,
+			tone
+		} = this.state.currentTarget;
 
 		const logState = this.logState;
 		const previousTarget = this.previousTarget;

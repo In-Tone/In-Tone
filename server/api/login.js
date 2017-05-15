@@ -1,5 +1,52 @@
+const db = require('../../db/index');
 const router = require('express').Router();
-const User = require('../../db/models/User');
+// const User = require('../../db/models/User');
+const User = db.model('user');
+const passport = require('passport')
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+})
+
+passport.deserializeUser(
+  (id, done) => {
+    User.findById(id)
+      .then(user => {
+        if (!user) console.log("No match.");
+        else done(null, user)
+      })
+      .catch(err => {
+        console.log(err);
+        done(err);
+      });
+  }
+);
+
+passport.use(new (require('passport-local').Strategy)(
+  (email, password, done) => {
+    User.findOne({where: {email}})
+      .then(user => {
+        if (!user) {
+          console.log("No match.");
+          return done(null, false, { message: 'Login incorrect' });
+        }
+        return user.authenticate(password)
+          .then(ok => {
+            if (!ok) {
+              console.log("Bad password.")
+              return done(null, false, { message: 'Login incorrect' })
+            }
+            console.log('Login successful', email, user.id)
+            done(null, user)
+          })
+      })
+      .catch(done)
+  }
+))
+
+router.get('/whoami', (req, res) => {
+  res.send(req.user)
+})
 
 router.post('/', (req, res, next) => {
 	User.findOne({

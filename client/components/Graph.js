@@ -9,10 +9,6 @@ import { drawGraph } from '../utils/GraphingUtils';
 //////////////////////////////////////////
 class Graph extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	////////////////////////////////////////////////////
 	// grab pitches and duration from props on mount, //
 	// then draw the current target graph ONLY /////////
@@ -68,6 +64,7 @@ class Graph extends React.Component {
 		// const smoothTargets = pitchSmoothing(targets)
 
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
+		// this.refs._canvasNode.getContext('2d');
 		let xLabels = getXLabels(duration, targetTone);
 		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
 
@@ -79,7 +76,7 @@ class Graph extends React.Component {
 	render() {
 		return (
 			<Paper zDepth={1}>
-				<canvas id='studyChart' ></canvas>
+				<canvas id='studyChart' ref='_canvaseNode'></canvas>
 			</Paper>
 		);
 	}

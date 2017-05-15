@@ -51,7 +51,9 @@ export const CreateAudioContext = () => {
 /////////////////////////////////////////////////////////////////////////////////
 /// on stop helper that creates user audio element and returns the audio blob ///
 /////////////////////////////////////////////////////////////////////////////////
+// turn into a component
 export const stopAndReturnMedia = (audioRecording) => {
+	////////
 	// create user audio element to post to page
 	let soundClips = document.getElementById('soundClips');
 	// clipContainer is now a div to fit w/target audio in study component
@@ -76,6 +78,7 @@ export const stopAndReturnMedia = (audioRecording) => {
 
 	// add the user audio to the existing audio div
 	soundClips.appendChild(clipContainer);
+	/////////
 
 	// create Blob for access by user audio element, set as src for playback
 	let blob = new Blob(audioRecording, { 'type' : 'audio/ogg; codecs=opus' });
