@@ -9,8 +9,11 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { targetWord, button } from './StudyElements';
 import Record from './Record';
 import Graph from './Graph';
+import AudioComponent from './AudioComponent';
 import { setUserTone } from '../reducers/UserTone';
-import { deleteAudioNode } from '../utils/RecordingUtils';
+import { setUserURL } from '../reducers/UserAudioURL';
+import { resetAudio } from '../utils/RecordingUtils';
+
 
 class Study extends React.Component {
 
@@ -53,18 +56,21 @@ class Study extends React.Component {
 		this.setState({ currentTarget });
 		dispatchUserTone([]);
 
-		deleteAudioNode('soundClips', 'clip');
+		// REST AUDIO GOES HERE
+		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 	}
 
 	// BETA VERSION ONLY
 	// makes the next tone to study the tone that was just studied (i.e., studied prior to the current tone)
 	previousTarget () {
-		console.log('here');
 		let previousTargets = this.state.previousTargets;
 		if (!previousTargets.length) return;
 		let currentTarget = previousTargets.pop();
 		this.setState({ previousTargets });
 		this.setState({ currentTarget });
+
+		// RESET AUDIO GOES HERE
+		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 	}
 
 	// loads local state with all targets from the store; also sets current target
@@ -112,12 +118,7 @@ class Study extends React.Component {
 					<Col lg={4}>
 						{targetWord(image, transliteration, englishTranslation, tone)}
 						<Paper zDepth={1} style={{marginTop:'10px'}}>
-							<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
-								<div style={{display:'flex', justifyContent:'center', paddingBottom:'5%'}}>
-									<h4>Target Audio:</h4>
-									<audio controls id='soundSample' src={wav} style={{width: '50%'}}/>
-								</div>
-							</div>
+							<AudioComponent wav={wav}/>
 							{button('PREVIOUS', previousTarget)}
 							<Record 
 								duration={this.state.currentTarget.duration}
@@ -142,7 +143,8 @@ class Study extends React.Component {
 // grab all targets from store //
 /////////////////////////////////
 const mapStateToProps = state => ({
-	allTargets: state.allTargets
+	allTargets: state.allTargets,
+	url: state.url
 });
 
 //////////////////////////////////////
@@ -152,6 +154,9 @@ const mapDispatchToProps = dispatch => {
 	return {
 		dispatchUserTone: userTone => {
 			dispatch(setUserTone(userTone));
+		},
+		dispatchSetUserURL: userURL => {
+			dispatch(setUserURL(userURL));
 		}
 	}
 };

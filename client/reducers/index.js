@@ -3,13 +3,15 @@ import languageReducer from './Language';
 import targetsReducer from './Targets';
 import userTonesReducer from './UserTone';
 import userReducer from './Auth';
+import audioURLReducer from './UserAudioURL';
 
 
 const rootReducer = combineReducers({
   language: languageReducer,
   allTargets: targetsReducer,
   userTones: userTonesReducer,
-  user: userReducer
+  user: userReducer,
+  url: audioURLReducer
 });
 
 export default rootReducer;
