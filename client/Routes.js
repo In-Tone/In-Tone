@@ -5,6 +5,7 @@ import AudioInput from './components/AudioInput';
 import Study from './components/Study';
 import Layout from './components/Layout';
 import Home from './components/Home';
+import Profile from './components/ProfilePage';
 
 const Routes = () => {
 	return (
@@ -12,6 +13,7 @@ const Routes = () => {
 			<Route path='/' component={Layout}>
         <Route path='home' component={Home}/>
 				<Route path='study' component={Study}/>
+				<Route path='profile' component={Profile}/>
 				<IndexRoute component={Home} />
 			</Route>
 		</Router>
