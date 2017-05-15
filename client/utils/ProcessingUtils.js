@@ -1,4 +1,5 @@
 import Pitchfinder from 'pitchfinder';
+import timeseries from 'timeseries-analysis';
 
 export const processMedia = (audioBlob, audioContext) => {
 	let blob = audioBlob;
@@ -46,13 +47,13 @@ export const pitchFiltering = frequencies => {
 		}
 	});
 
-	// "Pim's voice filter": filters any frequencies outside human voice range; replaces them with NaN's. 
-	let results = frequencies.map( freq => {
+	// "Pim's voice filter": filters any frequencies outside human voice range; replaces them with NaN's.
+	let newResults = frequencies.map( freq => {
 		if (freq > 500 || freq < 70) return NaN;
 		else return freq;
 	});
 
-	return [oldResults, results];
+	return [oldResults, newResults];
 };
 
 export const pitchSlicing = array => {
@@ -63,6 +64,7 @@ export const pitchSlicing = array => {
 		}
 	}
 };
+
 
 export const getXLabels = (duration, targetPitches) => {
 	let pitchesLength = targetPitches.length;
@@ -76,4 +78,34 @@ export const getXLabels = (duration, targetPitches) => {
 	}
 
 	return xLabels
+};
+
+// time series analysis, another option maybe:
+export const pitchSmoothing = array => {
+	const t = new timeseries.main(timeseries.adapter.fromArray(array))
+	const processed = t.ma({period: 6}).output();
+	const chart = t.ma({period: 6}).chart({main: true});
+	const results = processed.map(subArr => Math.round(subArr[1]))
+	return results;
+};
+
+// throw out halves and doubles:
+export const pitchFix = array => {
+	let rejects = []
+
+	for (let i = 1; i < array.length; i++) {
+		var prev = rejects.indexOf(array[i-1]) >=0 ? prev : array[i-1]
+		let curr = array[i]
+		let half = prev/2;
+		let double = prev*2;
+
+		if ( half + 10 > curr && curr > half - 10 || double + 10 > curr && curr > double - 10 ) {
+			rejects.push(array[i]);
+		}
+	}
+
+	return array.map(freq => {
+		if (rejects.indexOf(freq) >= 0) return NaN;
+    else return freq;
+ })
 };

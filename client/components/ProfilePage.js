@@ -56,7 +56,8 @@ class Profile extends Component {
 						</Paper>
 					</Col>
 
-					<Col lg={8}>
+					<Col lg={8} style={{paddingLeft:0}}>
+						<div>
 						<Paper>
 							{/* this can definitely be refactored into a loop */}
 							<div style={styles.bottomBorders}>
@@ -94,6 +95,7 @@ class Profile extends Component {
 								</Col>
 							</Row>
 						</Paper>
+						</div>
 					</Col>
 				</Row>
 			</div>

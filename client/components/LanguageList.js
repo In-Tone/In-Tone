@@ -21,6 +21,7 @@ function wrapState(ComposedComponent) {
       this.setState({
         selectedIndex: index
       });
+      // function call to change x for LxTx and LxTxWordx 
     };
 
     render() {
@@ -40,23 +41,21 @@ function wrapState(ComposedComponent) {
 SelectableList = wrapState(SelectableList);
 
 const UserLanguageList = () => (
-  <div>
-    <SelectableList defaultValue={1}>
-      <h3>Your Languages</h3>
-      <ListItem
-        value={1}
-        primaryText="User Language 1"
-      />
-      <ListItem
-        value={2}
-        primaryText="User Language 2"
-      />
-      <ListItem
-        value={3}
-        primaryText="User Language 3"
-      />
-    </SelectableList>
-  </div>
+  <SelectableList defaultValue={1}>
+    <h3>Your Languages</h3>
+    <ListItem
+      value={1}
+      primaryText="User Language 1"
+    />
+    <ListItem
+      value={2}
+      primaryText="User Language 2"
+    />
+    <ListItem
+      value={3}
+      primaryText="User Language 3"
+    />
+  </SelectableList>
 );
 
 export default UserLanguageList;
