@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   allTargets: targetsReducer,
   userTones: userTonesReducer,
   user: userReducer,
-  currentTarget: currentTargetReducer
+  currentTarget: currentTargetReducer,
   url: audioURLReducer
 });
 
