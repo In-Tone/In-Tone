@@ -9,11 +9,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { targetWord, button } from './StudyElements';
 import Record from './Record';
 import Graph from './Graph';
+import AudioComponent from './AudioComponent';
 import { setUserTone } from '../reducers/UserTone';
 import { deleteAudioNode } from '../utils/RecordingUtils';
 import {fetchTargets} from '../reducers/Targets';
 import SkyLight from 'react-skylight';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
+import { setUserURL } from '../reducers/UserAudioURL';
+import { resetAudio } from '../utils/RecordingUtils';
 
 const styles = {
 	footer: {
@@ -110,6 +113,9 @@ class Study extends React.Component {
 		let index = (this.state.index + 1) % this.props.allTargets.length;
 		this.props.setCurrentTarget(this.props.allTargets[index]);
 		this.setState({index, previousTargets});
+
+		// REST AUDIO GOES HERE
+		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 	}
 
 	// BETA VERSION ONLY
@@ -120,7 +126,10 @@ class Study extends React.Component {
 		let currentTarget = previousTargets.pop();
 		this.setState({ previousTargets });
 		this.props.setCurrentTarget(currentTarget);
+		this.setState({ currentTarget });
 
+		// RESET AUDIO GOES HERE
+		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 	}
 
 	languageDropDownChange(event, index, value) {
@@ -173,12 +182,7 @@ class Study extends React.Component {
 							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tone)}
 							{dropDownMenu()}
 							<Paper zDepth={1} style={{marginTop:'10px'}}>
-								<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
-									<div style={{display:'flex', justifyContent:'center', paddingBottom:'5%'}}>
-										<h4>Target Audio:</h4>
-										<audio controls id='soundSample' src={wav} style={{width: '50%'}}/>
-									</div>
-								</div>
+								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
 								<Record 
 									duration={this.props.currentTarget && this.props.currentTarget.duration}
@@ -223,6 +227,7 @@ class Study extends React.Component {
 const mapStateToProps = state => ({
 	allTargets: state.allTargets,
 	currentTarget: state.currentTarget
+	url: state.url
 });
 
 ///////////////////////////////////////////////////////////
@@ -238,6 +243,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		setCurrentTarget: currentTarget => {
 			dispatch(setCurrentTarget(currentTarget))
+		},
+		dispatchSetUserURL: userURL => {
+			dispatch(setUserURL(userURL));
 		}
 	}
 };

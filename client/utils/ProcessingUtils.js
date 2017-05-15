@@ -1,5 +1,4 @@
 import Pitchfinder from 'pitchfinder';
-import timeseries from 'timeseries-analysis';
 
 export const processMedia = (audioBlob, audioContext) => {
 	let blob = audioBlob;
@@ -36,7 +35,7 @@ export const pitchFiltering = frequencies => {
 	// if values have already been placed, this replaces such values ^^ with the previous number value less than 1000;
 	let oldResults = [];
 	frequencies.forEach(freq => {
-		if (typeof freq !== 'number' || freq > 1000 || isNaN(freq) ) {
+		if (freq > 500 || freq < 70 || isNaN(freq) ) {
 			if (!oldResults.length) {
 					oldResults.push(0);
 			} else {
@@ -47,13 +46,7 @@ export const pitchFiltering = frequencies => {
 		}
 	});
 
-	// "Pim's voice filter": filters any frequencies outside human voice range; replaces them with NaN's.
-	let newResults = frequencies.map( freq => {
-		if (freq > 500 || freq < 70) return NaN;
-		else return freq;
-	});
-
-	return [oldResults, newResults];
+	return oldResults;
 };
 
 export const pitchSlicing = array => {
@@ -78,15 +71,6 @@ export const getXLabels = (duration, targetPitches) => {
 	}
 
 	return xLabels
-};
-
-// time series analysis, another option maybe:
-export const pitchSmoothing = array => {
-	const t = new timeseries.main(timeseries.adapter.fromArray(array))
-	const processed = t.ma({period: 6}).output();
-	const chart = t.ma({period: 6}).chart({main: true});
-	const results = processed.map(subArr => Math.round(subArr[1]))
-	return results;
 };
 
 // throw out halves and doubles:

@@ -51,7 +51,7 @@ class Graph extends React.Component {
 		// drawGraph(chartCtx, xLabels, userTone, targetTone);
 
 			// pim's testing - fix halves and doubles:
-		const [oldResults, newResults] = pitchFiltering(userPitches);
+		const oldResults = pitchFiltering(userPitches);
 		const userTone = pitchSlicing(oldResults);
 		const targetTone = pitchSlicing(targetPitches);
 		const smoothResults = pitchFix(userTone)

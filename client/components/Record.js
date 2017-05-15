@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import { CreateAudioContext, stopAndReturnMedia, deleteAudioNode } from '../utils/RecordingUtils';
+import { CreateAudioContext, stopAndReturnMedia, resetAudio } from '../utils/RecordingUtils';
 import { processMedia } from '../utils/ProcessingUtils';
 import { connect } from 'react-redux';
 import { setUserTone } from '../reducers/UserTone';
+import { setUserURL } from '../reducers/UserAudioURL';
 
 class Record extends React.Component {
 
@@ -12,6 +13,8 @@ class Record extends React.Component {
 
 		this.duration = this.props.duration;
 		this.dispatchUserTone = this.props.dispatchUserTone;
+		this.dispatchSetUserURL = this.props.dispatchSetUserURL;
+		this.url = this.props.url;
 	}
 
 	componentDidMount() {
@@ -20,6 +23,10 @@ class Record extends React.Component {
 		const duration = this.props.duration;
 		// get dispatchUserTone from props
 		const dispatchUserTone = this.dispatchUserTone;
+		// get dispatchSetUserURL from props
+		const dispatchSetUserURL = this.dispatchSetUserURL;
+		// get url from props
+		const url = this.url;
 
 		///////////////////////////////////////
 		//////////// SET UP STREAM ////////////
@@ -48,7 +55,8 @@ class Record extends React.Component {
 			// ** make this onClick on react component
 			record.onclick = function() {
 				// remove existing user audio (so when you hit next it resets)
-				deleteAudioNode('soundClips', 'clip');
+				resetAudio(this.url, dispatchSetUserURL)
+
 				// grab countdown element
 				var countdown = document.getElementById('countdown');
 				// initialize seconds variable for countdown
@@ -83,7 +91,6 @@ class Record extends React.Component {
 			var mediaRecorder = new MediaRecorder(stream);
 			// when data is available, push available data to recording array
 			var recording = [];
-			let blob;
 			let userTones;
 
 			// .ondataavailable event precedes .on stop, grabs blob from recording array
@@ -94,8 +101,11 @@ class Record extends React.Component {
 			// .onstop event fires after .stop is called and after .ondatavailable fires
 			mediaRecorder.onstop = function(e) {
 				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
-				// also returns that blob
-				blob = stopAndReturnMedia(recording, context);
+				// and returns the blob and the audioURL
+				let {blob, audioURL} = stopAndReturnMedia(recording, context)
+
+				// setUserURL in store ldkfjsdlkj
+				dispatchSetUserURL(audioURL)
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
 				processMedia(blob, context) // second promise for blob
 					// set currentUserTone in store to the returned array of pitches
@@ -124,12 +134,19 @@ class Record extends React.Component {
 //////////////////////////////////////
 // grab current userTone from store //
 //////////////////////////////////////
+const mapStateToProps = state => ({
+	url: state.url
+})
+
 const mapDispatchToProps = dispatch => {
 	return {
 		dispatchUserTone: userTone => {
 			dispatch(setUserTone(userTone));
+		},
+		dispatchSetUserURL: userURL => {
+			dispatch(setUserURL(userURL));
 		}
 	}
 };
 
-export default connect(null, mapDispatchToProps)(Record);
+export default connect(mapStateToProps, mapDispatchToProps)(Record);
