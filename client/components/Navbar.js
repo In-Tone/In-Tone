@@ -14,31 +14,24 @@ class Navbar extends Component {
 	constructor() {
 		super()
 	}
-/*			<AppBar
-			style={styles.navbar}
-			title={<Link to='/'><FlatButton style={styles.elements}>In-Tone</FlatButton></Link>}
-			iconElementRight={<Link to='/'><FlatButton label="Login" style={styles.elements}/></Link>}
-			/>*/
 
 	render() {
 		return (
-			<Grid style={styles.navbar}>
-				<Row>
+				<Col xs={12} style={styles.navbar}>
 
-					<Col lg={4}>
+					<Col xs={4}>
 						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
 					</Col>
 
-					<Col lg={4}>
+					<Col xs={4}>
 						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
 					</Col>
 
-					<Col lg={4}>
+					<Col xs={4}>
 						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Login </FlatButton></Link>
 					</Col>
 
-				</Row>
-			</Grid>
+				</Col>
 		)
 	}
 
@@ -49,7 +42,8 @@ const styles = {
 		backgroundColor: 'rgba(82, 0, 124, 1)',
 		position: 'fixed',
 		width: '100%',
-		boxShadow: '0px 8px 10px -4px rgba(0,0,0,0.75)'
+		boxShadow: '0px 8px 10px -4px rgba(0,0,0,0.75)',
+		zIndex: 500
 	},
 	navElements: {
 		width: '100%',
@@ -59,10 +53,10 @@ const styles = {
 	},
 	navLogo: {
 		width: '100%',
-		height: '65px',
 		fontSize: '42px',
 		color: 'white',
-		fontWeight: 550
+		fontWeight: 550,
+		height: '65px'
 	}
 }
 

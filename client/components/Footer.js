@@ -79,13 +79,13 @@ class Footer extends Component {
 }
 
 
-
 const styles = {
 	footer: {
-		height: '65px',
+		height: '55px',
 		backgroundColor: 'purple',
 		position: 'fixed',
 		bottom: '0',
+		zIndex: 500
 	},
 	button: {
 		fontSize: '24px',

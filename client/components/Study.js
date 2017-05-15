@@ -36,7 +36,7 @@ class Study extends React.Component {
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
 	randomReset(e) {
-		let dispatchUserTones = this.props.dispatchUserTones;
+		let dispatchUserTone = this.props.dispatchUserTone;
 		let allTargets = this.state.allTargets;
 		let currentTarget = this.state.currentTarget;
 
@@ -51,7 +51,7 @@ class Study extends React.Component {
 		if (currentToneId === randNum) randNum = (randNum + 1) % allTargets.length;
 		currentTarget = allTargets[randNum];
 		this.setState({ currentTarget });
-		dispatchUserTones([]);
+		dispatchUserTone([]);
 
 		deleteAudioNode('soundClips', 'clip');
 	}
@@ -76,6 +76,9 @@ class Study extends React.Component {
 		this.setState({ currentTarget });
 	}
 
+	////////////////////////////
+	// render study component //
+	////////////////////////////
 	render() {
 
 		const transliteration = this.state.currentTarget.transliteration;
@@ -103,8 +106,8 @@ class Study extends React.Component {
 
 		return (
 			<div className='studyDiv'>
-				<Row>
-					<Col lg={4} style={{/*borderStyle:'dotted', borderColor:'blue'*/}}>
+				<Col lg={12}>
+					<Col lg={4}>
 						{targetWord(image, transliteration, englishTranslation, tone)}
 						<Paper zDepth={1} style={{marginTop:'10px'}}>
 							<div id='soundClips' style={{padding: '2% 0 3% 0'}}>
@@ -121,26 +124,32 @@ class Study extends React.Component {
 							{button('NEXT', randomReset)}
 						</Paper>
 					</Col>
-					<Col lg={8}>
+					<Col lg={8} style={{paddingLeft:0}}>
 						<Graph
 							targetPitches={this.state.currentTarget.pitches}
 							duration={this.state.currentTarget.duration}
 						/>
 					</Col>
-				</Row>
+				</Col>
 			</div>
 		);
 	}
 }
 
+/////////////////////////////////
+// grab all targets from store //
+/////////////////////////////////
 const mapStateToProps = state => ({
 	allTargets: state.allTargets
 });
 
+//////////////////////////////////////
+// grab current userTone from store //
+//////////////////////////////////////
 const mapDispatchToProps = dispatch => {
 	return {
-		dispatchUserTones: userTones => {
-			dispatch(setUserTone(userTones));
+		dispatchUserTone: userTone => {
+			dispatch(setUserTone(userTone));
 		}
 	}
 };
