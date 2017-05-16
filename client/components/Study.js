@@ -120,8 +120,8 @@ class Study extends React.Component {
 		// RESET AUDIO AND GRAPH GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 
-		if (Object.keys(this.props.graph).length) {
-			this.props.graph.destroy();
+		if (this.props.graph.length) {
+			this.props.graph.forEach(graph => graph.destroy())
 		}
 
 	}

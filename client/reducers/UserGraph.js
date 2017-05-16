@@ -7,7 +7,7 @@ export const setUserGraph = graph => ({
 	graph
 });
 
-const reducer = (state = {}, action) => {
+const reducer = (state = [], action) => {
 	console.log('action: ', action)
 	switch(action.type) {
 		case SET_USER_GRAPH:

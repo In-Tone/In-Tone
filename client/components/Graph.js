@@ -15,7 +15,6 @@ class Graph extends React.Component {
 
 		this.currGraph = []
 		this.dispatchSetUserGraph = this.props.dispatchSetUserGraph
-
 	}
 
 
@@ -61,19 +60,15 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, targetTone);
 
 		if (this.currGraph.length) {
-			console.log('what is currGraph', this.currGraph[0])
 			this.currGraph[0].destroy();
 			this.currGraph.shift();
-
 		}
 
 		const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
 		this.currGraph.push(graph);
 
 		// set graph on store
-		console.log('this inside component did update:', this)
-		console.log('graph: ', graph)
-		this.dispatchSetUserGraph(graph)
+		this.dispatchSetUserGraph(this.currGraph)
 
 	}
 
