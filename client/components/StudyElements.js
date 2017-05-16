@@ -24,9 +24,9 @@ export const targetWord = (image=null, transliteration=null, englishTranslation=
 	// w/o a border, the Paper renders in study with uneditable padding on top. Defining a porder seems to fix it 
 	<Paper zDepth={1} style={{borderStyle:'solid', borderColor:'white'}}>
 		<h1 style={nativeSpellingStyle} className='studyDefinitions'>{thaiLexicon[transliteration]}</h1>
-		<h2 className='studyDefinitions'>Transliteration: {transliteration}</h2>
-		<h2 className='studyDefinitions'>English Translation: {englishTranslation}</h2>
-		<h2 className='studyDefinitions'>Tone: {tone}</h2>
+		<h4 className='studyDefinitions'>Transliteration: {transliteration}</h4>
+		<h4 className='studyDefinitions'>English Translation: {englishTranslation}</h4>
+		<h4 className='studyDefinitions'>Tone: {tone}</h4>
 	</Paper>
 );
 

@@ -1,7 +1,7 @@
 import Chart from 'chart.js';
 
 // draw graph function using chart.js
-export const drawGraph = (context, xLabels, results, targetPitches) => {
+export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 	let graphObject = {
 			type: 'line',
 			data: {
@@ -33,6 +33,12 @@ export const drawGraph = (context, xLabels, results, targetPitches) => {
 							}
 						}
 					]
+				},
+				title: {
+					display: true,
+					position: 'top',
+					text: `Pitch Contour Graphs ${score ? `| Your Score: ${score}%` : ''}`,
+					fontSize: 20
 				}
 			}
 		}
