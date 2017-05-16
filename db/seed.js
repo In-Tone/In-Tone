@@ -21,53 +21,755 @@ function seedEverything() {
 
 }
 
-const userTones = seed(UserTone, ({users, toneTypes}) => ({
-	marcTones: {
-		pitches: [],
-		wavblob: {},
-		user_id: 1,
-		tone_type_id: 1
+const difficulty = ['beginner', 'amatuer', 'intermediate', 'pro', 'master'];
+
+const userTones = seed(UserTone, ({users, toneTypes, Targets}) => ({
+	a0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
 	},
-	pimTones: {
-		pitches: [],
-		wavblob: {},
-		user_id: 2,
-		tone_type_id: 1
+	a1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
 	},
-	edmondTones: {
-		pitches: [],
-		wavblob: {},
-		user_id: 3,
-		tone_type_id: 1
+	a2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
 	},
-	mikeTones: {
-		pitches: [],
-		wavblob: {},
-		user_id: 4,
-		tone_type_id: 1
-	}
+	a3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	a9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	b9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	c9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	d9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	e9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	f9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	g9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h0: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h1: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h2: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h3: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h4: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h5: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h6: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h7: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h8: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
+	h9: {
+		pitches: [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+		isBest: false,
+		score: Math.floor((Math.random() * 5) + 1),
+		difficulty: difficulty[Math.floor(Math.random() * 5)],
+		user_id: Math.floor((Math.random() * 4) + 1),
+		tone_type_id: Math.floor((Math.random() * 5) + 1),
+		target_id: Math.floor((Math.random() * 10) + 1)
+	},
 }))
 
 const users = seed(User, {
 	marc: {
 		email: 'marc@test.com',
 		password: 'test',
-		username: 'marcyMarc'
+		username: 'marcyMarc',
+		rank: 1
 	},
 	pim: {
 		email: 'pim@test.com',
 		password: 'test',
-		username: 'pimmyPim'
+		username: 'pimmyPim',
+		rank: 1
 	},
 	edmond: {
 		email: 'edmond@test.com',
 		password: 'test',
-		username: 'eddyEdmond'
+		username: 'eddyEdmond',
+		rank: 1
 	},
 	mike: {
 		email: 'mike@test.com',
 		password: 'test',
-		username: 'mikeyMike'
+		username: 'mikeyMike',
+		rank: 1
 	},
 })
 

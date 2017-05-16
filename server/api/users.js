@@ -8,9 +8,9 @@ const UserTone = db.model('UserTone');
 const {mustBeLoggedIn} = require('../auth');
 const router = require('express').Router();
 
-router.param('username',(req, res, next, username) => {
+router.get('/:username', (req, res, next) => {
 	User.findOne({
-		where: { username: username },
+		where: { username: req.params.username },
 		include: [{ all: true }]
 	})
 		.then(foundUser => {
@@ -19,41 +19,37 @@ router.param('username',(req, res, next, username) => {
 				err.status = 404;
 				throw err;
 			}
-			req.user = foundUser;
-			next();
+			res.send(foundUser);
 		})
 		.catch(next);
 });
 
-router.get('/:username', (req, res, next) => {
-	res.send(req.user);
-});
-
-router.post('/:username/:toneType', (req, res, next) => {
-	UserTone.findOne({
-		where: {
-			user_id: req.user.id,
-			tone_type_id: req.params.toneType
-		}
-	})
-		.then(userTone => {
-			if (!userTone) {
-				return res.sendStatus(404);
-			} else {
-				return userTone.update(req.body);
-			}
-		})
-		.then(updatedUserTone => {
-			res.send(updatedUserTone);
-		})
-		.catch(next)
-
-});
-
-router.post('/nsa', (req, res, next) => {
-	UserTone.create(req.body)
-		.then(() => {console.log('thanks for your data')})
+router.get('/usertones/:userId', (req, res, next) => {
+	UserTone.findAll({ where: { user_id: req.params.userId } })
+		.then(foundTones => res.send(foundTones))
 		.catch(next);
 })
+
+router.post('/usertones/:userId/:targetId/:bool', (req, res, next) => {
+	if (req.params.bool) {
+		UserTone.findOne({
+			where: {
+				user_id: req.params.userId,
+				target_id: req.params.targetId,
+				isBest: req.params.bool
+			}
+		})
+			.then(foundTone => foundTone.update({ isBest: false }))
+			.catch(next);
+	}
+	UserTone.create(req.body)
+		.then(() => {
+			console.log(req.body);
+			UserTone.findAll({ where: { user_id: req.params.userId } })
+				.then(foundTones => res.send(foundTones))
+				.catch(next);
+		})
+		.catch(next);
+});
 
 module.exports = router;
