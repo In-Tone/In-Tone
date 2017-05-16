@@ -30,9 +30,9 @@ class Navbar extends Component {
 						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
 					</Col>
 
-					<Col lg={4}>
+					<Col xs={4}>
 					{
-						this.props.user ? 
+						this.props.user ?
 						<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
 						<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
 					}
@@ -55,7 +55,7 @@ const styles = {
 	navElements: {
 		width: '100%',
 		fontSize: '24px',
-		color: 'white',	
+		color: 'white',
 		height: '65px'
 	},
 	navLogo: {

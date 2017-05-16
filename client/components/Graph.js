@@ -2,20 +2,29 @@ import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
-import { drawGraph } from '../utils/GraphingUtils';
+import { drawGraph, resetGraph } from '../utils/GraphingUtils';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
 //////////////////////////////////////////
 class Graph extends React.Component {
 
+	constructor(props) {
+		super(props)
+
+		this.currGraph = []
+	}
+
+
 	////////////////////////////////////////////////////
 	// grab pitches and duration from props on mount, //
 	// then draw the current target graph ONLY /////////
 	////////////////////////////////////////////////////
+
 	componentDidMount() {
-		const targetPitches = this.props.targetPitches;
-		const duration = this.props.duration;
+
+		const targetPitches = this.props.currentTarget.pitches
+		const duration = this.props.currentTarget.duration;
 
 		// slice target pitch array
 		const targetTone = pitchSlicing(targetPitches);
@@ -27,46 +36,43 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
+
 	}
 
 	////////////////////////////////////////////////////////////
 	// grab new pitches and duration from props, ///////////////
 	// then redraw graph with current target AND user pitches //
 	////////////////////////////////////////////////////////////
-	componentDidUpdate() {
-		const targetPitches = this.props.targetPitches;
-		const duration = this.props.duration;
-		const userPitches = this.props.userTones;
+	componentWillReceiveProps(nextProps) {
+		console.log('nextProps', nextProps)
+		const targetPitches = nextProps.currentTarget.pitches
+		const duration = nextProps.currentTarget.duration;
+		const userPitches = nextProps.userTones;
 
-		// // filter user pitches and slice both target and user pitches
-		// // this processing returns the userTone and targetTone
-		// const [oldResults, newResults] = pitchFiltering(userPitches);
-		// const userTone = pitchSlicing(oldResults);
-		// const targetTone = pitchSlicing(targetPitches);
-		// // grab chart element
-		// let chartCtx = document.getElementById('studyChart').getContext('2d');
-		// // create ms x-axis labels
-		// let xLabels = getXLabels(duration, targetTone);
-		// // draw graph
-		// drawGraph(chartCtx, xLabels, userTone, targetTone);
-
-			// pim's testing - fix halves and doubles:
-		const oldResults = pitchFiltering(userPitches);
-		const userTone = pitchSlicing(oldResults);
+		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
-		const smoothResults = pitchFix(userTone)
 		const smoothTargets = pitchFix(targetTone)
 
-		// pim's testing - fix by time series analysis:
-		// const results = pitchSlicing(oldResults);
-		// const targets = pitchSlicing(targetPitches);
-		// const smoothResults = pitchSmoothing(results)
-		// const smoothTargets = pitchSmoothing(targets)
-
-		let chartCtx = document.getElementById('studyChart').getContext('2d');
-		// this.refs._canvasNode.getContext('2d');
+		let chartCtx = this.refs._canvasNode.getContext('2d');
 		let xLabels = getXLabels(duration, targetTone);
-		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+
+		if (this.currGraph.length) {
+			this.currGraph[0].destroy();
+			this.currGraph.shift();
+		}
+
+		if (nextProps.userTones.length) {
+			const oldResults = pitchFiltering(userPitches);
+			const userTone = pitchSlicing(oldResults);
+			const smoothResults = pitchFix(userTone)
+
+			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+			this.currGraph.push(graph);
+		}
+		else {
+			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
+			this.currGraph.push(graph);
+		}
 
 	}
 
@@ -76,7 +82,7 @@ class Graph extends React.Component {
 	render() {
 		return (
 			<Paper zDepth={1}>
-				<canvas id='studyChart' ref='_canvaseNode'></canvas>
+				<canvas id='studyChart' ref='_canvasNode'></canvas>
 			</Paper>
 		);
 	}
@@ -86,7 +92,9 @@ class Graph extends React.Component {
 // get userTones from the store state //
 ////////////////////////////////////////
 const mapStateToProps = state => ({
-	userTones: state.userTones
+	userTones: state.userTones,
+	currentTarget: state.currentTarget
 });
+
 
 export default connect(mapStateToProps, null)(Graph);

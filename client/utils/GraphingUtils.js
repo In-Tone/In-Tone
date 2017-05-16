@@ -38,5 +38,6 @@ export const drawGraph = (context, xLabels, results, targetPitches) => {
 		}
 
 		// create graph object, which draws the chart on the canvas element
-		let pitchesGraph = new Chart(context, graphObject);
+		// let pitchesGraph = new Chart(context, graphObject);
+		return new Chart(context, graphObject);
 };
