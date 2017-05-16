@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import { Card, CardActions, CardMedia, CardTitle } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -19,62 +18,14 @@ import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
 
 const styles = {
-	footer: {
-		height: '55px',
-		backgroundColor: 'purple',
-		position: 'fixed',
-		bottom: '0',
-		zIndex: 500
-	},
-	button: {
-		fontSize: '24px',
-		color: 'white',
-		display: 'in-line',
-		height: '100%',
-	},
-	middleButton: {
-		fontSize: '24px',
-		color: 'white',
-		display: 'in-line',
-		height: '100%',
-		borderLeft: 'medium solid white',
-		borderRight: 'medium solid white'
-	},
 	modalButton: {
-		color: 'white',
 		margin: '30px',
 	},
 	buttonSection: {
-		marginTop: '40px',
+		paddingTop: '80px',
 	},
-	myDialog: {
-		backgroundColor: 'rgba(0, 137, 123, 1)',
-		color: '#ffffff',
-		width: '70%',
-		height: '320px',
-		fontSize: '20px',
-		paddingTop: '50px',
-		paddingLeft: '75px',
-		paddingRight: '75px',
-		position: 'fixed',
-		zIndex: 999999999999999,
-    lineHeight: '32px',
-    // vertical alignment
-    top:0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-	},
-	overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)'
-  }
+	graphStyle: {
+	}
 }
 
 class Study extends React.Component {
@@ -92,7 +43,6 @@ class Study extends React.Component {
 
 		this.randomReset = this.randomReset.bind(this);
 		this.previousTarget = this.previousTarget.bind(this);
-		this.languageDropDownChange = this.languageDropDownChange.bind(this);
 		this.onLanguageClick = this.onLanguageClick.bind(this);
 
 		// TESTING ONLY
@@ -142,12 +92,6 @@ class Study extends React.Component {
 		this.props.dispatchUserTone([])
 	}
 
-	languageDropDownChange(event, index, value) {
-		let language = event.target.innerHTML.toLowerCase();
-		this.setState({language: value});
-		this.props.fetchTargets(language);
-	}
-
 	onLanguageClick(language) {
 		this.props.fetchTargets(language)
 		this.setState({language});
@@ -169,27 +113,12 @@ class Study extends React.Component {
 			let logState = this.logState;
 			let previousTarget = this.previousTarget;
 			let randomReset = this.randomReset;
-			let languageDropDownChange = this.languageDropDownChange;
 
-			const dropDownMenu = () => (
-				<Paper zDepth={1} style={{marginTop:'10px'}}>
-					<DropDownMenu
-						value={1}
-						style={{width:'100%'}}
-						autoWidth={false}
-						onChange={this.languageDropDownChange} >
-						<MenuItem value={1} primaryText='Thai' />
-						{/* <MenuItem value={2} primaryText='Chinese' />
-						<MenuItem value={3} primaryText='Hmong' /> */}
-					</DropDownMenu>
-				</Paper>
-			);
 			return (
 				<div className='studyDiv'>
 					<Col lg={12}>
 						<Col lg={4}>
 							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tone)}
-							{dropDownMenu()}
 							<Paper zDepth={1} style={{marginTop:'10px'}}>
 								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
@@ -200,7 +129,7 @@ class Study extends React.Component {
 								{button('NEXT', randomReset)}
 							</Paper>
 						</Col>
-						<Col lg={8} style={{paddingLeft:0}}>
+						<Col lg={8} style={styles.graphStyle}>
 							<Graph />
 						</Col>
 					</Col>
@@ -214,6 +143,7 @@ class Study extends React.Component {
 							<h1>Choose a language:</h1>
 							<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
 							<RaisedButton
+								style={styles.modalButton}
 								label='Thai'
 								labelStyle={{fontSize: '24px'}}
 								onClick={() => {
