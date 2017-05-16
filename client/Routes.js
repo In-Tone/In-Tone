@@ -9,11 +9,13 @@ import Login from './components/Login';
 import WhoAmI from './components/WhoAmI';
 import Profile from './components/ProfilePage';
 
-const LoginPage = connect()(
+const LoginPage = connect(
+  ({ user }) => ({ user: user })
+)(
   ({ user, children }) => (
   <div>
     <nav>
-      {user ? <WhoAmI/> : <Login/>}
+      {user ? <Home/> : <Login/>}
     </nav>
     {children}
   </div>

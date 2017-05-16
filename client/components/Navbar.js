@@ -9,10 +9,13 @@ import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Grid, Row, Col } from 'react-bootstrap';
+import {logout} from '../reducers/Auth';
 
 class Navbar extends Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
+
+		this.logout = this.props.logout.bind(this);
 	}
 
 	render() {
@@ -28,7 +31,11 @@ class Navbar extends Component {
 					</Col>
 
 					<Col lg={4}>
-						<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Login </FlatButton></Link>
+					{
+						this.props.user ? 
+						<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
+						<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
+					}
 					</Col>
 
 				</Col>
@@ -60,4 +67,7 @@ const styles = {
 	}
 }
 
-export default Navbar;
+export default connect(
+  ({ user }) => ({ user: user }),
+  {logout}
+)(Navbar);
