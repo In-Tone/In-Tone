@@ -11,14 +11,14 @@ export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 					data: results,
 					borderCapStyle: 'butt',
 					borderColor: 'red',
-					// pointRadius: 2,
+					pointRadius: 0,
 					spanGaps: true
 				},{
 					label: 'target pitch',
 					data: targetPitches,
 					borderCapStyle: 'butt',
 					borderColor: 'blue',
-					// pointRadius: 2,
+					pointRadius: 0,
 					spanGaps: true
 				}]
 			},
