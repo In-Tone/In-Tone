@@ -23,6 +23,8 @@ const styles = {
 	},
 	buttonSection: {
 		paddingTop: '80px',
+	},
+	graphStyle: {
 	}
 }
 
@@ -127,7 +129,7 @@ class Study extends React.Component {
 								{button('NEXT', randomReset)}
 							</Paper>
 						</Col>
-						<Col lg={8} style={{paddingLeft:0}}>
+						<Col lg={8} style={styles.graphStyle}>
 							<Graph />
 						</Col>
 					</Col>
