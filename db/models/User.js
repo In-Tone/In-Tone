@@ -1,4 +1,6 @@
-const {STRING} = require('sequelize');
+'use strict';
+
+const { STRING, INTEGER } = require('sequelize');
 const crypto = require('crypto');
 const _ = require('lodash');
 
@@ -16,8 +18,13 @@ module.exports = db => db.define('user', {
 		type: STRING
 	},
 	username: {
-		type: STRING
-	}
+		type: STRING,
+		allowNull: false
+	},
+	rank: {
+		type: INTEGER,
+		allowNull: false
+	},
 }, {
 	instanceMethods: {
 		sanitize: function () {
