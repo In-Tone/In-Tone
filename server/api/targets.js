@@ -5,6 +5,15 @@ const ToneType = db.model('toneType');
 const Target = db.model('target');
 const router = require('express').Router();
 
+router.get('/:languageName/tonetypes', (req, res, next) => {
+	ToneType.findAll({
+		where: {
+			language: req.params.languageName
+		}
+	})
+		.then(toneTypes => res.json(toneTypes))
+});
+
 // load all targets by tone type for given language
 router.get('/:languageName', (req, res, next) => {
 	ToneType.findAll({

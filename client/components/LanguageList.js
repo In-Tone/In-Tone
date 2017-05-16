@@ -3,11 +3,16 @@ import React, {Component} from 'react';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import {connect} from 'react-redux'
+import { fetchTargets } from '../reducers/Targets';
+import { fetchUserTones } from '../reducers/UserTone';
+import { fetchToneTypes } from '../reducers/ToneTypes';
+
 
 let SelectableList = makeSelectable(List);
 
 // selectable lists wrap lists in a higher order component 
 function wrapState(ComposedComponent) {
+
   return class SelectableList extends Component {
     constructor(props){
       super(props)
@@ -15,7 +20,9 @@ function wrapState(ComposedComponent) {
         selectedIndex: 1
       }
 
-      this.handleRequestChange = this.handleRequestChange.bind(this)
+      this.handleRequestChange = this.handleRequestChange.bind(this);
+      // this.onLanguageClick = this.onLanguageClick.bind(this);
+
     }
 
     handleRequestChange (event, index) {
@@ -39,14 +46,22 @@ function wrapState(ComposedComponent) {
   };
 }
 
-SelectableList = wrapState(SelectableList);
+const UserLanguageList = (props) => {
 
-const UserLanguageList = () => (
+  const onLanguageClick = () => {
+    const userId = props.user.id;
+    props.fetchUserTones(userId);
+    props.fetchToneTypes('thai');
+    props.fetchTargets('thai');
+  }
+  
+  return (
   <SelectableList defaultValue={1}>
     <h3>Your Languages</h3>
     <ListItem
       value={1}
       primaryText="Thai"
+      onClick={onLanguageClick}
     />
     {/*<ListItem
       value={2}
@@ -57,7 +72,10 @@ const UserLanguageList = () => (
       primaryText="User Language 3"
     />*/}
   </SelectableList>
-);
+)};
+
+SelectableList = wrapState(SelectableList);
+
 
 const mapStateToProps = state => {
   return {
@@ -67,9 +85,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchTargets: language => {
-      dispatch(fetchTargets(language))
+    fetchTargets: targets => {
+      dispatch(fetchTargets(targets))
     },
+    fetchToneTypes: language => {
+      dispatch(fetchToneTypes(language))
+    },
+    fetchUserTones: userId => {
+      dispatch(fetchUserTones(userId))
+    }
   }
 }
 

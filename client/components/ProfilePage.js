@@ -16,19 +16,23 @@ import { Row, Col } from 'react-bootstrap';
 import Graph from './Graph';
 import UserLanguageList from './LanguageList'
 
+import Word from './Word';
+
 
 class Profile extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-
+			selectedTone: ''
 		}
-		this.selectTone = this.selectTone.bind(this)
+		this.selectTone = this.selectTone.bind(this);
 	}
 	// methods
-	selectTone(event) {
-		console.log('tone button clicked')
-		console.log(event);
+	selectTone(e) {
+		console.log("event", e);
+		this.setState({
+			selectedTone: "selectedTone"
+		})
 	}
 
 	componentDidMount() {
@@ -71,39 +75,16 @@ class Profile extends Component {
 						<Paper>
 							{/* this can definitely be refactored into a loop */}
 							<div style={styles.bottomBorders}>
-								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T1 </FlatButton>
-								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T2 </FlatButton>
-								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T3 </FlatButton>
-								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T4 </FlatButton>
-								<FlatButton style={styles.tones} onClick={this.selectTone}> L1T5 </FlatButton>
+							{
+								this.props.toneTypes && this.props.toneTypes.map(toneType => (
+									<FlatButton value={toneType.tone} style={styles.tones} onClick={this.selectTone} key={toneType.id}>{toneType.tone}</FlatButton>
+								))
+							}
 							</div>
-							<h2> L1T1Word1 </h2>
-							<Row>
-								<Col md={6}>
-									{/*THIS CAN AND NEEDS TO BE MODULARIZED*/}
-									<div style={styles.wordInfo}>
-										<h4 style={styles.infoBuffer}>Target Audio:</h4>
-										<audio controls id='profileTarget' style={{width: '50%'}}/>
-									</div>
-									<div style={styles.wordInfo}>
-										<h4 style={styles.infoBuffer}>User Audio:</h4>
-										<audio controls id='profileUser' style={{width: '50%'}}/>
-									</div>
-									<div style={styles.wordInfo}>
-										<Link to='/'><h4>Retry</h4></Link>
-									</div>
-									<div style={styles.wordInfo}>
-										<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
-										<h4> 69 </h4>
-									</div>
-								</Col>
-								<Col md={6}>
-									<Graph 
-										targetPitches={[1,2,3,4,5,6]}
-										duration={34}
-									/>
-								</Col>
-							</Row>
+							<Word
+							allTargets={this.props.allTargets}
+							currentTone={this.state.selectedTone}
+							/>
 						</Paper>
 						</div>
 					</Col>
@@ -141,7 +122,9 @@ const styles = {
 
 const mapStateToProps = state => {
 	return {
-		user: state.user
+		user: state.user,
+		toneTypes: state.toneTypes,
+		allTargets: state.allTargets
 	}
 }
 
