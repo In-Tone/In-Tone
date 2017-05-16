@@ -21,7 +21,7 @@ class Study extends React.Component {
 		super(props);
 
 		this.state = {
-			allTargets: [], 
+			allTargets: [],
 			currentTarget: {},
 			previousTargets: [],
 		};
@@ -120,7 +120,7 @@ class Study extends React.Component {
 						<Paper zDepth={1} style={{marginTop:'10px'}}>
 							<AudioComponent wav={wav}/>
 							{button('PREVIOUS', previousTarget)}
-							<Record 
+							<Record
 								duration={this.state.currentTarget.duration}
 								targetPitches={this.state.currentTarget.pitches}
 								/>

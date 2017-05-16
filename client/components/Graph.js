@@ -2,18 +2,27 @@ import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
-import { drawGraph } from '../utils/GraphingUtils';
+import { drawGraph, resetGraph } from '../utils/GraphingUtils';
+import { setUserGraph } from '../reducers/UserGraph';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
 //////////////////////////////////////////
 class Graph extends React.Component {
 
+	constructor(props) {
+		super(props)
+
+		this.currGraph = []
+	}
+
+
 	////////////////////////////////////////////////////
 	// grab pitches and duration from props on mount, //
 	// then draw the current target graph ONLY /////////
 	////////////////////////////////////////////////////
 	componentDidMount() {
+
 		const targetPitches = this.props.targetPitches;
 		const duration = this.props.duration;
 
@@ -38,35 +47,23 @@ class Graph extends React.Component {
 		const duration = this.props.duration;
 		const userPitches = this.props.userTones;
 
-		// // filter user pitches and slice both target and user pitches
-		// // this processing returns the userTone and targetTone
-		// const [oldResults, newResults] = pitchFiltering(userPitches);
-		// const userTone = pitchSlicing(oldResults);
-		// const targetTone = pitchSlicing(targetPitches);
-		// // grab chart element
-		// let chartCtx = document.getElementById('studyChart').getContext('2d');
-		// // create ms x-axis labels
-		// let xLabels = getXLabels(duration, targetTone);
-		// // draw graph
-		// drawGraph(chartCtx, xLabels, userTone, targetTone);
-
-			// pim's testing - fix halves and doubles:
+		// filter out halves and doubles:
 		const oldResults = pitchFiltering(userPitches);
 		const userTone = pitchSlicing(oldResults);
 		const targetTone = pitchSlicing(targetPitches);
 		const smoothResults = pitchFix(userTone)
 		const smoothTargets = pitchFix(targetTone)
 
-		// pim's testing - fix by time series analysis:
-		// const results = pitchSlicing(oldResults);
-		// const targets = pitchSlicing(targetPitches);
-		// const smoothResults = pitchSmoothing(results)
-		// const smoothTargets = pitchSmoothing(targets)
-
-		let chartCtx = document.getElementById('studyChart').getContext('2d');
-		// this.refs._canvasNode.getContext('2d');
+		let chartCtx = this.refs._canvasNode.getContext('2d');
 		let xLabels = getXLabels(duration, targetTone);
-		drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+
+		if (this.currGraph.length) {
+			this.currGraph[0].destroy();
+			this.currGraph.shift();
+
+		}
+
+		this.currGraph.push(drawGraph(chartCtx, xLabels, smoothResults, smoothTargets));
 
 	}
 
@@ -76,7 +73,7 @@ class Graph extends React.Component {
 	render() {
 		return (
 			<Paper zDepth={1}>
-				<canvas id='studyChart' ref='_canvaseNode'></canvas>
+				<canvas id='studyChart' ref='_canvasNode'></canvas>
 			</Paper>
 		);
 	}
@@ -86,7 +83,16 @@ class Graph extends React.Component {
 // get userTones from the store state //
 ////////////////////////////////////////
 const mapStateToProps = state => ({
-	userTones: state.userTones
+	userTones: state.userTones,
+	userGraph: state.userGraph
 });
 
-export default connect(mapStateToProps, null)(Graph);
+const mapDispatchToProps = dispatch => {
+	return {
+		dispatchSetUserGraph: graph => {
+			dispatch(setUserGraph(graph));
+		}
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Graph);
