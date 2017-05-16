@@ -38,38 +38,7 @@ class Footer extends Component {
 							<p>In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.</p>
 						</div>
         	</SkyLight>
-					<FlatButton onClick={() => {this.refs.train.show()}}  className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'}>Train</FlatButton>
-						<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="train" title="Choose a Language:">
-							<div style={styles.buttonSection}>
-								<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
-								<RaisedButton
-									label='Thai'
-									labelStyle={{fontSize: '24px'}}
-									ref={(button) => {this.thaiButton = button;}}
-									onClick={() => {
-										this.refs.mode.show()
-										this.onLanguageClick(this.thaiButton)
-									}} />
-								<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
-							</div>
-						</SkyLight>
-						<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="mode" title="Choose a Training Mode:">
-						<div style={styles.buttonSection}>
-							<RaisedButton label='Play' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
-							<Link to='/study'>
-								<RaisedButton
-									label='Study'
-									labelStyle={{fontSize: '24px'}}
-									style={styles.modalButton}
-									onClick={() => {
-										this.refs.howItWorks.hide()
-										this.refs.mode.hide()
-										this.refs.train.hide()
-									}}
-								/>
-							</Link>
-						</div>
-					</SkyLight>
+					<Link to='/study'><FlatButton className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'}>Train</FlatButton></Link>
 			</footer>
 		)
 	}
