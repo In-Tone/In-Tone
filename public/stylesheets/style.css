@@ -6,6 +6,7 @@
 body {
 	margin: 0;
 	padding: 0;
+	background-image: url('http://api.thumbr.it/whitenoise-500x370.png?');
 }
 
 body, html {
@@ -32,7 +33,6 @@ body, html {
 
 #canvasContainer {
   width: 100%;
-	background-image: url('../icon.jpg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-attachment: fixed;
