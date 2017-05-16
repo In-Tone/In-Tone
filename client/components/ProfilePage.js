@@ -28,10 +28,9 @@ class Profile extends Component {
 		this.selectTone = this.selectTone.bind(this);
 	}
 	// methods
-	selectTone(e) {
-		console.log("event", e);
+	selectTone() {
 		this.setState({
-			selectedTone: "selectedTone"
+			selectedTone: this.refs.toneButton.props.label
 		})
 	}
 
@@ -77,7 +76,7 @@ class Profile extends Component {
 							<div style={styles.bottomBorders}>
 							{
 								this.props.toneTypes && this.props.toneTypes.map(toneType => (
-									<FlatButton value={toneType.tone} style={styles.tones} onClick={this.selectTone} key={toneType.id}>{toneType.tone}</FlatButton>
+									<FlatButton ref='toneButton' label={toneType.tone} style={styles.tones} onClick={this.selectTone} key={toneType.id}>{toneType.tone}</FlatButton>
 								))
 							}
 							</div>

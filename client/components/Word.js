@@ -41,6 +41,7 @@ const styles = {
 }
 
 const Word = (props) => (
+
 			<div>
 			<h2>{}</h2>
 			<Row>
