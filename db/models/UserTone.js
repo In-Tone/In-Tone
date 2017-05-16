@@ -1,6 +1,6 @@
 'use strict';
 
-const { ARRAY, INTEGER, BLOB, ENUM, BOOLEAN } = require('sequelize');
+const { ARRAY, INTEGER, BLOB, ENUM, BOOLEAN, DATE } = require('sequelize');
 
 module.exports = db => db.define('UserTone', {
 	pitches: {
@@ -12,6 +12,9 @@ module.exports = db => db.define('UserTone', {
 	isBest: {
 		type: BOOLEAN,
 		allowNull: false
+	},
+	date: {
+		type: DATE
 	},
 	score: {
 		type: INTEGER,
