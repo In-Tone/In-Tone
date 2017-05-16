@@ -3,7 +3,6 @@ import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
-import { setUserGraph } from '../reducers/UserGraph';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -84,15 +83,7 @@ class Graph extends React.Component {
 ////////////////////////////////////////
 const mapStateToProps = state => ({
 	userTones: state.userTones,
-	userGraph: state.userGraph
 });
 
-const mapDispatchToProps = dispatch => {
-	return {
-		dispatchSetUserGraph: graph => {
-			dispatch(setUserGraph(graph));
-		}
-	}
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Graph);
+export default connect(mapStateToProps, null)(Graph);

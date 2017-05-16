@@ -4,7 +4,6 @@ import targetsReducer from './Targets';
 import userTonesReducer from './UserTone';
 import userReducer from './Auth';
 import audioURLReducer from './UserAudioURL';
-import UserGraphReducer from './UserGraph';
 
 
 const rootReducer = combineReducers({
@@ -12,8 +11,7 @@ const rootReducer = combineReducers({
   allTargets: targetsReducer,
   userTones: userTonesReducer,
   user: userReducer,
-  url: audioURLReducer,
-  userGraph: UserGraphReducer
+  url: audioURLReducer
 });
 
 export default rootReducer;
