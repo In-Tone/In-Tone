@@ -83,6 +83,8 @@ class Study extends React.Component {
 		super(props);
 
 		this.state = {
+			allTargets: [],
+			currentTarget: {},
 			previousTargets: [],
 			language: '',
 			index: 0
@@ -114,8 +116,15 @@ class Study extends React.Component {
 		this.props.setCurrentTarget(this.props.allTargets[index]);
 		this.setState({index, previousTargets});
 
-		// REST AUDIO GOES HERE
+		// RESET AUDIO AND GRAPH GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
+		this.props.dispatchUserTone([])
+
+
+		if (this.props.graph.length) {
+			this.props.graph.forEach(graph => graph.destroy())
+		}
+
 	}
 
 	// BETA VERSION ONLY
@@ -130,6 +139,7 @@ class Study extends React.Component {
 
 		// RESET AUDIO GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
+		this.props.dispatchUserTone([])
 	}
 
 	languageDropDownChange(event, index, value) {
@@ -147,7 +157,6 @@ class Study extends React.Component {
 	// render study component //
 	////////////////////////////
 	render() {
-
 		if (Object.keys(this.props.currentTarget).length) {
 			let {
 				transliteration,
@@ -184,7 +193,7 @@ class Study extends React.Component {
 							<Paper zDepth={1} style={{marginTop:'10px'}}>
 								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
-								<Record 
+								<Record
 									duration={this.props.currentTarget && this.props.currentTarget.duration}
 									targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
 									/>
@@ -192,10 +201,7 @@ class Study extends React.Component {
 							</Paper>
 						</Col>
 						<Col lg={8} style={{paddingLeft:0}}>
-							<Graph
-								targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
-								duration={this.props.currentTarget && this.props.currentTarget.duration}
-							/>
+							<Graph />
 						</Col>
 					</Col>
 				</div>
@@ -227,7 +233,8 @@ class Study extends React.Component {
 const mapStateToProps = state => ({
 	allTargets: state.allTargets,
 	currentTarget: state.currentTarget,
-	url: state.url
+	url: state.url,
+	graph: state.graph
 });
 
 ///////////////////////////////////////////////////////////

@@ -10,35 +10,46 @@ import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Grid, Row, Col } from 'react-bootstrap';
 import {logout} from '../reducers/Auth';
+import { fetchUserTones } from '../reducers/UserTone';
 
 class Navbar extends Component {
 	constructor(props) {
 		super(props)
 
 		this.logout = this.props.logout.bind(this);
+		this.onProfileClick = this.onProfileClick.bind(this);
+	}
+
+	onProfileClick () {
+		const userId = this.props.user.id;
+		console.log(userId)
+		this.props.fetchUserTones(userId);
 	}
 
 	render() {
+
 		return (
-				<Col xs={12} style={styles.navbar}>
+			<Col xs={12} style={styles.navbar}>
 
-					<Col xs={4}>
-						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
-					</Col>
-
-					<Col xs={4}>
-						<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
-					</Col>
-
-					<Col lg={4}>
-					{
-						this.props.user ? 
-						<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
-						<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
-					}
-					</Col>
-
+				<Col xs={4}>
+				{
+					this.props.user ? 
+					<Link to='/profile'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.onProfileClick}> Profile </FlatButton></Link> :
+					<Link to='/signup'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
+				}
 				</Col>
+				<Col xs={4}>
+					<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
+				</Col>
+				<Col lg={4}>
+				{
+					this.props.user ? 
+					<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
+					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
+				}
+				</Col>
+
+			</Col>
 		)
 	}
 
@@ -55,7 +66,7 @@ const styles = {
 	navElements: {
 		width: '100%',
 		fontSize: '24px',
-		color: 'white',	
+		color: 'white',
 		height: '65px'
 	},
 	navLogo: {
@@ -69,5 +80,5 @@ const styles = {
 
 export default connect(
   ({ user }) => ({ user: user }),
-  {logout}
+  {logout, fetchUserTones}
 )(Navbar);

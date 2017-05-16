@@ -15,6 +15,7 @@ class Record extends React.Component {
 		this.dispatchUserTone = this.props.dispatchUserTone;
 		this.dispatchSetUserURL = this.props.dispatchSetUserURL;
 		this.url = this.props.url;
+
 	}
 
 	componentDidMount() {
@@ -54,6 +55,7 @@ class Record extends React.Component {
 			// record button click handler
 			// ** make this onClick on react component
 			record.onclick = function() {
+
 				// remove existing user audio (so when you hit next it resets)
 				resetAudio(this.url, dispatchSetUserURL)
 
@@ -91,7 +93,6 @@ class Record extends React.Component {
 			var mediaRecorder = new MediaRecorder(stream);
 			// when data is available, push available data to recording array
 			var recording = [];
-			let userTones;
 
 			// .ondataavailable event precedes .on stop, grabs blob from recording array
 			mediaRecorder.ondataavailable = function(e) {
@@ -103,6 +104,8 @@ class Record extends React.Component {
 				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
 				// and returns the blob and the audioURL
 				let {blob, audioURL} = stopAndReturnMedia(recording, context)
+				// set recording to empty array
+				recording = [];
 
 				// setUserURL in store ldkfjsdlkj
 				dispatchSetUserURL(audioURL)
@@ -111,7 +114,7 @@ class Record extends React.Component {
 					// set currentUserTone in store to the returned array of pitches
 					.then(frequencies => dispatchUserTone(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
-			
+
 		// END OF .getUserMedia PROMISE
 		}).catch(function(err) {
 				console.log(err);
@@ -136,6 +139,7 @@ class Record extends React.Component {
 //////////////////////////////////////
 const mapStateToProps = state => ({
 	url: state.url
+
 })
 
 const mapDispatchToProps = dispatch => {

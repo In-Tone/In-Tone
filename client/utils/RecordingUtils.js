@@ -47,7 +47,7 @@ export const stopAndReturnMedia = (audioRecording) => {
 	// create Blob for access by user audio element, set as src for playback
 	let blob = new Blob(audioRecording, { 'type' : 'audio/ogg; codecs=opus' });
 	// call URL.revokeObjectURL() whenever we create a new audio recording to delete the old
-	// URL 
+	// URL
 	let audioURL = window.URL.createObjectURL(blob);
 	//audio.src = audioURL;
 
