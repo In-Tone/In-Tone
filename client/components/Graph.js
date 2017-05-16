@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
+import { setUserGraph } from '../reducers/UserGraph';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -13,6 +14,8 @@ class Graph extends React.Component {
 		super(props)
 
 		this.currGraph = []
+		this.dispatchSetUserGraph = this.props.dispatchSetUserGraph
+
 	}
 
 
@@ -35,6 +38,7 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
+
 	}
 
 	////////////////////////////////////////////////////////////
@@ -57,12 +61,19 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, targetTone);
 
 		if (this.currGraph.length) {
+			console.log('what is currGraph', this.currGraph[0])
 			this.currGraph[0].destroy();
 			this.currGraph.shift();
 
 		}
 
-		this.currGraph.push(drawGraph(chartCtx, xLabels, smoothResults, smoothTargets));
+		const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+		this.currGraph.push(graph);
+
+		// set graph on store
+		console.log('this inside component did update:', this)
+		console.log('graph: ', graph)
+		this.dispatchSetUserGraph(graph)
 
 	}
 
@@ -85,5 +96,13 @@ const mapStateToProps = state => ({
 	userTones: state.userTones,
 });
 
+const mapDispatchToProps = dispatch => {
+	return {
+		dispatchSetUserGraph: graph => {
+			dispatch(setUserGraph(graph));
+		}
+	}
+};
 
-export default connect(mapStateToProps, null)(Graph);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Graph);

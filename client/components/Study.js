@@ -17,6 +17,7 @@ import SkyLight from 'react-skylight';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
 import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
+import { setUserGraph } from '../reducers/UserGraph';
 
 const styles = {
 	footer: {
@@ -116,8 +117,13 @@ class Study extends React.Component {
 		this.props.setCurrentTarget(this.props.allTargets[index]);
 		this.setState({index, previousTargets});
 
-		// REST AUDIO GOES HERE
+		// RESET AUDIO AND GRAPH GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
+
+		if (Object.keys(this.props.graph).length) {
+			this.props.graph.destroy();
+		}
+
 	}
 
 	// BETA VERSION ONLY
@@ -149,54 +155,6 @@ class Study extends React.Component {
 	// render study component //
 	////////////////////////////
 	render() {
-
-<<<<<<< HEAD
-		const {
-			transliteration,
-			englishTranslation,
-			nativeSpelling:image,
-			wav,
-			tone
-		} = this.state.currentTarget;
-
-		const logState = this.logState;
-		const previousTarget = this.previousTarget;
-		const randomReset = this.randomReset;
-
-		const dropDownMenu = () => (
-			<DropDownMenu
-				value={this.state.languageValue}
-				style={{width:'15%'}}
-				autoWidth={false}
-				onChange={this.selectLanguage} >
-				<MenuItem value={1} primaryText='Language' />
-				<MenuItem value={2} primaryText='Thai' />
-				<MenuItem value={3} primaryText='Chinese' />
-				<MenuItem value={4} primaryText='Hmong' />
-			</DropDownMenu>
-		);
-
-		return (
-			<div className='studyDiv'>
-				<Col lg={12}>
-					<Col lg={4}>
-						{targetWord(image, transliteration, englishTranslation, tone)}
-						<Paper zDepth={1} style={{marginTop:'10px'}}>
-							<AudioComponent wav={wav}/>
-							{button('PREVIOUS', previousTarget)}
-							<Record
-								duration={this.state.currentTarget.duration}
-								targetPitches={this.state.currentTarget.pitches}
-								/>
-							{button('NEXT', randomReset)}
-						</Paper>
-					</Col>
-					<Col lg={8} style={{paddingLeft:0}}>
-						<Graph
-							targetPitches={this.state.currentTarget.pitches}
-							duration={this.state.currentTarget.duration}
-						/>
-=======
 		if (Object.keys(this.props.currentTarget).length) {
 			let {
 				transliteration,
@@ -246,7 +204,6 @@ class Study extends React.Component {
 								duration={this.props.currentTarget && this.props.currentTarget.duration}
 							/>
 						</Col>
->>>>>>> master
 					</Col>
 				</div>
 			);
@@ -277,7 +234,8 @@ class Study extends React.Component {
 const mapStateToProps = state => ({
 	allTargets: state.allTargets,
 	currentTarget: state.currentTarget,
-	url: state.url
+	url: state.url,
+	graph: state.graph
 });
 
 ///////////////////////////////////////////////////////////
@@ -296,6 +254,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		dispatchSetUserURL: userURL => {
 			dispatch(setUserURL(userURL));
+		},
+		dispatchSetUserGraph: graph => {
+			dispatch(setUserGraph(graph));
 		}
 	}
 };
