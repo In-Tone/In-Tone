@@ -41,7 +41,6 @@ const Login = ({ login, logout }) => (
       <br/>
       <RaisedButton type="submit" label="Login" backgroundColor='#3C3970' labelColor='white' style={{marginRight: '20px'}} />
     </form>
-    <RaisedButton label="Logout" onClick={logout}/>
   </div>
 </div>
 )
