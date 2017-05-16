@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
+import {connect} from 'react-redux'
 
 let SelectableList = makeSelectable(List);
 
@@ -45,17 +46,31 @@ const UserLanguageList = () => (
     <h3>Your Languages</h3>
     <ListItem
       value={1}
-      primaryText="User Language 1"
+      primaryText="Thai"
     />
-    <ListItem
+    {/*<ListItem
       value={2}
       primaryText="User Language 2"
     />
     <ListItem
       value={3}
       primaryText="User Language 3"
-    />
+    />*/}
   </SelectableList>
 );
 
-export default UserLanguageList;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchTargets: language => {
+      dispatch(fetchTargets(language))
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserLanguageList)

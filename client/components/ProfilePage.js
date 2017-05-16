@@ -31,6 +31,10 @@ class Profile extends Component {
 		console.log(event);
 	}
 
+	componentDidMount() {
+		console.log("props", this.props);
+	}
+
 	render() {
 		return(
 			<div className='studyDiv'>
@@ -42,14 +46,20 @@ class Profile extends Component {
 									size={120}
 									style={styles.avatarStyles}
 								/>
+
 								<div style={styles.userInfoStyles}>
 									<h4 style={styles.infoBuffer}>Name: </h4>
-									<h4>Users Name</h4>
+									<h4>{this.props.user.username}</h4>
 								</div>
 
 								<div style={styles.userInfoStyles}>
 									<h4 style={styles.infoBuffer}>Rank: </h4>
-									<h4> Users Rank </h4>
+									<h4>{this.props.user.rank}</h4>
+								</div>
+
+								<div style={styles.userInfoStyles}>
+									<h4 style={styles.infoBuffer}>User Since:</h4>
+									<h4>{this.props.user.userSince.slice(0,10)}</h4>
 								</div>
 
 								<UserLanguageList />
@@ -103,7 +113,6 @@ class Profile extends Component {
 	}
 }
 
-// modular...styles? I guess? 
 const styles = {
 	avatarStyles: {
 		margin: 5,
@@ -132,7 +141,7 @@ const styles = {
 
 const mapStateToProps = state => {
 	return {
-
+		user: state.user
 	}
 }
 
