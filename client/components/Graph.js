@@ -3,7 +3,6 @@ import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
-import { setUserGraph } from '../reducers/UserGraph';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -14,7 +13,6 @@ class Graph extends React.Component {
 		super(props)
 
 		this.currGraph = []
-		this.dispatchSetUserGraph = this.props.dispatchSetUserGraph
 	}
 
 
@@ -22,10 +20,11 @@ class Graph extends React.Component {
 	// grab pitches and duration from props on mount, //
 	// then draw the current target graph ONLY /////////
 	////////////////////////////////////////////////////
+
 	componentDidMount() {
 
-		const targetPitches = this.props.targetPitches;
-		const duration = this.props.duration;
+		const targetPitches = this.props.currentTarget.pitches
+		const duration = this.props.currentTarget.duration;
 
 		// slice target pitch array
 		const targetTone = pitchSlicing(targetPitches);
@@ -44,16 +43,14 @@ class Graph extends React.Component {
 	// grab new pitches and duration from props, ///////////////
 	// then redraw graph with current target AND user pitches //
 	////////////////////////////////////////////////////////////
-	componentDidUpdate() {
-		const targetPitches = this.props.targetPitches;
-		const duration = this.props.duration;
-		const userPitches = this.props.userTones;
+	componentWillReceiveProps(nextProps) {
+		console.log('nextProps', nextProps)
+		const targetPitches = nextProps.currentTarget.pitches
+		const duration = nextProps.currentTarget.duration;
+		const userPitches = nextProps.userTones;
 
-		// filter out halves and doubles:
-		const oldResults = pitchFiltering(userPitches);
-		const userTone = pitchSlicing(oldResults);
+		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
-		const smoothResults = pitchFix(userTone)
 		const smoothTargets = pitchFix(targetTone)
 
 		let chartCtx = this.refs._canvasNode.getContext('2d');
@@ -64,11 +61,18 @@ class Graph extends React.Component {
 			this.currGraph.shift();
 		}
 
-		const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
-		this.currGraph.push(graph);
+		if (nextProps.userTones.length) {
+			const oldResults = pitchFiltering(userPitches);
+			const userTone = pitchSlicing(oldResults);
+			const smoothResults = pitchFix(userTone)
 
-		// set graph on store
-		this.dispatchSetUserGraph(this.currGraph)
+			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+			this.currGraph.push(graph);
+		}
+		else {
+			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
+			this.currGraph.push(graph);
+		}
 
 	}
 
@@ -89,15 +93,8 @@ class Graph extends React.Component {
 ////////////////////////////////////////
 const mapStateToProps = state => ({
 	userTones: state.userTones,
+	currentTarget: state.currentTarget
 });
 
-const mapDispatchToProps = dispatch => {
-	return {
-		dispatchSetUserGraph: graph => {
-			dispatch(setUserGraph(graph));
-		}
-	}
-};
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Graph);
+export default connect(mapStateToProps, null)(Graph);

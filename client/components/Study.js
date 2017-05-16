@@ -17,7 +17,6 @@ import SkyLight from 'react-skylight';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
 import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
-import { setUserGraph } from '../reducers/UserGraph';
 
 const styles = {
 	footer: {
@@ -119,6 +118,8 @@ class Study extends React.Component {
 
 		// RESET AUDIO AND GRAPH GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
+		this.props.dispatchUserTone([])
+
 
 		if (this.props.graph.length) {
 			this.props.graph.forEach(graph => graph.destroy())
@@ -138,6 +139,7 @@ class Study extends React.Component {
 
 		// RESET AUDIO GOES HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
+		this.props.dispatchUserTone([])
 	}
 
 	languageDropDownChange(event, index, value) {
@@ -199,10 +201,7 @@ class Study extends React.Component {
 							</Paper>
 						</Col>
 						<Col lg={8} style={{paddingLeft:0}}>
-							<Graph
-								targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
-								duration={this.props.currentTarget && this.props.currentTarget.duration}
-							/>
+							<Graph />
 						</Col>
 					</Col>
 				</div>
@@ -254,9 +253,6 @@ const mapDispatchToProps = dispatch => {
 		},
 		dispatchSetUserURL: userURL => {
 			dispatch(setUserURL(userURL));
-		},
-		dispatchSetUserGraph: graph => {
-			dispatch(setUserGraph(graph));
 		}
 	}
 };
