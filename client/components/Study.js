@@ -12,10 +12,10 @@ import AudioComponent from './AudioComponent';
 import { setUserTone } from '../reducers/UserTone';
 import { deleteAudioNode } from '../utils/RecordingUtils';
 import {fetchTargets} from '../reducers/Targets';
-import SkyLight from 'react-skylight';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
 import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
+import ChooseLanguage from './ChooseLanguage';
 
 const styles = {
 	modalButton: {
@@ -134,23 +134,7 @@ class Study extends React.Component {
 				</div>
 			);
 		} else {
-			return (
-				<div>
-					<Paper zDepth={1} style={{marginTop:'10px'}}>
-						<div style={styles.buttonSection}>
-							<h1>Choose a language:</h1>
-							<RaisedButton label='Mandarin' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
-							<RaisedButton
-								style={styles.modalButton}
-								label='Thai'
-								labelStyle={{fontSize: '24px'}}
-								onClick={() => {
-									this.onLanguageClick("thai")
-								}} />
-							<RaisedButton label='Hmong' labelStyle={{fontSize: '24px'}} style={styles.modalButton} disabled={true}/>
-						</div>
-					</Paper>
-				</div>)
+			return <ChooseLanguage onLanguageClick={this.onLanguageClick} />
 		}
 	}
 }
