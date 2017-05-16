@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
+import { scores } from '../utils/CalculateScore';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -65,8 +66,11 @@ class Graph extends React.Component {
 			const oldResults = pitchFiltering(userPitches);
 			const userTone = pitchSlicing(oldResults);
 			const smoothResults = pitchFix(userTone)
+			// score is the user score, failing is the array of points where the
+			// user really needs to focus on fixing their inflection ***Integration TBD
+			let {score, failing} = scores(smoothTargets, smoothResults)
 
-			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets);
+			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
 		}
 		else {

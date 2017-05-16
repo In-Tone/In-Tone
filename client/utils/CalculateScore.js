@@ -36,9 +36,9 @@ export const scores = (target, results) => {
 		let pitchGrade = 0;
 		
 		// failing score will be all points at which a user needs to work on their inflection
-		let failingScore = [];
+		let failing = [];
 
-		// add to pitchGrade or push values from pitches into failingScore 
+		// add to pitchGrade or push values from pitches into failing 
 		differenceScore.forEach((score, index) => {
 			if(score <= 2){
 				pitchGrade += 1
@@ -47,12 +47,13 @@ export const scores = (target, results) => {
 				pitchGrade += 0.5
 			}
 			if(score >= 7){
-					failingScore.push(target[index])
+					failing.push(target[index])
 			}else{
-					failingScore.push(NaN)
+					failing.push(NaN)
 			}
 		})
-
+		
+		let score = Math.round((pitchGrade / differenceScore.length) * 100)
 		// returns the users score and their array of failing points
-		return [Math.round((pitchGrade / differenceScore.length) * 100), failingScore]
+		return {score, failing}
 }
