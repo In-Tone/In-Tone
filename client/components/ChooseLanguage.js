@@ -12,7 +12,7 @@ const ChooseLanguage = (props) => {
           <Link to='/study'>
           <img
             style={styles.button}
-            src={'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_Thailand.svg/1024px-Flag_of_Thailand.svg.png'}
+            src={'https://s3.amazonaws.com/in-tone/Flag_of_Thailand.svg.png'}
             onClick={() => props.onLanguageClick('thai')} />
           </Link>
           <h4>THAI</h4>
