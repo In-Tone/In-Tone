@@ -41,14 +41,11 @@ const styles = {
 }
 
 const Word = (props) => {
-	console.log("PROPS", props);
 	return (
 		<div>
 		{
 		props.allTargets.map(target => {
-			console.log("target: ", target);
 			if (target.tone_type_id === props.currentTone) {
-				console.log("BULLSHIT");
 				return (
 					<div>
 						<h2>{target.transliteration}</h2>
@@ -56,7 +53,7 @@ const Word = (props) => {
 							<Col md={6}>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Target Audio:</h4>
-									<audio controls id='profileTarget' style={{width: '50%'}}/>
+									<audio src={target.wav} controls id='profileTarget' style={{width: '50%'}}/>
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
@@ -72,8 +69,8 @@ const Word = (props) => {
 							</Col>
 							<Col md={6}>
 								<Graph 
-									targetPitches={[1,2,3,4,5,6]}
-									duration={34}
+									targetPitches={target.pitches}
+									duration={target.duration}
 								/>
 							</Col>
 						</Row>
