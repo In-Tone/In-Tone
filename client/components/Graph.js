@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
+import { dataCollect } from '../utils/DataCollect';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -12,10 +13,8 @@ class Graph extends React.Component {
 
 	constructor(props) {
 		super(props)
-
 		this.currGraph = []
 	}
-
 
 	////////////////////////////////////////////////////
 	// grab pitches and duration from props on mount, //
@@ -37,7 +36,6 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
-
 	}
 
 	////////////////////////////////////////////////////////////
@@ -48,6 +46,15 @@ class Graph extends React.Component {
 		const targetPitches = nextProps.currentTarget.pitches
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
+
+		// for sending blob to database
+		const target_id = nextProps.currentTarget.toneId;
+		const blob = nextProps.blob;
+		const user_id = nextProps.user.id;
+		const tone_type_id = nextProps.currentTarget.tone_type_id;
+		const isBest = false;
+		const date = null;
+		const difficulty = "beginner";
 
 		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
@@ -71,12 +78,12 @@ class Graph extends React.Component {
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
+			dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id);
 		}
 		else {
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
 			this.currGraph.push(graph);
 		}
-
 	}
 
 	//////////////////////////
@@ -96,7 +103,9 @@ class Graph extends React.Component {
 ////////////////////////////////////////
 const mapStateToProps = state => ({
 	userTones: state.userTones,
-	currentTarget: state.currentTarget
+	currentTarget: state.currentTarget,
+	user: state.user,
+	blob: state.blob
 });
 
 
