@@ -182,7 +182,7 @@ const generateDate = age => {
 	return chance.weighted(dates,weight[age])
 };
 
-const generatePitches = () => Array(4).fill(1).map(n => 200 + Math.floor(Math.random() * 30));
+const generatePitches = () => Array(43).fill(1).map(n => 200 + Math.floor(Math.random() * 30));
 
 const generatePitchArray = numAttempts => Array(numAttempts).fill(1).map(n => generatePitches());
 
@@ -232,7 +232,7 @@ const findBestScore = generatedAttempts => {
 		10: [0,0]
 	};
 
-	for (i = 0; i < generatedAttempts.length; i++) {
+	for (let i = 0; i < generatedAttempts.length; i++) {
 
 		let currentScore = generatedAttempts[i].score;
 		let currentTargetId = generatedAttempts[i].target_id;
@@ -253,7 +253,7 @@ const findBestScore = generatedAttempts => {
 const generateReturnObject = attemptsWithBestScore => {
 	let result = {};
 	let index = 0;
-	for (i = 0; i < attemptsWithBestScore.length; i++) {
+	for (let i = 0; i < attemptsWithBestScore.length; i++) {
 		result[index] = attemptsWithBestScore[i];
 		index++;
 	}
@@ -269,8 +269,8 @@ const generateUserAttempts = (numAttempts, age, userId) => {
 	generateAllUserAttempts = arrayOfUserAttempts => {
 		let result = {};
 		let index = 0;
-		for (i = 0; i < arrayOfUserAttempts.length; i++) {
-			for (j = 0; j < arrayOfUserAttempts[i].length; j++) {
+		for (let i = 0; i < arrayOfUserAttempts.length; i++) {
+			for (let j = 0; j < arrayOfUserAttempts[i].length; j++) {
 				result[index] = arrayOfUserAttempts[i][j];
 				index++;
 			}
