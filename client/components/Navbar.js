@@ -44,8 +44,8 @@ class Navbar extends Component {
 				</Col>
 				<Col xs={4}>
 				{
-					this.props.user ?
-					<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
+					this.props.user ? 
+					<Link to='/home'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton></Link> :
 					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
 				}
 				</Col>

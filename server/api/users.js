@@ -25,7 +25,12 @@ router.get('/:username', (req, res, next) => {
 });
 
 router.get('/usertones/:userId', (req, res, next) => {
-	UserTone.findAll({ where: { user_id: req.params.userId } })
+	UserTone.findAll({ 
+		where: { 
+			user_id: req.params.userId 
+		},
+		include: [ { all: true } ] 
+	})
 		.then(foundTones => res.send(foundTones))
 		.catch(next);
 })
@@ -48,7 +53,8 @@ router.post('/usertones/:userId/:targetId/:bool', (req, res, next) => {
 				user_id: req.params.userId,
 				target_id: req.params.targetId,
 				isBest: req.params.bool
-			}
+			},
+			include: [ { model: ToneType, required: true } ],
 		})
 			.then(foundTone => foundTone.update({ isBest: false }))
 			.catch(next);
