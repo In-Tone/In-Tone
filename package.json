@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/In-Tone/In-Tone#readme",
   "dependencies": {
+    "audiobuffer-to-wav": "^1.0.0",
     "axios": "^0.16.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
