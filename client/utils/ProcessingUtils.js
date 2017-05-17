@@ -1,6 +1,31 @@
 import Pitchfinder from 'pitchfinder';
 import toWav from 'audiobuffer-to-wav';
 
+// export const generateBase64Data = blob => {
+// 	let reader = new window.FileReader();
+// 	let base64DataPromise = new Promise ((resolve, reject) => {
+// 		reader.addEventListener('loadend', function() {
+// 			let base64Data = reader.result;
+// 			console.log(base64Data);
+// 			resolve(base64Data);
+// 		})
+// 		reader.readAsDataURL(blob);
+// 	return base64DataPromise;
+// }
+
+export const generateBase64Data = blob => {
+	let dataPromise = new Promise ((resolve, reject) => {
+		let reader = new window.FileReader();
+		reader.readAsDataURL(blob);
+		// let base64data;
+		reader.onloadend = function() {
+			let base64Data = reader.result;
+			resolve(base64Data);
+		}
+	});
+	return dataPromise;
+}
+
 export const processMedia = (audioBlob, audioContext) => {
 	let blob = audioBlob;
 	let context = audioContext;
@@ -14,9 +39,6 @@ export const processMedia = (audioBlob, audioContext) => {
 				const detectors = [detectPitch, Pitchfinder.AMDF()];
 				const float32Array = data.getChannelData(0); // get a single channel of sound
 				// const pitch = detectPitch(float32Array); // null if pitch cannot be identified
-				console.log(reader);
-
-				const wav = toWav(data);
 
 				// 500 bpm = 8.33 beats per second
 				// quantization = 4 --> 33.32 samples per second
@@ -24,8 +46,8 @@ export const processMedia = (audioBlob, audioContext) => {
 					tempo: 500, // in BPM, defaults to 120
 					quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
 				}).map(freq => Math.round(freq));
-				const freqWavArray = [frequencies, float32Array];
-				resolve(freqWavArray);
+				// const freqWavArray = [frequencies, float32Array];
+				resolve(frequencies);
 			})
 		})
 		reader.readAsArrayBuffer(blob);

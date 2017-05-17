@@ -107,21 +107,17 @@ class Record extends React.Component {
 			mediaRecorder.onstop = function(e) {
 				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
 				// and returns the blob and the audioURL
-				let {blob, audioURL, wav} = stopAndReturnMedia(recording, context)
+				let {blob, audioURL} = stopAndReturnMedia(recording, context)
 				// set recording to empty array
 				recording = [];
-
-				// setNewBlob(blob)
+				setNewBlob(blob);
 				// setUserURL in store ldkfjsdlkj
 				dispatchSetUserURL(audioURL)
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
 				processMedia(blob, context) // second promise for blob
 					// set currentUserTone in store to the returned array of pitches
-					.then((freqWavArray) => {
-						const frequencies = freqWavArray[0];
-						const float32array = freqWavArray[1]
+					.then((frequencies) => {
 						dispatchUserTone(frequencies)
-						setNewBlob(float32array);
 					});  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
 

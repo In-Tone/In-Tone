@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-export const dataCollect = (pitches, blob, isBest, date, score, difficulty='beginner',user_id, tone_type_id,target_id) => {
+import { generateBase64Data } from './ProcessingUtils';
+
+export const dataCollect = (pitches, wavblob, isBest, date, score, difficulty,user_id, tone_type_id,target_id) => {
+
 	const reqBody = { 
 		pitches, 
-		blob, 
+		wavblob, 
 		isBest, 
 		date, 
 		score, 
@@ -12,12 +15,18 @@ export const dataCollect = (pitches, blob, isBest, date, score, difficulty='begi
 		tone_type_id, 
 		target_id 
 	};
-	console.log("\n\n\n\n\n\n\nHERE\n\n\n\n\n\n\n");
-	axios.post(`/api/users/usertones/${user_id}/${target_id}/${isBest}`, reqBody)
-		.then(() => res.sendStatus(200))
+
+	generateBase64Data(wavblob)
+		.then(base64Data => {
+			reqBody.wavblob = base64Data;
+			return reqBody;
+		})
+		.then(reqBody => {
+			let user_id = reqBody.user_id;
+			axios.post(`/api/users/usertones/${user_id}/${target_id}/${isBest}`, reqBody)
+				.then(() => res.sendStatus(200))
+				.catch(err => console.error(err));
+		})
 		.catch(err => console.error(err));
+
 };
-
-
-// import datamine to study.js
-// line 368;

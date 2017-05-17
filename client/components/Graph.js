@@ -46,7 +46,6 @@ class Graph extends React.Component {
 	// then redraw graph with current target AND user pitches //
 	////////////////////////////////////////////////////////////
 	componentWillReceiveProps(nextProps) {
-		console.log('nextProps', nextProps)
 		const targetPitches = nextProps.currentTarget.pitches
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
@@ -82,11 +81,9 @@ class Graph extends React.Component {
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
-			console.log('BLOB DATA: ', blob);
 			dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id);
 		}
 		else {
-			console.log("NO USER DATA");
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
 			this.currGraph.push(graph);
 		}

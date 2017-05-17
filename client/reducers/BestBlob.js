@@ -7,7 +7,7 @@ export const setBlob = (bestBlob) => ({
 	bestBlob
 });
 
-const reducer = (state=[], action) => {
+const reducer = (state='', action) => {
 	switch(action.type) {
 		case SET_BLOB:
 			return action.bestBlob;
