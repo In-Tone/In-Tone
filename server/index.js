@@ -16,11 +16,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  console.log("req.body", req.body);
-  next();
-});
-
 db.sync()
   .then(() => {
     app.listen(port, function () {

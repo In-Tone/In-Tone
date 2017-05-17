@@ -30,7 +30,7 @@ passport.use(new (require('passport-local').Strategy)({usernameField:"email", pa
           console.log("No match.");
           return done(null, false, { message: 'Login incorrect' });
         }
-        return user.hasMatchingPassword(password) // need to promisify!
+        return user.hasMatchingPassword(password)
           .then(ok => {
             if (!ok) {
               console.log("Bad password.")
@@ -82,6 +82,7 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
   req.logout();
+  req.session.destroy();
   res.redirect('/api/login/whoami');
 });
 
