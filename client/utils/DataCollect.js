@@ -3,7 +3,6 @@ import axios from 'axios';
 import { generateBase64Data } from './ProcessingUtils';
 
 export const dataCollect = (pitches, wavblob, isBest, date, score, difficulty,user_id, tone_type_id,target_id,userBest) => {
-
 	const reqBody = { 
 		pitches, 
 		wavblob, 
