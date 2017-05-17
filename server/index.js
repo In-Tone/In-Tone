@@ -32,6 +32,16 @@ app.use(session({
 	saveUninitialized: false // does not force new sessions to be saved to the store
 }));
 
+// app.use(require('cookie-session')({
+//     name: 'session',
+//     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
+// }));
+
+// app.use('/api', function (req, res, next) {
+//     console.log("session", req.session);
+//     next();
+// })
+
 app.use(passport.initialize());
 app.use(passport.session());
 

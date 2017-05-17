@@ -18,6 +18,8 @@ import UserLanguageList from './LanguageList'
 
 import Word from './Word';
 
+import { whoami } from '../reducers/Auth';
+
 
 class Profile extends Component {
 	constructor(props){
@@ -29,70 +31,72 @@ class Profile extends Component {
 	}
 	// methods
 	selectTone(button) {
-		console.log("button", button.props.label);
 		this.setState({
 			selectedTone: button.props.label
 		})
 	}
 
-	componentDidMount() {
-
-	}
-
 	render() {
-		return(
-			<div className='studyDiv'>
-				<Row>
-					<Col lg={4}>
-						<Paper>
-								<Avatar
-									src='https://i.imgur.com/kP5Khh8.jpg'
-									size={120}
-									style={styles.avatarStyles}
-								/>
 
-								<div style={styles.userInfoStyles}>
-									<h4 style={styles.infoBuffer}>Name: </h4>
-									<h4>{this.props.user.username}</h4>
+		if (this.props.user) {
+			return(
+				<div className='studyDiv'>
+					<Row>
+						<Col lg={4}>
+							<Paper>
+									<Avatar
+										src='https://i.imgur.com/kP5Khh8.jpg'
+										size={120}
+										style={styles.avatarStyles}
+									/>
+
+									<div style={styles.userInfoStyles}>
+										<h4 style={styles.infoBuffer}>Name: </h4>
+										<h4>{this.props.user.username}</h4>
+									</div>
+
+									<div style={styles.userInfoStyles}>
+										<h4 style={styles.infoBuffer}>Rank: </h4>
+										<h4>{this.props.user.rank}</h4>
+									</div>
+
+									<div style={styles.userInfoStyles}>
+										<h4 style={styles.infoBuffer}>User Since:</h4>
+										<h4>{this.props.user.userSince.slice(0,10)}</h4>
+									</div>
+
+									<UserLanguageList />
+							</Paper>
+						</Col>
+
+						<Col lg={8} style={{paddingLeft:0}}>
+							<div>
+							<Paper>
+								{/* this can definitely be refactored into a loop */}
+								<div style={styles.bottomBorders}>
+								{
+									this.props.toneTypes && this.props.toneTypes.map(toneType => (
+										<FlatButton ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
+									))
+								}
 								</div>
-
-								<div style={styles.userInfoStyles}>
-									<h4 style={styles.infoBuffer}>Rank: </h4>
-									<h4>{this.props.user.rank}</h4>
-								</div>
-
-								<div style={styles.userInfoStyles}>
-									<h4 style={styles.infoBuffer}>User Since:</h4>
-									<h4>{this.props.user.userSince.slice(0,10)}</h4>
-								</div>
-
-								<UserLanguageList />
-						</Paper>
-					</Col>
-
-					<Col lg={8} style={{paddingLeft:0}}>
-						<div>
-						<Paper>
-							{/* this can definitely be refactored into a loop */}
-							<div style={styles.bottomBorders}>
-							{
-								this.props.toneTypes && this.props.toneTypes.map(toneType => (
-									<FlatButton ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
-								))
-							}
+								{
+									this.state.selectedTone ? (<Word
+									allTargets={this.props.allTargets}
+									currentTone={this.state.selectedTone}
+									/>) : (<h4>SELECT A LANGUAGE</h4>)
+								}
+							</Paper>
 							</div>
-							{
-								this.state.selectedTone ? (<Word
-								allTargets={this.props.allTargets}
-								currentTone={this.state.selectedTone}
-								/>) : (<h4>SELECT A LANGUAGE</h4>)
-							}
-						</Paper>
-						</div>
-					</Col>
-				</Row>
-			</div>
-		)
+						</Col>
+					</Row>
+				</div>
+			)
+			
+		} else {
+			return (<div>Oops... something went wrong.</div>)
+		}
+
 	}
 }
 
@@ -133,7 +137,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-
+		getUser: () => {
+			dispatch(whoami());
+		}
 	}
 }
 

@@ -20,7 +20,7 @@ export const authenticated = user => ({
 // DISPATCHERS //////////////////////////
 export const login = (email, password) =>
   dispatch =>
-    axios.post('/api/login',
+    axios.post('/api/login/local',
       {email, password})
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))
@@ -35,6 +35,7 @@ export const whoami = () =>
   dispatch =>
     axios.get('/api/login/whoami')
       .then(response => {
+        console.log("whoami responds", response);
         const user = {
           userSince: response.data.created_at,
           email: response.data.email,
@@ -43,9 +44,13 @@ export const whoami = () =>
           lastUpdated: response.data.updated_at,
           username: response.data.username
         }
-        dispatch(authenticated(user))
+        if (response.data !== "") {
+          dispatch(authenticated(user));
+        } else {
+          dispatch(authenticated(null));
+        }
       })
-      .catch(failed => dispatch(authenticated(null)))
+      // .catch(failed => dispatch(authenticated(null)))
 /////////////////////////////////////////////
 
 

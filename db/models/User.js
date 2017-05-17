@@ -31,8 +31,9 @@ module.exports = db => db.define('user', {
 			return _.omit(this.toJSON(), ['password', 'salt']);
 		},
 		hasMatchingPassword: function(candidatePassword) {
-			return this.Model.encryptPassword(candidatePassword, this.salt) === this.password;
-		}
+			return new Promise((resolve, reject) => (
+				resolve(this.Model.encryptPassword(candidatePassword, this.salt) === this.password)
+		))}
 	},
 	classMethods: {
 		generateSalt: function () {
