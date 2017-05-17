@@ -18,11 +18,8 @@ export const dataCollect = (pitches, wavblob, isBest, date, score, difficulty,us
 
 	let bestPreviousScore = findPreviousBestScore(target_id, userBest);
 
-	console.log('score: ', score)
-	console.log('prevScore: ', bestPreviousScore)
-
 	// if the attempt is the first attempt at the tone, or better than any previous attempt, process wavblob into array and send to DB
-	if (!userBest.length || score >  bestPreviousScore) {
+	if (!userBest.length || score > bestPreviousScore) {
 		reqBody.isBest = true;
 		generateBase64Data(wavblob)
 			.then(base64Data => {
@@ -44,7 +41,6 @@ export const findPreviousBestScore = (target_id, userBest) => {
 };
 
 export const makeAxiosRequest = reqObj => {
-	console.log('\n\n\n\n\n',reqObj,'\n\n\n\n\n\n\n\n\n');
 	axios.post(`/api/users/usertones/${reqObj.user_id}/${reqObj.target_id}/${reqObj.isBest}`, reqObj)
 		.then(()=> res.sendStatus(200))
 		.catch(err => console.error(err));
