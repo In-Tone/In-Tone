@@ -1,13 +1,13 @@
 'use strict';
 
-const { ARRAY, INTEGER, BLOB, ENUM, BOOLEAN } = require('sequelize');
+const { ARRAY, INTEGER, BLOB, ENUM, BOOLEAN, STRING } = require('sequelize');
 
 module.exports = db => db.define('UserTone', {
 	pitches: {
 		type: ARRAY(INTEGER),
 	},
 	wavblob: {
-		type: BLOB,
+		type: STRING,
 	},
 	isBest: {
 		type: BOOLEAN,
