@@ -232,7 +232,7 @@ const findBestScore = generatedAttempts => {
 		10: [0,0]
 	};
 
-	for (i = 0; i < generatedAttempts.length; i++) {
+	for (let i = 0; i < generatedAttempts.length; i++) {
 
 		let currentScore = generatedAttempts[i].score;
 		let currentTargetId = generatedAttempts[i].target_id;
@@ -253,7 +253,7 @@ const findBestScore = generatedAttempts => {
 const generateReturnObject = attemptsWithBestScore => {
 	let result = {};
 	let index = 0;
-	for (i = 0; i < attemptsWithBestScore.length; i++) {
+	for (let i = 0; i < attemptsWithBestScore.length; i++) {
 		result[index] = attemptsWithBestScore[i];
 		index++;
 	}
@@ -269,8 +269,8 @@ const generateUserAttempts = (numAttempts, age, userId) => {
 	generateAllUserAttempts = arrayOfUserAttempts => {
 		let result = {};
 		let index = 0;
-		for (i = 0; i < arrayOfUserAttempts.length; i++) {
-			for (j = 0; j < arrayOfUserAttempts[i].length; j++) {
+		for (let i = 0; i < arrayOfUserAttempts.length; i++) {
+			for (let j = 0; j < arrayOfUserAttempts[i].length; j++) {
 				result[index] = arrayOfUserAttempts[i][j];
 				index++;
 			}
