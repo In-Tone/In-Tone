@@ -121,6 +121,7 @@ class Record extends React.Component {
 						const frequencies = freqWavArray[0];
 						const float32array = freqWavArray[1]
 						dispatchUserTone(frequencies)
+						setNewBlob(float32array);
 					});  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
 

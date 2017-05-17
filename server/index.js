@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const bodyParser = require('body-parser');
+// app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
