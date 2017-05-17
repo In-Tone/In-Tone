@@ -77,7 +77,7 @@ class Profile extends Component {
 							<div style={styles.bottomBorders}>
 							{
 								this.props.toneTypes && this.props.toneTypes.map(toneType => (
-									<FlatButton ref={(button) => {toneType.tone = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.tone)}></FlatButton>
+									<FlatButton ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
 								))
 							}
 							</div>
