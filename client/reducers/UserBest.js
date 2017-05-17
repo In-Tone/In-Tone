@@ -10,17 +10,17 @@ export const setUserBest = bestAttempts => ({
 });
 
 
-export const fetchUserBest = userId => {
-	dispatch => {
+export const fetchUserBest = userId => (
+	dispatch =>
 		axios.get(`api/users/usertones/${userId}/best`)
 			.then( res => res.data)
 			.then( bestAttempts => dispatch(setUserBest(bestAttempts)))
-			.catch(err => console.error(err));
-	}
-}
+	)
+
 
 
 const reducer = (state = [], action) => {
+	console.log('action: ', action)
 	switch(action.type) {
 		case SET_USER_BEST:
 			return action.bestAttempts;
