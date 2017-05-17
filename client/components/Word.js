@@ -12,12 +12,8 @@ import FlatButton from 'material-ui/FlatButton';
 import { Row, Col } from 'react-bootstrap';
 
 // our modules
-<<<<<<< HEAD
 import ProfileGraphs from './ProfileGraphs';
-=======
-import Graph from './Graph';
 import { targetToUserHashGenerator } from '../utils/TargetUserBestHash';
->>>>>>> master
 
 const styles = {
 	avatarStyles: {
