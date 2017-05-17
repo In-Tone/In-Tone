@@ -102,8 +102,14 @@ class Study extends React.Component {
 				englishTranslation,
 				nativeSpelling:image,
 				wav,
-				tone
+				tone_type_id
 			} = this.props.currentTarget;
+
+			/***********************************************************************************/
+			/* VERY TEMPORARY DEMO ONLY WORKAROUND TO DISPLAYING TONE AS WORDS AND NOT NUMBERS */
+			/***********************************************************************************/
+			console.log(this.props.currentTarget)
+			let tones = ['', 'low', 'mid', 'falling', 'high', 'rising']
 
 			let logState = this.logState;
 			let previousTarget = this.previousTarget;
@@ -113,7 +119,7 @@ class Study extends React.Component {
 				<div className='studyDiv'>
 					<Col lg={12}>
 						<Col lg={4}>
-							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tone)}
+							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tones[tone_type_id])}
 							<Paper zDepth={1} style={{marginTop:'10px'}}>
 								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
