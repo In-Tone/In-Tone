@@ -97,7 +97,7 @@ class Graph extends React.Component {
 	render() {
 		return (
 			<Paper zDepth={1}>
-				<canvas id='studyChart' ref='_canvasNode'></canvas>
+				<canvas id='studyChart' ref='_canvasNode' style={styles.chart}></canvas>
 			</Paper>
 		);
 	}
@@ -116,3 +116,9 @@ const mapStateToProps = state => ({
 
 
 export default connect(mapStateToProps, null)(Graph);
+
+const styles = {
+	chart: {
+		padding: '24px',
+	}
+}
