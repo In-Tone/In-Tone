@@ -20,7 +20,7 @@ export const authenticated = user => ({
 // DISPATCHERS //////////////////////////
 export const login = (email, password) =>
   dispatch =>
-    axios.post('/api/login',
+    axios.post('/api/login/local',
       {email, password})
       .then(() => dispatch(whoami()))
       .catch(() => dispatch(whoami()))

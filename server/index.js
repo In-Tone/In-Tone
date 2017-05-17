@@ -16,6 +16,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+  console.log("req.body", req.body);
+  next();
+});
+
 db.sync()
   .then(() => {
     app.listen(port, function () {
@@ -30,6 +35,16 @@ app.use(session({
 	resave: false, // does not force session to be saved to store
 	saveUninitialized: false // does not force new sessions to be saved to the store
 }));
+
+// app.use(require('cookie-session')({
+//     name: 'session',
+//     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
+// }));
+
+// app.use('/api', function (req, res, next) {
+//     console.log("session", req.session);
+//     next();
+// })
 
 app.use(passport.initialize());
 app.use(passport.session());
