@@ -106,7 +106,7 @@ class Study extends React.Component {
 			} = this.props.currentTarget;
 
 			/***********************************************************************************/
-			/* VERY TEMPORARY DEMO ONLY WORKAROUND TO DISPLAYING TONE AS WORDS AND NOT NUMBERS */
+			/* TEMPORARY DEMO ONLY WORKAROUND TO DISPLAYING TONE AS WORDS AND NOT NUMBERS */
 			/***********************************************************************************/
 			let tones = ['', 'low', 'mid', 'falling', 'high', 'rising']
 
