@@ -30,7 +30,7 @@ const styles = {
 	wordInfo: {
 		display:'flex', 
 		justifyContent:'center', 
-		paddingBottom:'1%'
+		paddingBottom:'7%'
 	},
 	bottomBorders: {
 		borderBottom:'thin solid black'
@@ -39,24 +39,32 @@ const styles = {
 		paddingRight: '2%'
 	},
 	wordDiv: {
-		marginBottom: '15%',
-		marginTop: '5%',
-		borderStyle: 'dotted'
+		paddingBottom: '5%'
+	},
+	columnLeft: {
+		paddingTop: '1%'
+	},
+	transliterationStyles: {
+		paddingTop: '1%',
+		paddingBottom: '2%'
+	},
+	hrStyles: {
+		border: 'solid 1px grey'
 	}
 }
 
 const Word = (props) => {
-	console.log('word props', props)
 	return (
 		<div style={styles.wordDiv}>
 		{
 		props.allTargets.map(target => {
+			console.log(props)
 			if (target.tone_type_id === props.currentTone) {
 				return (
 					<div>
-						<h2>{target.transliteration}</h2>
+						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
 						<Row>
-							<Col md={6}>
+							<Col md={6} style={styles.columnLeft}>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Target Audio:</h4>
 									<audio src={target.wav} controls id='profileTarget' style={{width: '50%'}}/>
@@ -65,9 +73,9 @@ const Word = (props) => {
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
 									<audio controls id='profileUser' style={{width: '50%'}}/>
 								</div>
-								<div style={styles.wordInfo}>
+								{/*<div style={styles.wordInfo}>
 									<Link to='/'><h4>Retry</h4></Link>
-								</div>
+								</div>*/}
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
 									<h4> 69 </h4>
@@ -80,6 +88,7 @@ const Word = (props) => {
 								/>
 							</Col>
 						</Row>
+						<hr style={styles.hrStyles}/>
 					</div>
 				)
 			}

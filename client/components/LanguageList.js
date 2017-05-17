@@ -17,7 +17,7 @@ function wrapState(ComposedComponent) {
     constructor(props){
       super(props)
       this.state = {
-        selectedIndex: 1
+        selectedIndex: 0
       }
 
       this.handleRequestChange = this.handleRequestChange.bind(this);
@@ -63,14 +63,6 @@ const UserLanguageList = (props) => {
       primaryText="Thai"
       onClick={onLanguageClick}
     />
-    {/*<ListItem
-      value={2}
-      primaryText="User Language 2"
-    />
-    <ListItem
-      value={3}
-      primaryText="User Language 3"
-    />*/}
   </SelectableList>
 )};
 

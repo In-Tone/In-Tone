@@ -43,7 +43,7 @@ class Profile extends Component {
 				<div className='studyDiv'>
 					<Row>
 						<Col lg={4}>
-							<Paper>
+							<Paper style={styles.userInfo}>
 									<Avatar
 										src='https://i.imgur.com/kP5Khh8.jpg'
 										size={120}
@@ -69,10 +69,9 @@ class Profile extends Component {
 							</Paper>
 						</Col>
 
-						<Col lg={8} style={{paddingLeft:0}}>
+						<Col lg={8}>
 							<div>
 							<Paper>
-								{/* this can definitely be refactored into a loop */}
 								<div style={styles.bottomBorders}>
 								{
 									this.props.toneTypes && this.props.toneTypes.map(toneType => (
@@ -84,7 +83,7 @@ class Profile extends Component {
 									this.state.selectedTone ? (<Word
 									allTargets={this.props.allTargets}
 									currentTone={this.state.selectedTone}
-									/>) : (<h4>SELECT A LANGUAGE</h4>)
+									/>) : <div style={styles.selectLanguage}><h1>Please select a language, then a tone</h1></div>
 								}
 							</Paper>
 							</div>
@@ -123,6 +122,15 @@ const styles = {
 	},
 	infoBuffer: {
 		paddingRight: '2%'
+	},
+	selectLanguage: {
+		fontSize: '42px',
+		paddingTop: '130px',
+		paddingBottom: '130px'
+	},
+	userInfo: {
+		position: 'fixed',
+		width: '30%'
 	}
 }
 

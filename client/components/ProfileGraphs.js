@@ -6,9 +6,8 @@ import { scores } from '../utils/CalculateScore';
 
 const styles = {
 	profileGraphs: {
-		paddingTop: '5%',
-		paddingBottom: '15%',
-		marginBottom: '15%'
+		padding: '2%',
+		marginRight: '2%'
 	}
 }
 
@@ -21,21 +20,14 @@ class ProfileGraphs extends React.Component {
 
 	componentDidMount(){
 		// each canvas has to have a unique ID so they don't just rewrite the previous
-		console.log('profileGraph this.props', this.props)
-
 		let duration = this.props.duration;
-		let derp = this.chartDuration
-
-		console.log('chart duration as derp', derp)
+		let chartRef = this.chartDuration
 
 		let target = this.props.targetPitches;
 		let xLabels = getXLabels(duration, target)
 		let smoothResults = pitchFix(target)
 
-		console.log('what the fuck is refs', this.refs)
-		console.log('this is horseshit', this.refs[derp])
-
-		let chartCtx = this.refs[derp].getContext('2d')
+		let chartCtx = this.refs[chartRef].getContext('2d')
 		const graph = drawGraph(chartCtx, xLabels, smoothResults, [])
 	}
 
