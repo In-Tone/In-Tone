@@ -12,9 +12,6 @@ const addNewUser = (userInfo) => (
 		.catch(err => console.error(err))
 )
 
-
-
-
 export const SignUp = ({login}) => {
 	const onSubmit = (evt) => {
 		const email = evt.target.email.value;
@@ -22,7 +19,6 @@ export const SignUp = ({login}) => {
 		const password = evt.target.password.value;
 		const rank = 0;
 		evt.preventDefault()
-		console.log('inside onSubmit')
 		addNewUser({
 			email,
 			username,
@@ -30,7 +26,6 @@ export const SignUp = ({login}) => {
 			rank
 		})
 			.then(() => login(email, password))
-			.then(() => console.log('should be loggedin'))
 			.catch(err => console.error(err))
 	}
 
@@ -63,18 +58,6 @@ export const SignUp = ({login}) => {
 	)
 }
 
-const mapStateToProps = state => {
-	return {
-		user: state.user
-	}
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    login: (email, password) => {
-      dispatch(login(email, password))
-    }
-  }
-}
+const mapDispatchToProps = {login}
 
 export default connect(null, mapDispatchToProps)(SignUp);
