@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Grid, Row, Col } from 'react-bootstrap';
 import {logout} from '../reducers/Auth';
 import { fetchUserTones } from '../reducers/UserTone';
+import { fetchUserBest } from '../reducers/UserBest';
 
 class Navbar extends Component {
 	constructor(props) {
@@ -24,6 +25,7 @@ class Navbar extends Component {
 		const userId = this.props.user.id;
 		console.log(userId)
 		this.props.fetchUserTones(userId);
+		this.props.fetchUserBest(userId)
 	}
 
 	render() {
@@ -33,7 +35,7 @@ class Navbar extends Component {
 
 				<Col xs={4}>
 				{
-					this.props.user ? 
+					this.props.user ?
 					<Link to='/profile'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.onProfileClick}> Profile </FlatButton></Link> :
 					<Link to='/signup'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
 				}
@@ -43,7 +45,7 @@ class Navbar extends Component {
 				</Col>
 				<Col xs={4}>
 				{
-					this.props.user ? 
+					this.props.user ?
 					<FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton> :
 					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
 				}
@@ -80,5 +82,5 @@ const styles = {
 
 export default connect(
   ({ user }) => ({ user: user }),
-  {logout, fetchUserTones}
+  {logout, fetchUserTones, fetchUserBest}
 )(Navbar);

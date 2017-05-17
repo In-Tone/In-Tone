@@ -30,6 +30,17 @@ router.get('/usertones/:userId', (req, res, next) => {
 		.catch(next);
 })
 
+router.get('/usertones/:userId/best', (req, res, next) => {
+	UserTone.findAll({
+		where: {
+			user_id: req.params.userId,
+			isBest: true
+		}
+	})
+		.then(foundTones => res.send(foundTones))
+		.catch(next);
+})
+
 router.post('/usertones/:userId/:targetId/:bool', (req, res, next) => {
 	if (req.params.bool) {
 		UserTone.findOne({

@@ -6,6 +6,7 @@ import userReducer from './Auth';
 import currentTargetReducer from './CurrentTarget';
 import audioURLReducer from './UserAudioURL';
 import blobReducer from './BestBlob';
+import userBestReducer from './UserBest';
 
 const rootReducer = combineReducers({
   language: languageReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   currentTarget: currentTargetReducer,
   url: audioURLReducer,
   blob: blobReducer
+  userBest: userBestReducer
 });
 
 export default rootReducer;
