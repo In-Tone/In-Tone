@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import WhoAmI from './components/WhoAmI';
 import Profile from './components/ProfilePage';
+import SignUp from './components/SignUp';
 
 const LoginPage = connect(
   ({ user }) => ({ user: user })
@@ -26,6 +27,7 @@ const Routes = () => {
 		<Router history={hashHistory}>
 			<Route path='/' component={Layout}>
 				<Route path='/login' component={LoginPage}/>
+        <Route path='/signup' component={SignUp} />
         <Route path='/home' component={Home}/>
         <Route path='/study' component={Study}/>
 				<Route path='/profile' component={Profile}/>
