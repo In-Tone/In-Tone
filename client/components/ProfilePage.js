@@ -23,19 +23,20 @@ class Profile extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			selectedTone: ''
+			selectedTone: 0
 		}
 		this.selectTone = this.selectTone.bind(this);
 	}
 	// methods
-	selectTone() {
+	selectTone(button) {
+		console.log("button", button.props.label);
 		this.setState({
-			selectedTone: this.refs.toneButton.props.label
+			selectedTone: button.props.label
 		})
 	}
 
 	componentDidMount() {
-		console.log("props", this.props);
+
 	}
 
 	render() {
@@ -76,14 +77,16 @@ class Profile extends Component {
 							<div style={styles.bottomBorders}>
 							{
 								this.props.toneTypes && this.props.toneTypes.map(toneType => (
-									<FlatButton ref='toneButton' label={toneType.tone} style={styles.tones} onClick={this.selectTone} key={toneType.id}>{toneType.tone}</FlatButton>
+									<FlatButton ref={(button) => {toneType.tone = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.tone)}></FlatButton>
 								))
 							}
 							</div>
-							<Word
-							allTargets={this.props.allTargets}
-							currentTone={this.state.selectedTone}
-							/>
+							{
+								this.state.selectedTone ? (<Word
+								allTargets={this.props.allTargets}
+								currentTone={this.state.selectedTone}
+								/>) : (<h4>SELECT A LANGUAGE</h4>)
+							}
 						</Paper>
 						</div>
 					</Col>
@@ -123,7 +126,8 @@ const mapStateToProps = state => {
 	return {
 		user: state.user,
 		toneTypes: state.toneTypes,
-		allTargets: state.allTargets
+		allTargets: state.allTargets,
+		userBest: state.userBest
 	}
 }
 

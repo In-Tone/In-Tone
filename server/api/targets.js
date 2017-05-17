@@ -24,7 +24,9 @@ router.get('/:languageName', (req, res, next) => {
 			model: Target
 		}]
 	})
-	.then(foundTones => res.json(foundTones))
+	.then(foundTones => {
+		res.json(foundTones)
+	})
 	.catch(next);
 });
 

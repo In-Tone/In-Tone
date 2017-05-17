@@ -40,36 +40,49 @@ const styles = {
 	}
 }
 
-const Word = (props) => (
-
-			<div>
-			<h2>{}</h2>
-			<Row>
-				<Col md={6}>
-					<div style={styles.wordInfo}>
-						<h4 style={styles.infoBuffer}>Target Audio:</h4>
-						<audio controls id='profileTarget' style={{width: '50%'}}/>
+const Word = (props) => {
+	console.log("PROPS", props);
+	return (
+		<div>
+		{
+		props.allTargets.map(target => {
+			console.log("target: ", target);
+			if (target.tone_type_id === props.currentTone) {
+				console.log("BULLSHIT");
+				return (
+					<div>
+						<h2>{target.transliteration}</h2>
+						<Row>
+							<Col md={6}>
+								<div style={styles.wordInfo}>
+									<h4 style={styles.infoBuffer}>Target Audio:</h4>
+									<audio controls id='profileTarget' style={{width: '50%'}}/>
+								</div>
+								<div style={styles.wordInfo}>
+									<h4 style={styles.infoBuffer}>User Audio:</h4>
+									<audio controls id='profileUser' style={{width: '50%'}}/>
+								</div>
+								<div style={styles.wordInfo}>
+									<Link to='/'><h4>Retry</h4></Link>
+								</div>
+								<div style={styles.wordInfo}>
+									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
+									<h4> 69 </h4>
+								</div>
+							</Col>
+							<Col md={6}>
+								<Graph 
+									targetPitches={[1,2,3,4,5,6]}
+									duration={34}
+								/>
+							</Col>
+						</Row>
 					</div>
-					<div style={styles.wordInfo}>
-						<h4 style={styles.infoBuffer}>User Audio:</h4>
-						<audio controls id='profileUser' style={{width: '50%'}}/>
-					</div>
-					<div style={styles.wordInfo}>
-						<Link to='/'><h4>Retry</h4></Link>
-					</div>
-					<div style={styles.wordInfo}>
-						<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
-						<h4> 69 </h4>
-					</div>
-				</Col>
-				<Col md={6}>
-					<Graph 
-						targetPitches={[1,2,3,4,5,6]}
-						duration={34}
-					/>
-				</Col>
-			</Row>
-			</div>
-)
+				)
+			}
+		})
+	}
+	</div>
+)}
 
 export default Word;

@@ -22,13 +22,25 @@ export const fetchTargets = (language) =>
 	dispatch => {
 		axios.get(`api/targets/${language}`)
 			.then(res => {
-				return processTargetData(res);
+				// return processTargetData(res);
+				return res;
 			})
 			.then(allTargets => {
-				var shuffled = shuffle(allTargets);
+
+				var targetsDeal = [];
+
+				var targets = allTargets.data.map(toneType => {
+					targetsDeal.push(toneType.targets);
+				});
+
+				var newTargets = targetsDeal.reduce((acc, curr) => acc.concat(curr), []);
+
+				console.log("targetsDeal", newTargets);
+
+				var shuffled = shuffle(newTargets);
 				dispatch(setTargets(shuffled));
 				dispatch(setLanguage(language));
-				const currentTarget = allTargets[0];
+				const currentTarget = newTargets[0];
 				dispatch(setCurrentTarget(currentTarget));
 			})
 			.catch(err => console.error(err));
