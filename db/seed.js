@@ -79,6 +79,12 @@ const users = seed(User, {
 		username: 'mikeyMike',
 		rank: 1
 	},
+	test: {
+		email: 'test@test.com',
+		password: 'test',
+		username: 'test',
+		rank: 1
+	}
 })
 
 const toneTypes = seed(ToneType, {
