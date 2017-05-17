@@ -5,13 +5,11 @@ const User = db.model('user');
 const passport = require('passport'); 
 
 passport.serializeUser((user, done) => {
-  console.log("serialize user", user)
   done(null, user.id);
 })
 
 passport.deserializeUser(
   (id, done) => {
-    console.log("DESERIALIZE");
     User.findById(id)
       .then(user => {
         if (!user) console.log("No match.");
@@ -26,15 +24,12 @@ passport.deserializeUser(
 
 passport.use(new (require('passport-local').Strategy)({usernameField:"email", passwordField:"password"},
   (email, password, done) => {
-    console.log("IN PASSPORT.USE");
     User.findOne({where: {email}})
       .then(user => {
         if (!user) {
           console.log("No match.");
           return done(null, false, { message: 'Login incorrect' });
         }
-        console.log("user", user.hasMatchingPassword);
-        console.log("password", password);
         return user.hasMatchingPassword(password) // need to promisify!
           .then(ok => {
             if (!ok) {
@@ -51,11 +46,7 @@ passport.use(new (require('passport-local').Strategy)({usernameField:"email", pa
 
 
 router.post('/local', (req, res, next) => {
-
-  console.log('IN LOGIN LOCAL');
-
   passport.authenticate('local', {successRedirect: '/', session: true})(req, res, next)
-  
  //  User.findOne({
   //  where: {
   //    email: req.body.email
@@ -75,8 +66,7 @@ router.post('/local', (req, res, next) => {
 });
 
 router.get('/whoami', (req, res) => {
-  console.log("whoami", req.user);
-  res.send(req.user)
+  res.send(req.user);
 })
 
 router.post('/signup', (req, res, next) => {
