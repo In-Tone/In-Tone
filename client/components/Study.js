@@ -66,14 +66,9 @@ class Study extends React.Component {
 		this.props.setCurrentTarget(this.props.allTargets[index]);
 		this.setState({index, previousTargets});
 
-		// RESET AUDIO AND GRAPH GOES HERE
+		// RESET AUDIO AND GRAPH HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 		this.props.dispatchUserTone([])
-
-
-		if (this.props.graph.length) {
-			this.props.graph.forEach(graph => graph.destroy())
-		}
 
 	}
 
@@ -87,7 +82,7 @@ class Study extends React.Component {
 		this.props.setCurrentTarget(currentTarget);
 		this.setState({ currentTarget });
 
-		// RESET AUDIO GOES HERE
+		// RESET AUDIO AND GRAPH HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
 		this.props.dispatchUserTone([])
 	}

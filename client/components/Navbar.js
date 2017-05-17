@@ -23,7 +23,6 @@ class Navbar extends Component {
 
 	onProfileClick () {
 		const userId = this.props.user.id;
-		console.log(userId)
 		this.props.fetchUserTones(userId);
 		this.props.fetchUserBest(userId)
 	}

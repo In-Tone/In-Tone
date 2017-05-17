@@ -20,7 +20,6 @@ export const fetchUserBest = userId => (
 
 
 const reducer = (state = [], action) => {
-	console.log('action: ', action)
 	switch(action.type) {
 		case SET_USER_BEST:
 			return action.bestAttempts;

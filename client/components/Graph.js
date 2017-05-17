@@ -45,7 +45,6 @@ class Graph extends React.Component {
 	// then redraw graph with current target AND user pitches //
 	////////////////////////////////////////////////////////////
 	componentWillReceiveProps(nextProps) {
-		console.log('nextProps', nextProps)
 		const targetPitches = nextProps.currentTarget.pitches
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
