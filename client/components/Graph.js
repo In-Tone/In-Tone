@@ -47,9 +47,9 @@ class Graph extends React.Component {
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
 
-		let target_id, blob, user_id, tone_type_id, isBest, date, difficulty, userBest;
 
 		// info required for sending user attempt data to database
+		let target_id, blob, user_id, tone_type_id, isBest, date, difficulty, userBest;
 		if (nextProps.user) {
 			target_id = nextProps.currentTarget.id;
 			blob = nextProps.blob;

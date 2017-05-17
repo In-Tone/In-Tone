@@ -13,6 +13,7 @@ import { Row, Col } from 'react-bootstrap';
 
 // our modules
 import Graph from './Graph';
+import { targetToUserHashGenerator } from '../utils/TargetUserBestHash';
 
 const styles = {
 	avatarStyles: {
@@ -41,10 +42,14 @@ const styles = {
 }
 
 const Word = (props) => {
+	const targetsArray = props.allTargets;
+	const userBestArray = props.userBest;
+	const targetUserHash = targetToUserHashGenerator(targetsArray, userBestArray);
 	return (
 		<div>
 		{
 		props.allTargets.map(target => {
+			let audioSRC = targetUserHash[target.id];
 			if (target.tone_type_id === props.currentTone) {
 				return (
 					<div>
@@ -57,7 +62,7 @@ const Word = (props) => {
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
-									<audio controls id='profileUser' style={{width: '50%'}}/>
+									<audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/>
 								</div>
 								<div style={styles.wordInfo}>
 									<Link to='/'><h4>Retry</h4></Link>
@@ -82,4 +87,8 @@ const Word = (props) => {
 	</div>
 )}
 
-export default Word;
+const mapStateToProps = state => ({
+	userBest: state.userBest
+});
+
+export default connect(mapStateToProps, null)(Word);

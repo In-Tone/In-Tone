@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import { fetchTargets } from '../reducers/Targets';
 import { fetchUserTones } from '../reducers/UserTone';
 import { fetchToneTypes } from '../reducers/ToneTypes';
+import { fetchUserBest } from '../reducers/UserBest';
 
 
 let SelectableList = makeSelectable(List);
@@ -51,6 +52,7 @@ const UserLanguageList = (props) => {
   const onLanguageClick = () => {
     const userId = props.user.id;
     props.fetchUserTones(userId);
+    props.fetchUserBest(userId);
     props.fetchToneTypes('thai');
     props.fetchTargets('thai');
   }
@@ -93,6 +95,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchUserTones: userId => {
       dispatch(fetchUserTones(userId))
+    },
+    fetchUserBest: userId => {
+      dispatch(fetchUserBest(userId));
     }
   }
 }
