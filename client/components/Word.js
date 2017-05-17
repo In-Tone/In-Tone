@@ -12,7 +12,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { Row, Col } from 'react-bootstrap';
 
 // our modules
-import Graph from './Graph';
+import ProfileGraphs from './ProfileGraphs';
 
 const styles = {
 	avatarStyles: {
@@ -37,12 +37,18 @@ const styles = {
 	},
 	infoBuffer: {
 		paddingRight: '2%'
+	},
+	wordDiv: {
+		marginBottom: '15%',
+		marginTop: '5%',
+		borderStyle: 'dotted'
 	}
 }
 
 const Word = (props) => {
+	console.log('word props', props)
 	return (
-		<div>
+		<div style={styles.wordDiv}>
 		{
 		props.allTargets.map(target => {
 			if (target.tone_type_id === props.currentTone) {
@@ -68,7 +74,7 @@ const Word = (props) => {
 								</div>
 							</Col>
 							<Col md={6}>
-								<Graph 
+								<ProfileGraphs 
 									targetPitches={target.pitches}
 									duration={target.duration}
 								/>

@@ -73,7 +73,6 @@ class Profile extends Component {
 					<Col lg={8} style={{paddingLeft:0}}>
 						<div>
 						<Paper>
-							{/* this can definitely be refactored into a loop */}
 							<div style={styles.bottomBorders}>
 							{
 								this.props.toneTypes && this.props.toneTypes.map(toneType => (
