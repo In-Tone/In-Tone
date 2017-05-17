@@ -9,6 +9,8 @@ import Login from './components/Login';
 import WhoAmI from './components/WhoAmI';
 import Profile from './components/ProfilePage';
 import SignUp from './components/SignUp';
+import { whoami } from './reducers/Auth';
+import store from './store';
 
 const LoginPage = connect(
   ({ user }) => ({ user: user })
@@ -34,10 +36,14 @@ const SignUpPage = connect(
   </div>
 ))
 
+const getUser = () => {
+  store.dispatch(whoami());
+}
+
 const Routes = () => {
 	return (
 		<Router history={hashHistory}>
-			<Route path='/' component={Layout}>
+			<Route path='/' component={Layout} onEnter={getUser}>
 				<Route path='/login' component={LoginPage}/>
         <Route path='/signup' component={SignUpPage} />
         <Route path='/home' component={Home}/>

@@ -2,7 +2,7 @@ const db = require('../../db/index');
 const router = require('express').Router();
 // const User = require('../../db/models/User');
 const User = db.model('user');
-const passport = require('passport')
+const passport = require('passport'); 
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -22,7 +22,7 @@ passport.deserializeUser(
   }
 );
 
-passport.use(new (require('passport-local').Strategy)(
+passport.use(new (require('passport-local').Strategy)({usernameField:"email", passwordField:"password"},
   (email, password, done) => {
     User.findOne({where: {email}})
       .then(user => {
@@ -30,7 +30,7 @@ passport.use(new (require('passport-local').Strategy)(
           console.log("No match.");
           return done(null, false, { message: 'Login incorrect' });
         }
-        return user.authenticate(password)
+        return user.hasMatchingPassword(password)
           .then(ok => {
             if (!ok) {
               console.log("Bad password.")
@@ -44,43 +44,46 @@ passport.use(new (require('passport-local').Strategy)(
   }
 ))
 
-router.get('/whoami', (req, res) => {
-  res.send(req.user)
-})
 
-router.post('/', (req, res, next) => {
-	User.findOne({
-		where: {
-			email: req.body.email
-		}
-	})
-		.then(foundUser => {
-			if (!foundUser) res.status(401).send('User not found');
-			else if (!foundUser.hasMatchingPassword(req.body.password)) res.status(401).send('Incorrect password');
-			else {
-				req.login(foundUser, err => {
-					if (err) next(err);
-					else res.json(foundUser);
-				})
-			}
-		})
-		.catch(next);
+router.post('/local', (req, res, next) => {
+  passport.authenticate('local', {successRedirect: '/', session: true})(req, res, next)
+ //  User.findOne({
+  //  where: {
+  //    email: req.body.email
+  //  }
+  // })
+  //  .then(foundUser => {
+  //    if (!foundUser) res.status(401).send('User not found');
+  //    else if (!foundUser.hasMatchingPassword(req.body.password)) res.status(401).send('Incorrect password');
+  //    else {
+  //      req.login(foundUser, err => {
+  //        if (err) next(err);
+  //        else res.json(foundUser);
+  //      })
+  //    }
+  //  })
+  //  .catch(next);
 });
 
+router.get('/whoami', (req, res) => {
+  res.send(req.user);
+})
+
 router.post('/signup', (req, res, next) => {
-	User.create(req.body)
-		.then(createdUser => {
-			req.login(createdUser, err => {
-				if (err) next(err);
-				else res.json(createdUser);
-			})
-		})
-		.catch(next);
+  User.create(req.body)
+    .then(createdUser => {
+      req.login(createdUser, err => {
+        if (err) next(err);
+        else res.json(createdUser);
+      })
+    })
+    .catch(next);
 });
 
 router.post('/logout', (req, res, next) => {
-	req.logout();
-	res.sendStatus(200);
+  req.logout();
+  req.session.destroy();
+  res.redirect('/api/login/whoami');
 });
 
 module.exports = router;

@@ -35,8 +35,6 @@ export const fetchTargets = (language) =>
 
 				var newTargets = targetsDeal.reduce((acc, curr) => acc.concat(curr), []);
 
-				console.log("targetsDeal", newTargets);
-
 				var shuffled = shuffle(newTargets);
 				dispatch(setTargets(shuffled));
 				dispatch(setLanguage(language));

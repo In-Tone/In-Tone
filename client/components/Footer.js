@@ -84,7 +84,7 @@ const styles = {
 		paddingLeft: '75px',
 		paddingRight: '75px',
 		position: 'fixed',
-		zIndex: 999999999999999,
+		zIndex: 500,
     lineHeight: '32px',
     // vertical alignment
     top:0,

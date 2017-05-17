@@ -43,18 +43,23 @@ class Graph extends React.Component {
 	// then redraw graph with current target AND user pitches //
 	////////////////////////////////////////////////////////////
 	componentWillReceiveProps(nextProps) {
-		const targetPitches = nextProps.currentTarget.pitches
+		const targetPitches = nextProps.currentTarget.pitches;
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
 
-		// for sending blob to database
-		const target_id = nextProps.currentTarget.toneId;
-		const blob = nextProps.blob;
-		const user_id = nextProps.user.id;
-		const tone_type_id = nextProps.currentTarget.tone_type_id;
-		const isBest = false;
-		const date = null;
-		const difficulty = "beginner";
+		let target_id, blob, user_id, tone_type_id, isBest, date, difficulty, userBest;
+
+		// info required for sending user attempt data to database
+		if (nextProps.user) {
+			target_id = nextProps.currentTarget.id;
+			blob = nextProps.blob;
+			user_id = nextProps.user.id;
+			tone_type_id = nextProps.currentTarget.tone_type_id;
+			isBest = false;
+			date = null;
+			difficulty = "beginner";
+			userBest = nextProps.userBest;
+		}
 
 		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
@@ -78,7 +83,7 @@ class Graph extends React.Component {
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
-			dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id);
+			if (nextProps.user) dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id, userBest);
 		}
 		else {
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
@@ -92,7 +97,7 @@ class Graph extends React.Component {
 	render() {
 		return (
 			<Paper zDepth={1}>
-				<canvas id='studyChart' ref='_canvasNode'></canvas>
+				<canvas id='studyChart' ref='_canvasNode' style={styles.chart}></canvas>
 			</Paper>
 		);
 	}
@@ -105,8 +110,15 @@ const mapStateToProps = state => ({
 	userTones: state.userTones,
 	currentTarget: state.currentTarget,
 	user: state.user,
-	blob: state.blob
+	blob: state.blob,
+	userBest: state.userBest
 });
 
 
 export default connect(mapStateToProps, null)(Graph);
+
+const styles = {
+	chart: {
+		padding: '24px',
+	}
+}
