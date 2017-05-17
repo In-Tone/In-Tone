@@ -182,7 +182,7 @@ const generateDate = age => {
 	return chance.weighted(dates,weight[age])
 };
 
-const generatePitches = () => Array(4).fill(1).map(n => 200 + Math.floor(Math.random() * 30));
+const generatePitches = () => Array(43).fill(1).map(n => 200 + Math.floor(Math.random() * 30));
 
 const generatePitchArray = numAttempts => Array(numAttempts).fill(1).map(n => generatePitches());
 
