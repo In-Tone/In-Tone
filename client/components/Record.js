@@ -111,6 +111,7 @@ class Record extends React.Component {
 				// set recording to empty array
 				recording = [];
 
+				// setNewBlob(blob)
 				// setUserURL in store ldkfjsdlkj
 				dispatchSetUserURL(audioURL)
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
@@ -118,9 +119,8 @@ class Record extends React.Component {
 					// set currentUserTone in store to the returned array of pitches
 					.then((freqWavArray) => {
 						const frequencies = freqWavArray[0];
-						const wav = freqWavArray[1]
+						const float32array = freqWavArray[1]
 						dispatchUserTone(frequencies)
-						setNewBlob(wav);
 					});  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
 

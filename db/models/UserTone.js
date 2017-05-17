@@ -7,7 +7,7 @@ module.exports = db => db.define('UserTone', {
 		type: ARRAY(INTEGER),
 	},
 	wavblob: {
-		type: BLOB,
+		type: ARRAY(BLOB),
 	},
 	isBest: {
 		type: BOOLEAN,

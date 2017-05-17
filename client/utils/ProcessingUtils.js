@@ -24,7 +24,7 @@ export const processMedia = (audioBlob, audioContext) => {
 					tempo: 500, // in BPM, defaults to 120
 					quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
 				}).map(freq => Math.round(freq));
-				const freqWavArray = [frequencies, wav];
+				const freqWavArray = [frequencies, float32Array];
 				resolve(freqWavArray);
 			})
 		})
