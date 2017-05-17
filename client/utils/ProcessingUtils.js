@@ -93,7 +93,7 @@ export const getXLabels = (duration, targetPitches) => {
 	let xLabels = [];
 
 	for (let i = 0; i < pitchesLength; i++) {
-		xLabels.push(ms + ' ms');
+		xLabels.push(ms);
 		ms += increment;
 	}
 

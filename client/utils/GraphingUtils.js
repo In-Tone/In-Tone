@@ -30,6 +30,20 @@ export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 								max: 500,
 								min: 75,
 								stepSize: 50
+							},
+							scaleLabel: {
+								display: true,
+								labelString: 'Frequency (Hz)',
+								fontSize: 18,
+							}
+						}
+					],
+					xAxes: [
+						{
+							scaleLabel: {
+								display: true,
+								labelString: 'Time (ms)',
+								fontSize: 18
 							}
 						}
 					]
