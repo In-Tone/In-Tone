@@ -12,8 +12,12 @@ import FlatButton from 'material-ui/FlatButton';
 import { Row, Col } from 'react-bootstrap';
 
 // our modules
+<<<<<<< HEAD
+import ProfileGraphs from './ProfileGraphs';
+=======
 import Graph from './Graph';
 import { targetToUserHashGenerator } from '../utils/TargetUserBestHash';
+>>>>>>> master
 
 const styles = {
 	avatarStyles: {
@@ -31,13 +35,26 @@ const styles = {
 	wordInfo: {
 		display:'flex', 
 		justifyContent:'center', 
-		paddingBottom:'1%'
+		paddingBottom:'7%'
 	},
 	bottomBorders: {
 		borderBottom:'thin solid black'
 	},
 	infoBuffer: {
 		paddingRight: '2%'
+	},
+	wordDiv: {
+		paddingBottom: '5%'
+	},
+	columnLeft: {
+		paddingTop: '1%'
+	},
+	transliterationStyles: {
+		paddingTop: '1%',
+		paddingBottom: '2%'
+	},
+	hrStyles: {
+		border: 'solid 1px grey'
 	}
 }
 
@@ -46,16 +63,16 @@ const Word = (props) => {
 	const userBestArray = props.userBest;
 	const targetUserHash = targetToUserHashGenerator(targetsArray, userBestArray);
 	return (
-		<div>
+		<div style={styles.wordDiv}>
 		{
 		props.allTargets.map(target => {
 			let audioSRC = targetUserHash[target.id];
 			if (target.tone_type_id === props.currentTone) {
 				return (
 					<div>
-						<h2>{target.transliteration}</h2>
+						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
 						<Row>
-							<Col md={6}>
+							<Col md={6} style={styles.columnLeft}>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Target Audio:</h4>
 									<audio src={target.wav} controls id='profileTarget' style={{width: '50%'}}/>
@@ -64,21 +81,22 @@ const Word = (props) => {
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
 									<audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/>
 								</div>
-								<div style={styles.wordInfo}>
+								{/*<div style={styles.wordInfo}>
 									<Link to='/'><h4>Retry</h4></Link>
-								</div>
+								</div>*/}
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
 									<h4> 69 </h4>
 								</div>
 							</Col>
 							<Col md={6}>
-								<Graph 
+								<ProfileGraphs 
 									targetPitches={target.pitches}
 									duration={target.duration}
 								/>
 							</Col>
 						</Row>
+						<hr style={styles.hrStyles}/>
 					</div>
 				)
 			}
