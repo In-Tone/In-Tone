@@ -1,25 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const ChooseLanguage = (props) => {
-	return (
-		<div style={styles.container}>
-				<div style={styles.content}>
-					<h1>Choose a language</h1>
-					<h2>(more coming soon!)</h2>
-					<RaisedButton
-						style={styles.modalButton}
-						label='Thai'
-						labelStyle={{ fontSize: '24px' }}
-						onClick={() => {
-							props.onLanguageClick("thai")
-						}} />
-
-				</div>
-		</div>
-	)
+  return (
+    <div style={styles.container}>
+        <div style={styles.content}>
+          <h1>Choose a language</h1>
+          <h3><i>( more coming soon! )</i></h3>
+          <Link to='/study'>
+          <img
+            style={styles.button}
+            src={'https://s3.amazonaws.com/in-tone/Flag_of_Thailand.svg.png'}
+            onClick={() => props.onLanguageClick('thai')} />
+          </Link>
+          <h4>THAI</h4>
+        </div>
+    </div>
+  )
 }
+
 
 export default ChooseLanguage
 
@@ -30,8 +31,7 @@ const styles = {
 	container: {
 		position: 'relative',
 		height: '100vh',
-		width: '100%'
-
+		width: '100%',
 	},
 	content: {
 		position: 'absolute',
@@ -39,4 +39,9 @@ const styles = {
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
+	button: {
+		marginTop: '20px',
+		height: '10vh',
+		boxShadow: '5px 5px 5px #888888'
+	}
 }

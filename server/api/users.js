@@ -56,7 +56,7 @@ router.post('/usertones/:userId/:targetId/:bool', (req, res, next) => {
 			},
 			include: [ { model: ToneType, required: true } ],
 		})
-			.then(foundTone => foundTone.update({ isBest: false }))
+			.then(foundTone => foundTone && foundTone.update({ isBest: false }))
 			.catch(next);
 	}
 	UserTone.create(req.body)
