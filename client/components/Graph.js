@@ -13,10 +13,8 @@ class Graph extends React.Component {
 
 	constructor(props) {
 		super(props)
-
 		this.currGraph = []
 	}
-
 
 	////////////////////////////////////////////////////
 	// grab pitches and duration from props on mount, //
@@ -38,7 +36,6 @@ class Graph extends React.Component {
 		let xLabels = getXLabels(duration, smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
-
 	}
 
 	////////////////////////////////////////////////////////////
@@ -87,17 +84,7 @@ class Graph extends React.Component {
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
 			this.currGraph.push(graph);
 		}
-
-
 	}
-
-//NEED THAT SHIT
-				// 	score: score, HERE
-				// difficulty: difficulty, HARD CODE
-				// date: date, NULL
-				// user_id: userId, USER
-				// tone_type_id: toneTypeId, PROPS
-				// target_id: targetId PROPS
 
 	//////////////////////////
 	// render the component //
