@@ -113,6 +113,23 @@ const scores = (target, results) => {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
+// the targetToScore hash maps the target ID to an array, the first element of which is the top score, and the second element of which is the index (of the array passed to the function as an argument) at which the highest score takes place
+
+// THIS IS THE GENERAL MODEL: DO NOT USE WITH THE FUNCTION FINDBESTSCORE
+
+// const targetToScoreHash = {
+// 	1: [0,0],
+// 	2: [0,0],
+// 	3: [0,0],
+// 	4: [0,0],
+// 	5: [0,0],
+// 	6: [0,0],
+// 	7: [0,0],
+// 	8: [0,0],
+// 	9: [0,0],
+// 	10: [0,0]
+// }
+
 const targetToToneType = {
 	1: 2,
 	2: 4,
@@ -201,17 +218,33 @@ const generateAttemptObject = (attemptsArray, age, userId) => {
 }
 
 const findBestScore = generatedAttempts => {
-	let score = 0;
-	let indexOfBest = 0;
+
+	let scoreHash = {
+		1: [0,0],
+		2: [0,0],
+		3: [0,0],
+		4: [0,0],
+		5: [0,0],
+		6: [0,0],
+		7: [0,0],
+		8: [0,0],
+		9: [0,0],
+		10: [0,0]
+	};
+
 	for (i = 0; i < generatedAttempts.length; i++) {
+
 		let currentScore = generatedAttempts[i].score;
-		if (currentScore > score) {
-			score = currentScore;
+		let currentTargetId = generatedAttempts[i].target_id;
+		let currentHighScore = scoreHash[currentTargetId][0];
+
+		if (currentScore > currentHighScore) {
+			scoreHash[currentTargetId][0] = currentScore;
 			generatedAttempts[i].isBest = true;
-			if (i !== indexOfBest) {
-				generatedAttempts[indexOfBest].isBest = false;
+			if (i !== scoreHash[currentTargetId][1]) {
+				generatedAttempts[scoreHash[currentTargetId][1]].isBest = false;
 			}
-			indexOfBest = i;
+			scoreHash[currentTargetId][1] = i;
 		}
 	}
 	return generatedAttempts;
@@ -240,10 +273,20 @@ const generateUserAttempts = (numAttempts, age, userId) => {
 			for (j = 0; j < arrayOfUserAttempts[i].length; j++) {
 				result[index] = arrayOfUserAttempts[i][j];
 				index++;
-				console.log('here');
 			}
 		}
 		return result;
 }
+
+// CODE FOR DEBUGGING PURPOSES ONLY
+
+// const marcAttempts = generateUserAttempts(10,0,1);
+// const pimAttempts = generateUserAttempts(10,1,2);
+// const edmondAttempts = generateUserAttempts(10,1,3);
+// const mikeAttempts = generateUserAttempts(10,2,4);
+
+// const totalAttempts = generateAllUserAttempts([marcAttempts, pimAttempts, edmondAttempts, mikeAttempts]);
+
+// console.log(totalAttempts);
 
 module.exports = { generateUserAttempts, generateAllUserAttempts };
