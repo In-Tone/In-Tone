@@ -22,7 +22,7 @@ export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 					spanGaps: true
 				}]
 			},
-			options: {   // pim: added fixed y labels
+			options: {
 				scales: {
 					yAxes: [
 						{

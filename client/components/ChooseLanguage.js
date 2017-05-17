@@ -31,8 +31,7 @@ const styles = {
 	container: {
 		position: 'relative',
 		height: '100vh',
-		width: '100%'
-
+		width: '100%',
 	},
 	content: {
 		position: 'absolute',
@@ -40,4 +39,9 @@ const styles = {
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
+	button: {
+		marginTop: '20px',
+		height: '10vh',
+		boxShadow: '5px 5px 5px #888888'
+	}
 }
