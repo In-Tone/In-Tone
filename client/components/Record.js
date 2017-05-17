@@ -5,6 +5,7 @@ import { processMedia } from '../utils/ProcessingUtils';
 import { connect } from 'react-redux';
 import { setUserTone } from '../reducers/UserTone';
 import { setUserURL } from '../reducers/UserAudioURL';
+import { setBlob } from '../reducers/BestBlob';
 
 class Record extends React.Component {
 
@@ -15,6 +16,7 @@ class Record extends React.Component {
 		this.dispatchUserTone = this.props.dispatchUserTone;
 		this.dispatchSetUserURL = this.props.dispatchSetUserURL;
 		this.url = this.props.url;
+		this.setNewBlob = this.props.setNewBlob;
 
 	}
 
@@ -28,6 +30,8 @@ class Record extends React.Component {
 		const dispatchSetUserURL = this.dispatchSetUserURL;
 		// get url from props
 		const url = this.url;
+		// get blob dispatcher from props;
+		const setNewBlob = this.setNewBlob;
 
 		///////////////////////////////////////
 		//////////// SET UP STREAM ////////////
@@ -103,7 +107,7 @@ class Record extends React.Component {
 			mediaRecorder.onstop = function(e) {
 				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
 				// and returns the blob and the audioURL
-				let {blob, audioURL} = stopAndReturnMedia(recording, context)
+				let {blob, audioURL, wav} = stopAndReturnMedia(recording, context)
 				// set recording to empty array
 				recording = [];
 
@@ -112,7 +116,12 @@ class Record extends React.Component {
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
 				processMedia(blob, context) // second promise for blob
 					// set currentUserTone in store to the returned array of pitches
-					.then(frequencies => dispatchUserTone(frequencies));  // store holds raw frequency info. that stuff gets filtered in graphing component
+					.then((freqWavArray) => {
+						const frequencies = freqWavArray[0];
+						const wav = freqWavArray[1]
+						dispatchUserTone(frequencies)
+						setNewBlob(wav);
+					});  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
 
 		// END OF .getUserMedia PROMISE
@@ -149,6 +158,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		dispatchSetUserURL: userURL => {
 			dispatch(setUserURL(userURL));
+		},
+		setNewBlob: blob => {
+			dispatch(setBlob(blob));
 		}
 	}
 };

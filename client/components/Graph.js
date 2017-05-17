@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
+import { dataCollect } from '../utils/DataCollect';
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -50,6 +51,15 @@ class Graph extends React.Component {
 		const duration = nextProps.currentTarget.duration;
 		const userPitches = nextProps.userTones;
 
+		// for sending blob to database
+		const target_id = nextProps.currentTarget.toneId;
+		const blob = nextProps.blob;
+		const user_id = nextProps.user.id;
+		const tone_type_id = nextProps.currentTarget.tone_type_id;
+		const isBest = false;
+		const date = null;
+		const difficulty = "beginner";
+
 		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
 		const smoothTargets = pitchFix(targetTone)
@@ -72,13 +82,25 @@ class Graph extends React.Component {
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
+			console.log('BLOB DATA: ', blob);
+			dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id);
 		}
 		else {
+			console.log("NO USER DATA");
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
 			this.currGraph.push(graph);
 		}
 
+
 	}
+
+//NEED THAT SHIT
+				// 	score: score, HERE
+				// difficulty: difficulty, HARD CODE
+				// date: date, NULL
+				// user_id: userId, USER
+				// tone_type_id: toneTypeId, PROPS
+				// target_id: targetId PROPS
 
 	//////////////////////////
 	// render the component //
@@ -97,7 +119,9 @@ class Graph extends React.Component {
 ////////////////////////////////////////
 const mapStateToProps = state => ({
 	userTones: state.userTones,
-	currentTarget: state.currentTarget
+	currentTarget: state.currentTarget,
+	user: state.user,
+	blob: state.blob
 });
 
 

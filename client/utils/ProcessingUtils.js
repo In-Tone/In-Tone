@@ -1,4 +1,5 @@
 import Pitchfinder from 'pitchfinder';
+import toWav from 'audiobuffer-to-wav';
 
 export const processMedia = (audioBlob, audioContext) => {
 	let blob = audioBlob;
@@ -7,6 +8,7 @@ export const processMedia = (audioBlob, audioContext) => {
 
 	let frequencyPromise = new Promise ((resolve, reject) => {
 		reader.addEventListener("loadend", function() {
+			// const toWav = buffToWav
 			return context.decodeAudioData(reader.result).then(data => {
 				const detectPitch = new Pitchfinder.YIN();
 				const detectors = [detectPitch, Pitchfinder.AMDF()];
@@ -14,13 +16,16 @@ export const processMedia = (audioBlob, audioContext) => {
 				// const pitch = detectPitch(float32Array); // null if pitch cannot be identified
 				console.log(reader);
 
+				const wav = toWav(data);
+
 				// 500 bpm = 8.33 beats per second
 				// quantization = 4 --> 33.32 samples per second
 				let frequencies = Pitchfinder.frequencies(detectors, float32Array, {
 					tempo: 500, // in BPM, defaults to 120
 					quantization: 8, // samples per beat, defaults to 4 (i.e. 16th notes)
 				}).map(freq => Math.round(freq));
-				resolve(frequencies);
+				const freqWavArray = [frequencies, wav];
+				resolve(freqWavArray);
 			})
 		})
 		reader.readAsArrayBuffer(blob);
