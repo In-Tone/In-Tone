@@ -148,7 +148,8 @@ const mapStateToProps = state => ({
 	allTargets: state.allTargets,
 	currentTarget: state.currentTarget,
 	url: state.url,
-	graph: state.graph
+	graph: state.graph,
+	userBest: state.userBest
 });
 
 ///////////////////////////////////////////////////////////

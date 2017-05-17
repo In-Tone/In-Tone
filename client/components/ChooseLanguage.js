@@ -3,9 +3,6 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const ChooseLanguage = (props) => {
-
-	const x = -50;
-	const y = -50;
 	return (
 		<div style={styles.container}>
 				<div style={styles.content}>
@@ -32,14 +29,14 @@ const styles = {
 	},
 	container: {
 		position: 'relative',
-		height: '100vh', // if this were a % it would be a % of the parent elem.
-		width: '100%' // the parent elem here has a width so we can do 100%
+		height: '100vh',
+		width: '100%'
 
 	},
 	content: {
 		position: 'absolute',
-		top: '50%', // relative to parent
-		left: '50%', // relative to parent
+		top: '50%',
+		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
 }
