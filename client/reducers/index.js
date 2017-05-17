@@ -6,6 +6,7 @@ import userReducer from './Auth';
 import currentTargetReducer from './CurrentTarget';
 import audioURLReducer from './UserAudioURL';
 import setToneTypesReducer from './ToneTypes';
+import userBestReducer from './UserBest';
 
 const rootReducer = combineReducers({
   language: languageReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   currentTarget: currentTargetReducer,
   url: audioURLReducer,
-  toneTypes: setToneTypesReducer
+  toneTypes: setToneTypesReducer,
+  userBest: userBestReducer
 });
 
 export default rootReducer;
