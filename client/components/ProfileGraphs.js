@@ -37,7 +37,7 @@ class ProfileGraphs extends React.Component {
 		let smoothTargets = pitchFix(slicedTarget);
 
 		let chartCtx = this.refs[chartRef].getContext('2d')
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothTargets, userPitches)
+		const graph = drawProfileGraph(chartCtx, xLabels, smoothTargets, [])
 	}
 
 	render() {
