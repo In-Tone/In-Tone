@@ -25,10 +25,19 @@ class ProfileGraphs extends React.Component {
 
 		let target = this.props.targetPitches;
 		let xLabels = getXLabels(duration, target)
-		let smoothResults = pitchFix(target)
+
+
+		let userPitches = this.props.userPitches;
+		// console.log('this.props: ', this.props)
+		// console.log('USER PITCHES: ', userPitches)
+		// let slicedUser = pitchSlicing(userPitches);
+		// let smoothResults = pitchFix(sliced);
+
+		let slicedTarget = pitchSlicing(target);
+		let smoothTargets = pitchFix(slicedTarget);
 
 		let chartCtx = this.refs[chartRef].getContext('2d')
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothResults, [])
+		const graph = drawProfileGraph(chartCtx, xLabels, smoothTargets, userPitches)
 	}
 
 	render() {

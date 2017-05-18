@@ -84,7 +84,7 @@ class Profile extends Component {
 								<FlatButton label={''} style={styles.tones} onClick={() => this.setState({selectedTone:0})}>all</FlatButton>
 								{
 									this.props.toneTypes && this.props.toneTypes.map(toneType => (
-										<FlatButton ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
+										<FlatButton key={toneType.id} ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
 									))
 								}
 								</div>
