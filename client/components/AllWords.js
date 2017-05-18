@@ -54,7 +54,7 @@ const styles = {
 	}
 }
 
-const Word = (props) => {
+const AllWords = (props) => {
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
 	const targetUserHash = targetToUserHashGenerator(targetsArray, userBestArray);
@@ -63,7 +63,7 @@ const Word = (props) => {
 		{
 		props.allTargets.map(target => {
 			let audioSRC = targetUserHash[target.id];
-			if (target.tone_type_id === props.currentTone) {
+			// if (target.tone_type_id === props.currentTone) {
 				return (
 					<div>
 						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
@@ -95,7 +95,7 @@ const Word = (props) => {
 						<hr style={styles.hrStyles}/>
 					</div>
 				)
-			}
+			// }
 		})
 	}
 	</div>
@@ -105,4 +105,4 @@ const mapStateToProps = state => ({
 	userBest: state.userBest
 });
 
-export default connect(mapStateToProps, null)(Word);
+export default connect(mapStateToProps, null)(AllWords);

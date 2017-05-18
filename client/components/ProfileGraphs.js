@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
-import { drawGraph } from '../utils/GraphingUtils';
+import { drawProfileGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 
 const styles = {
@@ -28,7 +28,7 @@ class ProfileGraphs extends React.Component {
 		let smoothResults = pitchFix(target)
 
 		let chartCtx = this.refs[chartRef].getContext('2d')
-		const graph = drawGraph(chartCtx, xLabels, smoothResults, [])
+		const graph = drawProfileGraph(chartCtx, xLabels, smoothResults, [])
 	}
 
 	render() {

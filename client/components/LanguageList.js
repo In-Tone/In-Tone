@@ -11,7 +11,7 @@ import { fetchUserBest } from '../reducers/UserBest';
 
 let SelectableList = makeSelectable(List);
 
-// selectable lists wrap lists in a higher order component 
+// selectable lists wrap lists in a higher order component
 function wrapState(ComposedComponent) {
 
   return class SelectableList extends Component {
@@ -30,7 +30,7 @@ function wrapState(ComposedComponent) {
       this.setState({
         selectedIndex: index
       });
-      // function call to change x for LxTx and LxTxWordx 
+      // function call to change x for LxTx and LxTxWordx
     };
 
     render() {
@@ -56,7 +56,7 @@ const UserLanguageList = (props) => {
     props.fetchToneTypes('thai');
     props.fetchTargets('thai');
   }
-  
+
   return (
   <SelectableList defaultValue={1}>
     <h3>Your Languages</h3>
@@ -79,8 +79,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchTargets: targets => {
-      dispatch(fetchTargets(targets))
+    fetchTargets: language => {
+      dispatch(fetchTargets(language))
     },
     fetchToneTypes: language => {
       dispatch(fetchToneTypes(language))
