@@ -5,7 +5,7 @@ import { drawProfileGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 
 // ProfileGraphs: a *smart* component to access canvas refs
-class ProfileGraphs extends React.Component {
+class ProfileGraphs extends Component {
 	constructor(props){
 		super(props)
 		this.chartDuration = Math.round(this.props.duration).toString()

@@ -31,19 +31,6 @@ body, html {
 	width: auto;
 }
 
-#canvasContainer {
-  width: 100%;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-attachment: fixed;
-	background-size: 35%
-}
-
-#homeCanvas {
-	margin: auto;
-	width: 100%;
-}
-
 /* STUDY COMPONENT STYLES */
 .studyDiv {
 	width: 96%;
