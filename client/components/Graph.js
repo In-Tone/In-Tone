@@ -83,7 +83,7 @@ class Graph extends React.Component {
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
-			if (nextProps.user) dataCollect(userPitches, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id, userBest);
+			if (nextProps.user) dataCollect(smoothResults, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id, userBest);
 		}
 		else {
 			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
@@ -103,6 +103,12 @@ class Graph extends React.Component {
 	}
 }
 
+const styles = {
+	chart: {
+		padding: '24px',
+	}
+}
+
 ////////////////////////////////////////
 // get userTones from the store state //
 ////////////////////////////////////////
@@ -114,11 +120,4 @@ const mapStateToProps = state => ({
 	userBest: state.userBest
 });
 
-
 export default connect(mapStateToProps, null)(Graph);
-
-const styles = {
-	chart: {
-		padding: '24px',
-	}
-}

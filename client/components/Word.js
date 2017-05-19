@@ -20,8 +20,6 @@ const Word = (props) => {
 	const userBestArray = props.userBest;
 	const userAudioSource = targetToUserHashGenerator(targetsArray, userBestArray);
 	const userPitchArray = targetToUserPitches(targetsArray, userBestArray);
-	console.log("userPitchArray: ", userPitchArray)
-	console.log('HELLLLLLO')
 	return (
 		<div style={styles.wordDiv}>
 		{
@@ -46,7 +44,7 @@ const Word = (props) => {
 								</div>*/}
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
-									<h4> 69 </h4>
+									<h4> {Math.floor(Math.random() * 10) + 1} </h4>
 								</div>
 							</Col>
 							<Col md={6}>
@@ -65,13 +63,6 @@ const Word = (props) => {
 	}
 	</div>
 )}
-
-const mapStateToProps = state => ({
-	userBest: state.userBest
-});
-
-export default connect(mapStateToProps, null)(Word);
-
 
 const styles = {
 	avatarStyles: {
@@ -111,3 +102,10 @@ const styles = {
 		border: 'solid 1px grey'
 	}
 }
+
+const mapStateToProps = state => ({
+	userBest: state.userBest
+});
+
+export default connect(mapStateToProps, null)(Word);
+

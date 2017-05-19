@@ -3,7 +3,10 @@
 // Accepts the filtered arrays of target and results 
 export const scores = (target, results) => {
 
-		// create a difference array for each data set: n+1 - n
+		console.log('target', target)
+		console.log('results', results)
+
+		// store a difference array for each data set: (n+1 - n)
 		let resultsDiff = [];
 		let targetsDiff = [];
 
@@ -20,6 +23,10 @@ export const scores = (target, results) => {
 			}
 		})
 
+		/******************************************************************************************/
+		/**************************Slicing Algo Experiment Zone************************************/
+		
+
 		// differenceScore will be the difference between user and target change at each point along
 		// their curves
 		let differenceScore = [];
@@ -31,6 +38,8 @@ export const scores = (target, results) => {
 		for(var i = 0; i < shortestDiff.length; i++){
 			differenceScore.push(Math.abs(resultsDiff[i] - targetsDiff[i]))
 		}
+
+		console.log('differenceScore is', differenceScore)
 
 		// pitchGrade will be the users score on an attempt
 		let pitchGrade = 0;

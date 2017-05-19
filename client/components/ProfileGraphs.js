@@ -4,14 +4,7 @@ import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } fr
 import { drawProfileGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 
-const styles = {
-	profileGraphs: {
-		padding: '2%',
-		marginRight: '2%'
-	}
-}
-
-// ProfileGraphs: a *smart* component because canvas ID's are bullshit
+// ProfileGraphs: a *smart* component to access canvas refs
 class ProfileGraphs extends React.Component {
 	constructor(props){
 		super(props)
@@ -19,25 +12,28 @@ class ProfileGraphs extends React.Component {
 	}
 
 	componentDidMount(){
-		// each canvas has to have a unique ID so they don't just rewrite the previous
+		let smoothUser;
 		let duration = this.props.duration;
-		let chartRef = this.chartDuration
+		// each canvas has to have a unique ref so they don't just rewrite the previous
+		let chartRef = this.chartDuration;
+		let chartCtx = this.refs[chartRef].getContext('2d');
 
+		// set up the target pitch contours
 		let target = this.props.targetPitches;
-		let xLabels = getXLabels(duration, target)
-
-
-		let userPitches = this.props.userPitches;
-		// console.log('this.props: ', this.props)
-		// console.log('USER PITCHES: ', userPitches)
-		// let slicedUser = pitchSlicing(userPitches);
-		// let smoothResults = pitchFix(sliced);
-
 		let slicedTarget = pitchSlicing(target);
 		let smoothTargets = pitchFix(slicedTarget);
 
-		let chartCtx = this.refs[chartRef].getContext('2d')
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothTargets, [])
+		// set up the user pitch contours. Handle race conditions/empty user arrays
+		if(this.props.userPitches){
+			smoothUser = this.props.userPitches;
+		}else{
+			smoothUser = [];
+		}
+
+		// axes markers
+		let xLabels = getXLabels(duration, target);
+
+		const graph = drawProfileGraph(chartCtx, xLabels, smoothUser, smoothTargets)
 	}
 
 	render() {
@@ -46,6 +42,13 @@ class ProfileGraphs extends React.Component {
 				<canvas ref={this.chartDuration}></canvas>
 			</Paper>
 		)
+	}
+}
+
+const styles = {
+	profileGraphs: {
+		padding: '2%',
+		marginRight: '2%'
 	}
 }
 
