@@ -4,7 +4,7 @@ import Chart from 'chart.js'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 
-export default class Home extends React.Component {
+class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -92,7 +92,16 @@ export default class Home extends React.Component {
     render() {
         return (
         <div id='canvasContainer'>
-    	    <canvas id='homeCanvas' width='1050' height='500'></canvas>
+    	    <canvas id='homeCanvas' width='1050' height='500' style={styles.waveform}></canvas>
         </div>
     )}
 }
+
+const styles = {
+    waveform: { 
+        width: '100%',
+        height: '95vh'
+    }
+}
+
+export default Home;
