@@ -17,8 +17,11 @@ import Graph from './Graph';
 import UserLanguageList from './LanguageList'
 
 import Word from './Word';
+import AllWords from './AllWords';
 
 import { whoami } from '../reducers/Auth';
+import { fetchTargets } from '../reducers/Targets';
+import { fetchToneTypes } from '../reducers/ToneTypes';
 
 
 class Profile extends Component {
@@ -34,6 +37,11 @@ class Profile extends Component {
 		this.setState({
 			selectedTone: button.props.label
 		})
+	}
+
+	componentDidMount() {
+		this.props.fetchTargets('thai');
+		this.props.fetchToneTypes('thai');
 	}
 
 	render() {
@@ -73,9 +81,10 @@ class Profile extends Component {
 							<div>
 							<Paper>
 								<div style={styles.bottomBorders}>
+								<FlatButton label={''} style={styles.tones} onClick={() => this.setState({selectedTone:0})}>all</FlatButton>
 								{
 									this.props.toneTypes && this.props.toneTypes.map(toneType => (
-										<FlatButton ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
+										<FlatButton key={toneType.id} ref={(button) => {toneType.button = button}} label={toneType.id} style={styles.tones} onClick={() => this.selectTone(toneType.button)}>{toneType.tone}</FlatButton>
 									))
 								}
 								</div>
@@ -83,7 +92,7 @@ class Profile extends Component {
 									this.state.selectedTone ? (<Word
 									allTargets={this.props.allTargets}
 									currentTone={this.state.selectedTone}
-									/>) : <div style={styles.selectLanguage}><h1>Please select a language, then a tone</h1></div>
+									/>) : <AllWords allTargets={this.props.allTargets} />
 								}
 							</Paper>
 							</div>
@@ -91,7 +100,7 @@ class Profile extends Component {
 					</Row>
 				</div>
 			)
-			
+
 		} else {
 			return (<div>Oops... something went wrong.</div>)
 		}
@@ -108,13 +117,13 @@ const styles = {
 		justifyContent: 'center'
 	},
 	tones: {
-		paddingRight: '4%',
-		paddingLeft: '4%',
-		fontSize: '24px'
+		paddingRight: '2%',
+		paddingLeft: '2%',
+		fontSize: '24px',
 	},
 	wordInfo: {
-		display:'flex', 
-		justifyContent:'center', 
+		display:'flex',
+		justifyContent:'center',
 		paddingBottom:'1%'
 	},
 	bottomBorders: {
@@ -147,7 +156,13 @@ const mapDispatchToProps = dispatch => {
 	return {
 		getUser: () => {
 			dispatch(whoami());
-		}
+		},
+		fetchTargets: language => {
+      dispatch(fetchTargets(language))
+    },
+		fetchToneTypes: language => {
+      dispatch(fetchToneTypes(language))
+    }
 	}
 }
 

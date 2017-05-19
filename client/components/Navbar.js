@@ -23,8 +23,8 @@ class Navbar extends Component {
 
 	onProfileClick () {
 		const userId = this.props.user.id;
-		// this.props.fetchUserTones(userId);
-		// this.props.fetchUserBest(userId)
+		this.props.fetchUserTones(userId);
+		this.props.fetchUserBest(userId)
 	}
 
 	render() {
@@ -44,7 +44,7 @@ class Navbar extends Component {
 				</Col>
 				<Col xs={4}>
 				{
-					this.props.user ? 
+					this.props.user ?
 					<Link to='/home'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton></Link> :
 					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
 				}
