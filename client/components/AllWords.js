@@ -15,45 +15,6 @@ import { Row, Col } from 'react-bootstrap';
 import ProfileGraphs from './ProfileGraphs';
 import { targetToUserHashGenerator } from '../utils/TargetUserBestHash';
 
-const styles = {
-	avatarStyles: {
-		margin: 5,
-	},
-	userInfoStyles: {
-		display: 'flex',
-		justifyContent: 'center'
-	},
-	tones: {
-		paddingRight: '4%',
-		paddingLeft: '4%',
-		fontSize: '24px'
-	},
-	wordInfo: {
-		display:'flex',
-		justifyContent:'center',
-		paddingBottom:'7%'
-	},
-	bottomBorders: {
-		borderBottom:'thin solid black'
-	},
-	infoBuffer: {
-		paddingRight: '2%'
-	},
-	wordDiv: {
-		paddingBottom: '5%'
-	},
-	columnLeft: {
-		paddingTop: '1%'
-	},
-	transliterationStyles: {
-		paddingTop: '1%',
-		paddingBottom: '2%'
-	},
-	hrStyles: {
-		border: 'solid 1px grey'
-	}
-}
-
 const AllWords = (props) => {
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
@@ -100,6 +61,45 @@ const AllWords = (props) => {
 	}
 	</div>
 )}
+
+const styles = {
+	avatarStyles: {
+		margin: 5,
+	},
+	userInfoStyles: {
+		display: 'flex',
+		justifyContent: 'center'
+	},
+	tones: {
+		paddingRight: '4%',
+		paddingLeft: '4%',
+		fontSize: '24px'
+	},
+	wordInfo: {
+		display:'flex',
+		justifyContent:'center',
+		paddingBottom:'7%'
+	},
+	bottomBorders: {
+		borderBottom:'thin solid black'
+	},
+	infoBuffer: {
+		paddingRight: '2%'
+	},
+	wordDiv: {
+		paddingBottom: '5%'
+	},
+	columnLeft: {
+		paddingTop: '1%'
+	},
+	transliterationStyles: {
+		paddingTop: '1%',
+		paddingBottom: '2%'
+	},
+	hrStyles: {
+		border: 'solid 1px grey'
+	}
+}
 
 const mapStateToProps = state => ({
 	userBest: state.userBest
