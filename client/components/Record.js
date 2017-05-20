@@ -1,11 +1,20 @@
+'use strict';
+// react
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+// material-ui
 import RaisedButton from 'material-ui/RaisedButton';
+
+// dispatchers
+import { setUserURL } from '../reducers/UserAudioURL';
+import { setUserTone } from '../reducers/UserTone';
+import { setBlob } from '../reducers/BestBlob';
+
+// utitlities
 import { CreateAudioContext, stopAndReturnMedia, resetAudio } from '../utils/RecordingUtils';
 import { processMedia } from '../utils/ProcessingUtils';
-import { connect } from 'react-redux';
-import { setUserTone } from '../reducers/UserTone';
-import { setUserURL } from '../reducers/UserAudioURL';
-import { setBlob } from '../reducers/BestBlob';
+
 
 class Record extends React.Component {
 
@@ -55,13 +64,13 @@ class Record extends React.Component {
 			/////// SET UP RECORD BUTTON ///////
 			////////////////////////////////////
 			// grab "record" button
-			var record = document.getElementById("Record");
+			var record = document.getElementById('Record');
 			// record button click handler
 			// ** make this onClick on react component
 			record.onclick = function() {
 
 				// remove existing user audio (so when you hit next it resets)
-				resetAudio(this.url, dispatchSetUserURL)
+				resetAudio(this.url, dispatchSetUserURL);
 
 				// grab countdown element
 				var countdown = document.getElementById('countdown');
@@ -72,21 +81,21 @@ class Record extends React.Component {
 				// create countdown timer
 				var countdownTimer = setInterval(() => {
 						seconds = seconds-1;
-						countdown.innerHTML = (seconds > 0) ? seconds : "GO!";
+						countdown.innerHTML = (seconds > 0) ? seconds : 'GO!';
 				}, 1000);
 				// create record initializer to fire at same time as setInterval reaches 3 seconds
 				// also clear that interval
 				// start recording
 				setTimeout(() => {
 						clearInterval(countdownTimer);
-						record.style.background = "red";
-						record.style.color = "black";
+						record.style.background = 'red';
+						record.style.color = 'black';
 						mediaRecorder.start();
 				}, 3000);
 				// create recording stop, which fires exactly 1 second + duration of target after start
 				setTimeout(() => {
-					record.style.background = "";
-					record.style.color = "";
+					record.style.background = '';
+					record.style.color = '';
 					mediaRecorder.stop();
 				}, 4000+duration);
 			};
@@ -107,23 +116,23 @@ class Record extends React.Component {
 			mediaRecorder.onstop = function(e) {
 				// stopAndReturnMedia helper function that sets url of user audio element to the new blob
 				// and returns the blob and the audioURL
-				let {blob, audioURL} = stopAndReturnMedia(recording, context)
+				let {blob, audioURL} = stopAndReturnMedia(recording, context);
 				// set recording to empty array
 				recording = [];
 				setNewBlob(blob);
 				// setUserURL in store ldkfjsdlkj
-				dispatchSetUserURL(audioURL)
+				dispatchSetUserURL(audioURL);
 				// processMedia helper function that reads blob, runs through Pitchfinder, and returns array of pitches
 				processMedia(blob, context) // second promise for blob
 					// set currentUserTone in store to the returned array of pitches
 					.then((frequencies) => {
-						dispatchUserTone(frequencies)
+						dispatchUserTone(frequencies);
 					});  // store holds raw frequency info. that stuff gets filtered in graphing component
 			};
 
 		// END OF .getUserMedia PROMISE
 		}).catch(function(err) {
-				console.log(err);
+				console.error(err);
 		});
 
 	}
@@ -136,7 +145,7 @@ class Record extends React.Component {
 			<RaisedButton id='Record' className='studyButtons'>
 				<p id="countdown">RECORD</p>
 			</RaisedButton>
-		)
+		);
 	}
 }
 
@@ -146,7 +155,7 @@ class Record extends React.Component {
 const mapStateToProps = state => ({
 	url: state.url
 
-})
+});
 
 const mapDispatchToProps = dispatch => {
 	return {
@@ -159,7 +168,7 @@ const mapDispatchToProps = dispatch => {
 		setNewBlob: blob => {
 			dispatch(setBlob(blob));
 		}
-	}
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Record);

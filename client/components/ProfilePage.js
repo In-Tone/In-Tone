@@ -1,8 +1,9 @@
-'use strict'
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {connect} from 'react-redux'
-import {Link} from 'react-router'
+'use strict';
+// react
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // material-ui
 import Paper from 'material-ui/Paper';
@@ -12,17 +13,16 @@ import Avatar from 'material-ui/Avatar';
 // bootstrap
 import { Row, Col } from 'react-bootstrap';
 
-// our modules
+// components
 import Graph from './Graph';
-import UserLanguageList from './LanguageList'
-
+import UserLanguageList from './LanguageList';
 import Word from './Word';
 import AllWords from './AllWords';
 
+// dispatchers
 import { whoami } from '../reducers/Auth';
 import { fetchTargets } from '../reducers/Targets';
 import { fetchToneTypes } from '../reducers/ToneTypes';
-
 
 class Profile extends Component {
 	constructor(props){
@@ -102,11 +102,36 @@ class Profile extends Component {
 			)
 
 		} else {
-			return (<div>Oops... something went wrong.</div>)
+			return (<div>Oops... something went wrong.</div>);
 		}
 
 	}
 }
+
+const mapStateToProps = state => {
+	return {
+		user: state.user,
+		toneTypes: state.toneTypes,
+		allTargets: state.allTargets,
+		userBest: state.userBest
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		getUser: () => {
+			dispatch(whoami());
+		},
+		fetchTargets: language => {
+			dispatch(fetchTargets(language));
+		},
+		fetchToneTypes: language => {
+			dispatch(fetchToneTypes(language));
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const styles = {
 	avatarStyles: {
@@ -141,29 +166,4 @@ const styles = {
 		position: 'fixed',
 		width: '30%'
 	}
-}
-
-const mapStateToProps = state => {
-	return {
-		user: state.user,
-		toneTypes: state.toneTypes,
-		allTargets: state.allTargets,
-		userBest: state.userBest
-	}
-}
-
-const mapDispatchToProps = dispatch => {
-	return {
-		getUser: () => {
-			dispatch(whoami());
-		},
-		fetchTargets: language => {
-      dispatch(fetchTargets(language))
-    },
-		fetchToneTypes: language => {
-      dispatch(fetchToneTypes(language))
-    }
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+};

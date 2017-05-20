@@ -1,5 +1,11 @@
+'use strict';
+// react
 import React, { Component } from 'react';
+
+// material-ui
 import Paper from 'material-ui/Paper';
+
+// utilities
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawProfileGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
@@ -8,7 +14,7 @@ import { scores } from '../utils/CalculateScore';
 class ProfileGraphs extends Component {
 	constructor(props){
 		super(props)
-		this.chartDuration = Math.round(this.props.duration).toString()
+		this.chartDuration = Math.round(this.props.duration).toString();
 	}
 
 	componentDidMount(){
@@ -24,16 +30,13 @@ class ProfileGraphs extends Component {
 		let smoothTargets = pitchFix(slicedTarget);
 
 		// set up the user pitch contours. Handle race conditions/empty user arrays
-		if(this.props.userPitches){
-			smoothUser = this.props.userPitches;
-		}else{
-			smoothUser = [];
-		}
+		if(this.props.userPitches) smoothUser = this.props.userPitches;
+		else smoothUser = [];
 
 		// axes markers
 		let xLabels = getXLabels(duration, target);
 
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothUser, smoothTargets)
+		const graph = drawProfileGraph(chartCtx, xLabels, smoothUser, smoothTargets);
 	}
 
 	render() {
@@ -41,15 +44,15 @@ class ProfileGraphs extends Component {
 			<Paper zDepth={1} style={styles.profileGraphs}>
 				<canvas ref={this.chartDuration}></canvas>
 			</Paper>
-		)
+		);
 	}
 }
+
+export default ProfileGraphs;
 
 const styles = {
 	profileGraphs: {
 		padding: '2%',
 		marginRight: '2%'
 	}
-}
-
-export default ProfileGraphs;
+};
