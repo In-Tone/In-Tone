@@ -17,17 +17,6 @@ import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
 import ChooseLanguage from './ChooseLanguage';
 
-const styles = {
-	modalButton: {
-		margin: '30px',
-	},
-	buttonSection: {
-		paddingTop: '80px',
-	},
-	graphStyle: {
-	}
-}
-
 class Study extends React.Component {
 
 	constructor(props) {
@@ -68,7 +57,7 @@ class Study extends React.Component {
 
 		// RESET AUDIO AND GRAPH HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
-		this.props.dispatchUserTone([])
+		this.props.dispatchUserTone([]);
 
 	}
 
@@ -84,11 +73,11 @@ class Study extends React.Component {
 
 		// RESET AUDIO AND GRAPH HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
-		this.props.dispatchUserTone([])
+		this.props.dispatchUserTone([]);
 	}
 
 	onLanguageClick(language) {
-		this.props.fetchTargets(language)
+		this.props.fetchTargets(language);
 		this.setState({language});
 	}
 
@@ -161,10 +150,10 @@ const mapDispatchToProps = dispatch => {
 			dispatch(setUserTone(userTone));
 		},
 		fetchTargets: language => {
-			dispatch(fetchTargets(language))
+			dispatch(fetchTargets(language));
 		},
 		setCurrentTarget: currentTarget => {
-			dispatch(setCurrentTarget(currentTarget))
+			dispatch(setCurrentTarget(currentTarget));
 		},
 		dispatchSetUserURL: userURL => {
 			dispatch(setUserURL(userURL));
@@ -173,3 +162,14 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Study);
+
+const styles = {
+	modalButton: {
+		margin: '30px',
+	},
+	buttonSection: {
+		paddingTop: '80px',
+	},
+	graphStyle: {
+	}
+}
