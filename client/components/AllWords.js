@@ -1,13 +1,9 @@
 'use strict';
 // react
-import React, {Component} from 'react';
-import {render} from 'react-dom';
-import {connect} from 'react-redux';
-import {Link} from 'react-router';
-
-// material-ui
-import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // bootstrap
 import { Row, Col } from 'react-bootstrap';
@@ -58,12 +54,18 @@ const AllWords = (props) => {
 						</Row>
 						<hr style={styles.hrStyles}/>
 					</div>
-				)
+				);
 			// }
 		})
 	}
 	</div>
-)}
+)};
+
+const mapStateToProps = state => ({
+	userBest: state.userBest
+});
+
+export default connect(mapStateToProps, null)(AllWords);
 
 const styles = {
 	avatarStyles: {
@@ -102,10 +104,4 @@ const styles = {
 	hrStyles: {
 		border: 'solid 1px grey'
 	}
-}
-
-const mapStateToProps = state => ({
-	userBest: state.userBest
-});
-
-export default connect(mapStateToProps, null)(AllWords);
+};

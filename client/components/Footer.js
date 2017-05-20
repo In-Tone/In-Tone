@@ -1,49 +1,75 @@
-'use strict'
-import React, {Component} from 'react';
-import {render} from 'react-dom';
-import {connect} from 'react-redux';
-import {Link} from 'react-router';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-
+'use strict';
+// react
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import SkyLight from 'react-skylight';
 
-import store from '../store';
+// material-ui
+import FlatButton from 'material-ui/FlatButton';
+
+// components
+import { tonalLanguages, aboutInTone } from './FooterText';
+
+// dispatchers
 import {fetchTargets} from '../reducers/Targets';
 
 class Footer extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
+
+		this.onTotalLanguageClick = this.onTotalLanguageClick.bind(this);
+		this.onHowItWorsClick = this.onHowItWorsClick.bind(this);
+		this.onTrainClick = this.onTrainClick.bind(this);
 	}
 
 	onLanguageClick(button) {
 		const language = button.props.label.toLowerCase();
-		this.props.fetchTargets(language)
+		this.props.fetchTargets(language);
+	}
+
+	onTotalLanguageClick() {
+		this.refs.tonalLanguages.show();
+		this.refs.howItWorks.hide();
+	}
+
+	onHowItWorsClick() {
+		this.refs.tonalLanguages.hide();
+		this.refs.howItWorks.show();
+	}
+
+	onTrainClick() {
+		this.refs.tonalLanguages.hide();
+		this.refs.howItWorks.hide();
 	}
 
 	render() {
 		return (
 			<footer className="col-xs-12" style={styles.footer}>
-					<FlatButton onClick={() => this.refs.tonalLanguages.show()} className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} >
-						What are Tonal Languages?
-					</FlatButton>
-						<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="tonalLanguages" title="What are Tonal Languages?">
-							<p>Tonal languages use pitch to distinguish a word's meaning. Depending on the pitch, the same syllable could mean two totally different things! For example, in Thai, <i>ma</i> spoken in a high tone would mean <i>horse</i> and in a rising tone would mean <i>dog</i>. For people who don't speak tonal languages, these tones are hard to perceive and reproduce.</p>
-						</SkyLight>
-					<FlatButton onClick={() => this.refs.howItWorks.show()} className="col-xs-4" style={styles.middleButton} hoverColor={'rgba(156, 39, 176, 0.7)'}>
-						How In-Tone Works
-					</FlatButton>
-					<SkyLight  dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
-						<div>
-							<p>In-Tone helps you perceive and reproduce a language's tones. You are given a series of vocabulary flashcards with audio of the word being spoken by a native speaker. You can then record yourself saying the word, and In-Tone will provide you with a graph comparing the target's pitch values alongside your own.</p>
-						</div>
-        	</SkyLight>
-					<Link to='/study'><FlatButton className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'}>Train</FlatButton></Link>
+				<FlatButton onClick={this.onTotalLanguageClick} className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} >
+					What are Tonal Languages?
+				</FlatButton>
+				<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="tonalLanguages" title="What are Tonal Languages?">
+					{tonalLanguages()}
+				</SkyLight>
+				<FlatButton onClick={this.onHowItWorsClick} className="col-xs-4" style={styles.middleButton} hoverColor={'rgba(156, 39, 176, 0.7)'}>
+					How In-Tone Works
+				</FlatButton>
+				<SkyLight  dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
+					<div>
+						{aboutInTone()}
+					</div>
+				</SkyLight>
+				<Link to='/study'><FlatButton className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} onClick={this.onTrainClick}>Train</FlatButton></Link>
 			</footer>
-		)
+		);
 	}
 }
 
+const mapDispatchToProps = {fetchTargets};
+
+export default connect(null, mapDispatchToProps)(Footer);
 
 const styles = {
 	footer: {
@@ -85,25 +111,21 @@ const styles = {
 		paddingRight: '75px',
 		position: 'fixed',
 		zIndex: 500,
-    lineHeight: '32px',
-    // vertical alignment
-    top:0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
+		lineHeight: '32px',
+		// vertical alignment
+		top:0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		margin: 'auto',
 	},
 	overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)'
-  }
-}
-
-const mapDispatchToProps = {fetchTargets};
-
-export default connect(null, mapDispatchToProps)(Footer);
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		zIndex: 0,
+		backgroundColor: 'rgba(0,0,0,0.7)'
+	}
+};

@@ -53,7 +53,7 @@ class Profile extends Component {
 						<Col lg={4}>
 							<Paper style={styles.userInfo}>
 									<Avatar
-										src='https://i.imgur.com/kP5Khh8.jpg'
+										src='https://s3.amazonaws.com/in-tone/kP5Khh8.jpg'
 										size={120}
 										style={styles.avatarStyles}
 									/>

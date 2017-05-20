@@ -1,28 +1,28 @@
+'use strict';
+// react
 import React from 'react';
 import { Link } from 'react-router';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 
 const ChooseLanguage = (props) => {
-  return (
-    <div style={styles.container}>
-        <div style={styles.content}>
-          <h1>Choose a language</h1>
-          <h3><i>( more coming soon! )</i></h3>
-          <Link to='/study'>
-          <img
-            style={styles.button}
-            src={'https://s3.amazonaws.com/in-tone/Flag_of_Thailand.svg.png'}
-            onClick={() => props.onLanguageClick('thai')} />
-          </Link>
-          <h4>THAI</h4>
-        </div>
-    </div>
-  )
+	return (
+		<div style={styles.container}>
+			<div style={styles.content}>
+				<h1>Choose a language</h1>
+				<h3><i>( more coming soon! )</i></h3>
+				<Link to='/study'>
+				<img
+					style={styles.button}
+					src={'https://s3.amazonaws.com/in-tone/Flag_of_Thailand.svg.png'}
+					onClick={() => props.onLanguageClick('thai')} />
+				</Link>
+				<h4>THAI</h4>
+			</div>
+		</div>
+	)
 }
 
 
-export default ChooseLanguage
+export default ChooseLanguage;
 
 const styles = {
 	modalButton: {
@@ -44,4 +44,4 @@ const styles = {
 		height: '10vh',
 		boxShadow: '5px 5px 5px #888888'
 	}
-}
+};
