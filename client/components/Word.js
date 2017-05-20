@@ -13,12 +13,12 @@ import { Row, Col } from 'react-bootstrap';
 
 // our modules
 import ProfileGraphs from './ProfileGraphs';
-import { targetToUserHashGenerator, targetToUserPitches} from '../utils/TargetUserBestHash';
+import { targetToUserAudio, targetToUserPitches} from '../utils/HashMaps';
 
 const Word = (props) => {
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
-	const userAudioSource = targetToUserHashGenerator(targetsArray, userBestArray);
+	const userAudioSource = targetToUserAudio(targetsArray, userBestArray);
 	const userPitchArray = targetToUserPitches(targetsArray, userBestArray);
 	return (
 		<div style={styles.wordDiv}>

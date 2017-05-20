@@ -1,8 +1,9 @@
-'use strict'
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {connect} from 'react-redux'
-import {Link} from 'react-router'
+'use strict';
+// react
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 // material-ui
 import Paper from 'material-ui/Paper';
@@ -11,14 +12,16 @@ import FlatButton from 'material-ui/FlatButton';
 // bootstrap
 import { Row, Col } from 'react-bootstrap';
 
-// our modules
+// components
 import ProfileGraphs from './ProfileGraphs';
-import { targetToUserHashGenerator } from '../utils/TargetUserBestHash';
+
+// utilities
+import { targetToUserAudio } from '../utils/HashMaps';
 
 const AllWords = (props) => {
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
-	const targetUserHash = targetToUserHashGenerator(targetsArray, userBestArray);
+	const targetUserHash = targetToUserAudio(targetsArray, userBestArray);
 	return (
 		<div style={styles.wordDiv}>
 		{
