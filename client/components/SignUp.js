@@ -30,8 +30,8 @@ export const SignUp = ({login}) => {
 	}
 
 	return (
-		<div className='container text-center'>
-			<div id="login-signup">
+		<div style={styles.loginSignup}>
+			<div style={styles.form}>
 				<h1>Sign up</h1>
 				<form onSubmit={onSubmit}>
 					<TextField
@@ -51,11 +51,28 @@ export const SignUp = ({login}) => {
 						type="password"
 					/>
 					<br/>
-					<RaisedButton type="submit" label="Submit" backgroundColor='#3C3970' labelColor='white' style={{marginRight: '20px'}} />
+					<RaisedButton type="submit" label="Submit" backgroundColor='#3C3970' labelColor='white' style={styles.submit} />
 				</form>
 			</div>
 		</div>
 	)
+}
+
+const styles = {
+	form: {
+		margin: 0,
+    padding: '5vh 0 7vh 0',
+		backgroundColor: 'white',
+		/*width, style, color*/
+		border: 'medium inset black'
+	},
+  loginSignup: {
+	  textAlign: 'center',
+  	padding: '21vh 25% 50vh 25%',
+  },
+   submit: {
+    margin: 12
+  },
 }
 
 const mapDispatchToProps = {login}

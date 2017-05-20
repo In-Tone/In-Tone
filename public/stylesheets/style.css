@@ -16,19 +16,8 @@ body, html {
 	padding: 0;
 }
 
-#login-signup {
-	padding-top: 100px;
-	margin: auto;
-	text-align: center;
-}
-
 #app {
 	text-align: center;
-}
-
-#modes-container {
-	height: auto;
-	width: auto;
 }
 
 /* STUDY COMPONENT STYLES */
@@ -43,6 +32,12 @@ body, html {
 }
 .studyDefinitions {
 	font-size: 24px;
+}
+
+
+.loginSignup {
+	text-align: 'center';
+	padding: 12.5% 25% 12.5% 25%;
 }
 
 audio::-internal-media-controls-download-button {

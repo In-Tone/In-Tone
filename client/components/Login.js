@@ -4,30 +4,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {login, logout} from '../reducers/Auth';
 import {connect} from 'react-redux';
 
-const styles = {
-  button: {
-    margin: 12,
-  },
-  exampleImageInput: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    width: '100%',
-    opacity: 0,
-  },
-};
-
 const Login = ({ login, logout }) => (
-<div className='container text-center'>
-  <div id="login-signup">
+  <div style={styles.loginSignup}>
+  <div style={styles.form}>
     <h1>Please log in</h1>
-    <form onSubmit={evt => {
-      evt.preventDefault()
-      login(evt.target.email.value, evt.target.password.value)
-    } }>
+    <form 
+      onSubmit={evt => {
+        evt.preventDefault()
+        login(evt.target.email.value, evt.target.password.value)
+      }}
+    >
       <TextField
         hintText="email"
         name="email"
@@ -39,11 +25,31 @@ const Login = ({ login, logout }) => (
         type="password"
       />
       <br/>
-      <RaisedButton type="submit" label="Login" backgroundColor='#3C3970' labelColor='white' style={{marginRight: '20px'}} />
+      <RaisedButton type="submit" label="Login" backgroundColor='#3C3970' labelColor='white' style={styles.submit} />
     </form>
   </div>
-</div>
+  </div>
 )
+
+const styles = {
+/*  button: {
+    margin: 12,
+  },*/
+  submit: {
+    margin: 12
+  },
+  form: {
+    margin: 0,
+    padding: '10vh 0 10vh 0',
+    backgroundColor: 'white',
+    /*width, style, color*/
+    border: 'medium inset black'
+  },
+  loginSignup: {
+  textAlign: 'center',
+  padding: '21vh 25% 50vh 25%',
+  }
+};
 
 export default connect(
   state => ({}),
