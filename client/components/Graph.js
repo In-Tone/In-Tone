@@ -105,7 +105,7 @@ class Graph extends React.Component {
 
 const styles = {
 	chart: {
-		padding: '24px',
+		padding: '2%',
 	}
 }
 

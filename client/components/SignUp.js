@@ -64,7 +64,7 @@ const styles = {
     padding: '5vh 0 7vh 0',
 		backgroundColor: 'white',
 		/*width, style, color*/
-		border: 'medium inset black'
+		border: 'thin inset black'
 	},
   loginSignup: {
 	  textAlign: 'center',

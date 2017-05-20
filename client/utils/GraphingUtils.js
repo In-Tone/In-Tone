@@ -52,7 +52,7 @@ export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 					display: true,
 					position: 'top',
 					text: `Pitch Contour Graphs ${score ? `| Your Score: ${score}%` : ''}`,
-					fontSize: 20
+					fontSize: 24
 				}
 			}
 		}

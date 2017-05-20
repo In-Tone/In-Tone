@@ -17,17 +17,6 @@ import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
 import ChooseLanguage from './ChooseLanguage';
 
-const styles = {
-	modalButton: {
-		margin: '30px',
-	},
-	buttonSection: {
-		paddingTop: '80px',
-	},
-	graphStyle: {
-	}
-}
-
 class Study extends React.Component {
 
 	constructor(props) {
@@ -119,7 +108,7 @@ class Study extends React.Component {
 					<Col lg={12}>
 						<Col lg={4}>
 							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tones[tone_type_id])}
-							<Paper zDepth={1} style={{marginTop:'10px'}}>
+							<Paper zDepth={1} style={styles.graphPaper}>
 								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
 								<Record
@@ -129,8 +118,9 @@ class Study extends React.Component {
 								{button('NEXT', randomReset)}
 							</Paper>
 						</Col>
-						<Col lg={8} style={styles.graphStyle}>
-							<Graph />
+						<br />
+						<Col lg={8} style={styles.graphContainerStyle}>
+							<Graph/>
 						</Col>
 					</Col>
 				</div>
@@ -138,6 +128,18 @@ class Study extends React.Component {
 		} else {
 			return <ChooseLanguage onLanguageClick={this.onLanguageClick} />
 		}
+	}
+}
+
+const styles = {
+	modalButton: {
+		margin: '60px',
+	},
+	graphContainerStyle: {
+		margin: '5px 0 5px 0'
+	},
+	graphPaper: {
+		marginTop:'10px'
 	}
 }
 
