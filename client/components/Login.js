@@ -4,22 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {login, logout} from '../reducers/Auth';
 import {connect} from 'react-redux';
 
-const styles = {
-  button: {
-    margin: 12,
-  },
-  exampleImageInput: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    width: '100%',
-    opacity: 0,
-  },
-};
-
 const Login = ({ login, logout }) => (
 <div className='container text-center'>
   <div id="login-signup">
@@ -49,3 +33,19 @@ export default connect(
   state => ({}),
   {login, logout},
 )(Login)
+
+const styles = {
+  button: {
+    margin: 12,
+  },
+  exampleImageInput: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
+};
