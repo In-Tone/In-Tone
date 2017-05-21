@@ -1,10 +1,10 @@
 'use strict'
 
-// Accepts the filtered arrays of target and results 
+// Accepts the filtered arrays of target and results
 export const scores = (target, results) => {
 
-		console.log('target', target)
-		console.log('results', results)
+		// console.log('target', target)
+		// console.log('results', results)
 
 		// store a difference array for each data set: (n+1 - n)
 		let resultsDiff = [];
@@ -25,12 +25,12 @@ export const scores = (target, results) => {
 
 		/******************************************************************************************/
 		/**************************Slicing Algo Experiment Zone************************************/
-		
+
 
 		// differenceScore will be the difference between user and target change at each point along
 		// their curves
 		let differenceScore = [];
-		
+
 		// determine the shortest of targetsDiff or resultsDiff
 		let shortestDiff = targetsDiff.length > resultsDiff.length ? resultsDiff : targetsDiff
 
@@ -39,15 +39,15 @@ export const scores = (target, results) => {
 			differenceScore.push(Math.abs(resultsDiff[i] - targetsDiff[i]))
 		}
 
-		console.log('differenceScore is', differenceScore)
+		// console.log('differenceScore is', differenceScore)
 
 		// pitchGrade will be the users score on an attempt
 		let pitchGrade = 0;
-		
+
 		// failing score will be all points at which a user needs to work on their inflection
 		let failing = [];
 
-		// add to pitchGrade or push values from pitches into failing 
+		// add to pitchGrade or push values from pitches into failing
 		differenceScore.forEach((score, index) => {
 			if(score <= 2){
 				pitchGrade += 1
@@ -61,7 +61,7 @@ export const scores = (target, results) => {
 					failing.push(NaN)
 			}
 		})
-		
+
 		let score = Math.round((pitchGrade / differenceScore.length) * 100)
 		// returns the users score and their array of failing points
 		return {score, failing}

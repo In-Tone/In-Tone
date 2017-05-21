@@ -76,13 +76,22 @@ export const pitchFiltering = frequencies => {
 	return oldResults;
 };
 
+// in case there's more noise to slice out, keep track of other diffs up to halfway through. slice where the largest diff is:
 export const pitchSlicing = array => {
-	for (let i = 0; i < array.length; i++) {
+	// console.log('pre slicing: ', array)
+	let sliceIdx = 0;
+	let largestDiff = 0; // change to a while loop that while largest diff is greater than 60, keep going up in the idx.
+	for (let i = 0; i < array.length / 2; i++) {
 		let diff = Math.abs(array[i] - array[i - 1]);
-		if (diff > 80) {
-			return array.slice(i);
+		if (diff > 80 && diff > largestDiff ) {
+			console.log('diff', diff)
+			sliceIdx = i;
+			largestDiff = diff;
+			console.log('largest diff', largestDiff)
 		}
 	}
+	// console.log('post slicing: ', array.slice(sliceIdx))
+	return array.slice(sliceIdx);
 };
 
 
@@ -101,22 +110,48 @@ export const getXLabels = (duration, targetPitches) => {
 };
 
 // throw out halves and doubles:
-export const pitchFix = array => {
-	let rejects = []
+// export const pitchFix = array => {
+// 	let rejects = []
 
-	for (let i = 1; i < array.length; i++) {
-		var prev = rejects.indexOf(array[i-1]) >=0 ? prev : array[i-1]
-		let curr = array[i]
-		let half = prev/2;
-		let double = prev*2;
+// 	for (let i = 1; i < array.length; i++) {
+// 		var prev = rejects.indexOf(array[i-1]) >=0 ? prev : array[i-1]
+// 		let curr = array[i]
+// 		let half = prev/2;
+// 		let double = prev*2;
 
-		if ( half + 10 > curr && curr > half - 10 || double + 10 > curr && curr > double - 10 ) {
-			rejects.push(array[i]);
+// 		if ( half + 10 > curr && curr > half - 10 || double + 10 > curr && curr > double - 10 ) {
+// 			rejects.push(array[i]);
+// 		}
+// 	}
+
+// 	return array.map(freq => {
+// 		if (rejects.indexOf(freq) >= 0) return NaN;
+//     else return freq;
+//  })
+// };
+
+export const pitchFix = arr => {
+	// pre-plug results to start with arr[0] which seems ok now that slice let's us start noise-free
+	let results = [arr[0]];
+	for (let i = 1; i < arr.length - 1; i++) {
+		let prev = results[results.length-1];
+		let half = prev / 2
+		let double = prev * 2
+		const curr = arr[i];
+
+		if (half + 15 > curr && curr > half - 15) {
+			results.push(curr * 2)
+		}
+
+		else if (double + 15 > curr && curr > double - 15 ) {
+			results.push(curr / 2)
+		}
+		else if (Math.abs(prev - curr) > 60) {
+			results.push(prev)
+		}
+		else {
+			results.push(curr)
 		}
 	}
-
-	return array.map(freq => {
-		if (rejects.indexOf(freq) >= 0) return NaN;
-    else return freq;
- })
-};
+	return results;
+}
