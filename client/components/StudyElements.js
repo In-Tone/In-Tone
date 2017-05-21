@@ -1,9 +1,13 @@
+'use strict';
+// react
 import React from 'react';
+
+// material-ui
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // matches transliteration stored in the database to unicode represetation of thai character
-const thaiLexicon = {
+export const thaiLexicon = {
 	'ch\u00CC': '\u0E43\u0E0A\u0E48', 									// falling chai
 	'\u0127\u00EE': '\u0E43\u0E2B\u0E49', 							// falling hai
 	'ch\u00CE': '\u0E43\u0E0A\u0E49', 									// hight chai

@@ -1,10 +1,17 @@
+'use strict';
+// react
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
+
+// material-ui
+import Paper from 'material-ui/Paper';
+
+// utilities
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
 import { drawGraph, resetGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 import { dataCollect } from '../utils/DataCollect';
+
 
 //////////////////////////////////////////
 // this component draws the pitch graph //
@@ -13,7 +20,7 @@ class Graph extends React.Component {
 
 	constructor(props) {
 		super(props)
-		this.currGraph = []
+		this.currGraph = [];
 	}
 
 	////////////////////////////////////////////////////
@@ -23,13 +30,13 @@ class Graph extends React.Component {
 
 	componentDidMount() {
 
-		const targetPitches = this.props.currentTarget.pitches
+		const targetPitches = this.props.currentTarget.pitches;
 		const duration = this.props.currentTarget.duration;
 
 		// slice target pitch array
 		const targetTone = pitchSlicing(targetPitches);
 		// smooth target pitch array
-		const smoothTargets = pitchFix(targetTone)
+		const smoothTargets = pitchFix(targetTone);
 		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		// create ms x-axis labels
@@ -63,7 +70,7 @@ class Graph extends React.Component {
 
 		// target slicing + smoothing
 		const targetTone = pitchSlicing(targetPitches);
-		const smoothTargets = pitchFix(targetTone)
+		const smoothTargets = pitchFix(targetTone);
 
 		let chartCtx = this.refs._canvasNode.getContext('2d');
 		let xLabels = getXLabels(duration, targetTone);
@@ -76,10 +83,10 @@ class Graph extends React.Component {
 		if (nextProps.userTones.length) {
 			const oldResults = pitchFiltering(userPitches);
 			const userTone = pitchSlicing(oldResults);
-			const smoothResults = pitchFix(userTone)
+			const smoothResults = pitchFix(userTone);
 			// score is the user score, failing is the array of points where the
 			// user really needs to focus on fixing their inflection ***Integration TBD
-			let {score, failing} = scores(smoothTargets, smoothResults)
+			let {score, failing} = scores(smoothTargets, smoothResults);
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);
@@ -103,12 +110,6 @@ class Graph extends React.Component {
 	}
 }
 
-const styles = {
-	chart: {
-		padding: '24px',
-	}
-}
-
 ////////////////////////////////////////
 // get userTones from the store state //
 ////////////////////////////////////////
@@ -121,3 +122,9 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, null)(Graph);
+
+const styles = {
+	chart: {
+		padding: '24px',
+	}
+};
