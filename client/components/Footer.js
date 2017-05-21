@@ -19,8 +19,8 @@ class Footer extends Component {
 	constructor(props) {
 		super(props);
 
-		this.onTotalLanguageClick = this.onTotalLanguageClick.bind(this);
-		this.onHowItWorsClick = this.onHowItWorsClick.bind(this);
+		this.onTonalLanguageClick = this.onTonalLanguageClick.bind(this);
+		this.onHowItWorksClick = this.onHowItWorksClick.bind(this);
 		this.onTrainClick = this.onTrainClick.bind(this);
 	}
 
@@ -29,12 +29,12 @@ class Footer extends Component {
 		this.props.fetchTargets(language);
 	}
 
-	onTotalLanguageClick() {
+	onTonalLanguageClick() {
 		this.refs.tonalLanguages.show();
 		this.refs.howItWorks.hide();
 	}
 
-	onHowItWorsClick() {
+	onHowItWorksClick() {
 		this.refs.tonalLanguages.hide();
 		this.refs.howItWorks.show();
 	}
@@ -47,13 +47,13 @@ class Footer extends Component {
 	render() {
 		return (
 			<footer className="col-xs-12" style={styles.footer}>
-				<FlatButton onClick={this.onTotalLanguageClick} className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} >
+				<FlatButton onClick={this.onTonalLanguageClick} className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} >
 					What are Tonal Languages?
 				</FlatButton>
 				<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="tonalLanguages" title="What are Tonal Languages?">
 					{tonalLanguages()}
 				</SkyLight>
-				<FlatButton onClick={this.onHowItWorsClick} className="col-xs-4" style={styles.middleButton} hoverColor={'rgba(156, 39, 176, 0.7)'}>
+				<FlatButton onClick={this.onHowItWorksClick} className="col-xs-4" style={styles.middleButton} hoverColor={'rgba(156, 39, 176, 0.7)'}>
 					How In-Tone Works
 				</FlatButton>
 				<SkyLight  dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="howItWorks" title="How In-Tone Works">
