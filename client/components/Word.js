@@ -1,8 +1,9 @@
 'use strict'
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {connect} from 'react-redux'
-import {Link} from 'react-router'
+// react
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 // material-ui
 import Paper from 'material-ui/Paper';
@@ -11,14 +12,16 @@ import FlatButton from 'material-ui/FlatButton';
 // bootstrap
 import { Row, Col } from 'react-bootstrap';
 
-// our modules
+// components
 import ProfileGraphs from './ProfileGraphs';
-import { targetToUserHashGenerator, targetToUserPitches} from '../utils/TargetUserBestHash';
+
+// utitlities
+import { targetToUserAudio, targetToUserPitches} from '../utils/HashMaps';
 
 const Word = (props) => {
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
-	const userAudioSource = targetToUserHashGenerator(targetsArray, userBestArray);
+	const userAudioSource = targetToUserAudio(targetsArray, userBestArray);
 	const userPitchArray = targetToUserPitches(targetsArray, userBestArray);
 	return (
 		<div style={styles.wordDiv}>
@@ -64,6 +67,12 @@ const Word = (props) => {
 	</div>
 )}
 
+const mapStateToProps = state => ({
+	userBest: state.userBest
+});
+
+export default connect(mapStateToProps, null)(Word);
+
 const styles = {
 	avatarStyles: {
 		margin: 5,
@@ -101,11 +110,4 @@ const styles = {
 	hrStyles: {
 		border: 'solid 1px grey'
 	}
-}
-
-const mapStateToProps = state => ({
-	userBest: state.userBest
-});
-
-export default connect(mapStateToProps, null)(Word);
-
+};

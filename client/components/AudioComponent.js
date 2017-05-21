@@ -1,12 +1,14 @@
+'use strict';
+// react
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class AudioComponent extends Component {
 	constructor(props){
-		super(props)
+		super(props);
 		this.state = {
 			audioType: 'Target Audio: '
-		}
+		};
 	}
 
 	render(){
@@ -21,9 +23,17 @@ class AudioComponent extends Component {
 					<audio controls id='clip' src={this.props.url} style={{width: '50%'}}/>
 				</div>
 			</div>
-		)
+		);
 	}
 }
+
+const mapStateToProps = state => ({
+	url: state.url
+});
+
+const mapDispatchToProps = null;
+
+export default connect(mapStateToProps, mapDispatchToProps)(AudioComponent);
 
 const styles = {
 	audioStyles: {
@@ -31,11 +41,4 @@ const styles = {
 		justifyContent:'center', 
 		paddingBottom:'5%'
 	}
-}
-
-const mapStateToProps = state => ({
-	url: state.url
-});
-const mapDispatchToProps = null;
-
-export default connect(mapStateToProps, mapDispatchToProps)(AudioComponent)
+};

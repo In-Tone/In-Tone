@@ -1,16 +1,23 @@
+'use strict';
+// react
 import React from 'react';
+import { connect } from 'react-redux';
+
+// material-ui
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import {connect} from 'react-redux';
-import axios from 'axios';
 
-import {login} from '../reducers/Auth';
+// dispatchers
+import { login } from '../reducers/Auth';
+
+// utilities
+import axios from 'axios';
 
 const addNewUser = (userInfo) => (
 	axios.post( '/api/login/signup', userInfo)
 		.then(res => res.data)
 		.catch(err => console.error(err))
-)
+);
 
 export const SignUp = ({login}) => {
 	const onSubmit = (evt) => {
@@ -18,7 +25,7 @@ export const SignUp = ({login}) => {
 		const username = evt.target.username.value;
 		const password = evt.target.password.value;
 		const rank = 0;
-		evt.preventDefault()
+		evt.preventDefault();
 		addNewUser({
 			email,
 			username,
@@ -26,8 +33,8 @@ export const SignUp = ({login}) => {
 			rank
 		})
 			.then(() => login(email, password))
-			.catch(err => console.error(err))
-	}
+			.catch(err => console.error(err));
+	};
 
 	return (
 		<div className='container text-center'>
@@ -55,9 +62,9 @@ export const SignUp = ({login}) => {
 				</form>
 			</div>
 		</div>
-	)
-}
+	);
+};
 
-const mapDispatchToProps = {login}
+const mapDispatchToProps = {login};
 
 export default connect(null, mapDispatchToProps)(SignUp);

@@ -1,21 +1,24 @@
-'use strict'
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {connect} from 'react-redux'
-import {Link, browserHistory} from 'react-router'
-import AppBar from 'material-ui/AppBar';
+'use strict';
+// react
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+
+// material-ui
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import RaisedButton from 'material-ui/RaisedButton';
+
+// bootstrap
 import { Grid, Row, Col } from 'react-bootstrap';
+
+// dispatchers
 import {logout} from '../reducers/Auth';
 import { fetchUserTones } from '../reducers/UserTone';
 import { fetchUserBest } from '../reducers/UserBest';
 
 class Navbar extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 
 		this.logout = this.props.logout.bind(this);
 		this.onProfileClick = this.onProfileClick.bind(this);
@@ -24,7 +27,7 @@ class Navbar extends Component {
 	onProfileClick () {
 		const userId = this.props.user.id;
 		this.props.fetchUserTones(userId);
-		this.props.fetchUserBest(userId)
+		this.props.fetchUserBest(userId);
 	}
 
 	render() {
@@ -51,10 +54,15 @@ class Navbar extends Component {
 				</Col>
 
 			</Col>
-		)
+		);
 	}
 
 }
+
+export default connect(
+  ({ user }) => ({ user: user }),
+  {logout, fetchUserTones, fetchUserBest}
+)(Navbar);
 
 const styles = {
 	navbar: {
@@ -77,9 +85,4 @@ const styles = {
 		fontWeight: 550,
 		height: '65px'
 	}
-}
-
-export default connect(
-  ({ user }) => ({ user: user }),
-  {logout, fetchUserTones, fetchUserBest}
-)(Navbar);
+};

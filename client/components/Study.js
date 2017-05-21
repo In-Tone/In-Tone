@@ -1,21 +1,33 @@
+'use strict';
+// react
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+
+// material-ui
 import MenuItem from 'material-ui/MenuItem';
 import { Card, CardActions, CardMedia, CardTitle } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+
+// bootstrap
 import { Grid, Row, Col } from 'react-bootstrap';
-import { targetWord, button } from './StudyElements';
+
+// components
 import Record from './Record';
 import Graph from './Graph';
 import AudioComponent from './AudioComponent';
+import ChooseLanguage from './ChooseLanguage';
+import { targetWord, button } from './StudyElements';
+
+// dispatchers
 import { setUserTone } from '../reducers/UserTone';
-import { deleteAudioNode } from '../utils/RecordingUtils';
 import {fetchTargets} from '../reducers/Targets';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
 import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
-import ChooseLanguage from './ChooseLanguage';
+
+// utilities
+import { toneTypeIdToQuality } from '../utils/HashMaps';
 
 class Study extends React.Component {
 
@@ -23,36 +35,28 @@ class Study extends React.Component {
 		super(props);
 
 		this.state = {
-			allTargets: [],
-			currentTarget: {},
 			previousTargets: [],
-			language: '',
 			index: 0
 		};
 
-		this.randomReset = this.randomReset.bind(this);
+		this.next = this.next.bind(this);
 		this.previousTarget = this.previousTarget.bind(this);
 		this.onLanguageClick = this.onLanguageClick.bind(this);
 
-		// TESTING ONLY
-		this.logState = this.logState.bind(this);
-	}
-
-	logState() {
-		console.log(this.state);
 	}
 
 	// randomly selects a tone from this.state.targets and sets that target tone as the next tone to study
-	randomReset(e) {
-		let allTargets = this.props.allTargets;
+	next() {
+		// modify previousTargets stack
 		let previousTargets = this.state.previousTargets;
-		let currentTarget = this.props.currentTarget;
-
-		previousTargets.push(currentTarget);
+		previousTargets.push(this.props.currentTarget);
 		if (previousTargets.length > 10) previousTargets.shift();
 
+		// select new currentTarget
 		let index = (this.state.index + 1) % this.props.allTargets.length;
 		this.props.setCurrentTarget(this.props.allTargets[index]);
+
+		// update state to reflect new previousTargets stack and currentTarget selection mechanims ('index');
 		this.setState({index, previousTargets});
 
 		// RESET AUDIO AND GRAPH HERE
@@ -61,15 +65,18 @@ class Study extends React.Component {
 
 	}
 
-	// BETA VERSION ONLY
 	// makes the next tone to study the tone that was just studied (i.e., studied prior to the current tone)
 	previousTarget () {
 		let previousTargets = this.state.previousTargets;
+
+		// return if previous target stack is empty
 		if (!previousTargets.length) return;
+
+		// set previous target as new current target; update this.state.index accordingly (in order to keep forward direction through targets regular)
 		let currentTarget = previousTargets.pop();
-		this.setState({ previousTargets });
 		this.props.setCurrentTarget(currentTarget);
-		this.setState({ currentTarget });
+		let index = this.state.index - 1;
+		this.setState({ index, previousTargets });
 
 		// RESET AUDIO AND GRAPH HERE
 		resetAudio(this.props.url, this.props.dispatchSetUserURL);
@@ -78,14 +85,16 @@ class Study extends React.Component {
 
 	onLanguageClick(language) {
 		this.props.fetchTargets(language);
-		this.setState({language});
 	}
 
 	////////////////////////////
 	// render study component //
 	////////////////////////////
 	render() {
+		// IF: if the redux store's currentTarget field is populated; i.e., IF a language has been selected
+		// ELSE: select a language and cause the redux store's currentTarget field to be populated
 		if (Object.keys(this.props.currentTarget).length) {
+
 			let {
 				transliteration,
 				englishTranslation,
@@ -93,15 +102,9 @@ class Study extends React.Component {
 				wav,
 				tone_type_id
 			} = this.props.currentTarget;
-
-			/***********************************************************************************/
-			/* VERY TEMPORARY DEMO ONLY WORKAROUND TO DISPLAYING TONE AS WORDS AND NOT NUMBERS */
-			/***********************************************************************************/
-			let tones = ['', 'low', 'mid', 'falling', 'high', 'rising']
-
-			let logState = this.logState;
+			let tones = toneTypeIdToQuality();
 			let previousTarget = this.previousTarget;
-			let randomReset = this.randomReset;
+			let next = this.next;
 
 			return (
 				<div className='studyDiv'>
@@ -115,7 +118,7 @@ class Study extends React.Component {
 									duration={this.props.currentTarget && this.props.currentTarget.duration}
 									targetPitches={this.props.currentTarget && this.props.currentTarget.pitches}
 									/>
-								{button('NEXT', randomReset)}
+								{button('NEXT', next)}
 							</Paper>
 						</Col>
 						<Col lg={8} style={styles.graphStyle}>
@@ -158,7 +161,7 @@ const mapDispatchToProps = dispatch => {
 		dispatchSetUserURL: userURL => {
 			dispatch(setUserURL(userURL));
 		}
-	}
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Study);
@@ -172,4 +175,4 @@ const styles = {
 	},
 	graphStyle: {
 	}
-}
+};
