@@ -108,7 +108,7 @@ class Study extends React.Component {
 					<Col lg={12}>
 						<Col lg={4}>
 							{this.props.currentTarget && targetWord(image, transliteration, englishTranslation, tones[tone_type_id])}
-							<Paper zDepth={1} style={styles.graphPaper}>
+							<Paper zDepth={1} style={styles.optionsPaper}>
 								<AudioComponent wav={wav}/>
 								{button('PREVIOUS', previousTarget)}
 								<Record
@@ -136,9 +136,10 @@ const styles = {
 		margin: '60px',
 	},
 	graphContainerStyle: {
-		margin: '5px 0 5px 0'
+		marginBottom: '50%',
+		borderStyle: 'dotted'
 	},
-	graphPaper: {
+	optionsPaper: {
 		marginTop:'10px'
 	}
 }
