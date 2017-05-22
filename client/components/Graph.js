@@ -86,7 +86,7 @@ class Graph extends React.Component {
 			const smoothResults = pitchFix(userTone);
 			// score is the user score, failing is the array of points where the
 			// user really needs to focus on fixing their inflection ***Integration TBD
-			let {score, failing} = scores(smoothTargets, smoothResults);
+			let {score, failing} = scores(smoothTargets, smoothResults, xLabels);
 
 			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
 			this.currGraph.push(graph);

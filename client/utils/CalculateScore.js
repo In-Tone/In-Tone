@@ -1,14 +1,16 @@
 'use strict'
 
 // Accepts the filtered arrays of target and results 
-export const scores = (target, results) => {
+export const scores = (target, results, xLabels) => {
 
+		console.log('xLabels passed into scores', xLabels)
 		console.log('target', target)
 		console.log('results', results)
 
 		// store a difference array for each data set: (n+1 - n)
 		let resultsDiff = [];
 		let targetsDiff = [];
+		let targetsDiffOld = [];
 
 		// determine the longer of results or target
 		let longest = results.length > target.length ? results : target
@@ -16,12 +18,18 @@ export const scores = (target, results) => {
 		// loop once through both arrays, calculating their differences at each index pair
 		longest.forEach((pitch, index) => {
 			if(target[index + 1]){
-				targetsDiff.push(target[index + 1] - target[index])
+				// push the derivative at discrete intervals 
+				targetsDiff.push((target[index + 1] - target[index])/(xLabels[index + 1] - xLabels[index]))
+				targetsDiffOld.push(results[index + 1] - results[index])
 			}
 			if(results[index + 1]){
 				resultsDiff.push(results[index + 1] - results[index])
 			}
 		})
+
+		console.log('targetsDiff with CALCULUS', targetsDiff)
+		console.log('targetsdiff WITHOUT calculus', targetsDiffOld)
+		console.log('resultsDiff', resultsDiff)
 
 		/******************************************************************************************/
 		/**************************Slicing Algo Experiment Zone************************************/
