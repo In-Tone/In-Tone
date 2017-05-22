@@ -84,6 +84,7 @@ class Graph extends React.Component {
 			const oldResults = pitchFiltering(userPitches);
 			const userTone = pitchSlicing(oldResults);
 			const smoothResults = pitchFix(userTone);
+
 			// score is the user score, failing is the array of points where the
 			// user really needs to focus on fixing their inflection ***Integration TBD
 			let {score, failing} = scores(smoothTargets, smoothResults);
