@@ -28,7 +28,7 @@ export const drawGraph = (context, xLabels, results, targetPitches, score) => {
 						{
 							ticks: {
 								max: 500,
-								min: 75,
+								min: 50,
 								stepSize: 50
 							},
 							scaleLabel: {
@@ -89,7 +89,7 @@ export const drawProfileGraph = (context, xLabels, results, targetPitches, score
 						{
 							ticks: {
 								max: 500,
-								min: 75,
+								min: 50,
 								stepSize: 50,
 								display: false
 							},

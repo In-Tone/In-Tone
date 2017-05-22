@@ -81,15 +81,9 @@ class Graph extends React.Component {
 		}
 
 		if (nextProps.userTones.length) {
-			console.log('PRE FILTER', userPitches)
 			const oldResults = pitchFiltering(userPitches);
-			console.log('POST FILTER', oldResults)
 			const userTone = pitchSlicing(oldResults);
-			console.log('POST SLICE', userTone)
 			const smoothResults = pitchFix(userTone);
-			console.log('POST SMOOTHING', smoothResults)
-
-
 
 			// score is the user score, failing is the array of points where the
 			// user really needs to focus on fixing their inflection ***Integration TBD
