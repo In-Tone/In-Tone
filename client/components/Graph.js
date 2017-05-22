@@ -40,7 +40,7 @@ class Graph extends React.Component {
 		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		// create ms x-axis labels
-		let xLabels = getXLabels(duration, smoothTargets);
+		let xLabels = getXLabels(smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
 	}
@@ -73,7 +73,7 @@ class Graph extends React.Component {
 		const smoothTargets = pitchFix(targetTone);
 
 		let chartCtx = this.refs._canvasNode.getContext('2d');
-		let xLabels = getXLabels(duration, targetTone);
+		let xLabels = getXLabels(smoothTargets);
 
 		if (this.currGraph.length) {
 			this.currGraph[0].destroy();

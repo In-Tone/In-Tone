@@ -81,7 +81,7 @@ export const pitchSlicing = array => {
 	let sliceIdx = 0;
 	let largestDiff = 0;
 	for (let i = 0; i < array.length / 2; i++) {
-		let diff = Math.abs(array[i] - array[i - 1]);
+		let diff = array[i] - array[i - 1];
 		if (diff > 80 && diff > largestDiff ) {
 			sliceIdx = i;
 			largestDiff = diff;
@@ -91,17 +91,13 @@ export const pitchSlicing = array => {
 };
 
 
-export const getXLabels = (duration, targetPitches) => {
-	let pitchesLength = targetPitches.length;
-	let increment = Math.floor(duration / pitchesLength);
-	let ms = increment;
+export const getXLabels = (targetPitches) => {
+	let increment = 15;
 	let xLabels = [];
-
-	for (let i = 0; i < pitchesLength; i++) {
-		xLabels.push(ms);
-		ms += increment;
+	for (let i = 0; i < targetPitches.length; i++) {
+		xLabels.push(increment);
+		increment += 15;
 	}
-
 	return xLabels
 };
 
