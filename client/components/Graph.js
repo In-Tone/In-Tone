@@ -40,7 +40,7 @@ class Graph extends React.Component {
 		// grab chart element
 		let chartCtx = document.getElementById('studyChart').getContext('2d');
 		// create ms x-axis labels
-		let xLabels = getXLabels(duration, smoothTargets);
+		let xLabels = getXLabels(smoothTargets);
 		// draw graph
 		drawGraph(chartCtx, xLabels, [], smoothTargets);
 	}
@@ -73,7 +73,7 @@ class Graph extends React.Component {
 		const smoothTargets = pitchFix(targetTone);
 
 		let chartCtx = this.refs._canvasNode.getContext('2d');
-		let xLabels = getXLabels(duration, targetTone);
+		let xLabels = getXLabels(smoothTargets);
 
 		if (this.currGraph.length) {
 			this.currGraph[0].destroy();
@@ -84,6 +84,7 @@ class Graph extends React.Component {
 			const oldResults = pitchFiltering(userPitches);
 			const userTone = pitchSlicing(oldResults);
 			const smoothResults = pitchFix(userTone);
+
 			// score is the user score, failing is the array of points where the
 			// user really needs to focus on fixing their inflection ***Integration TBD
 			let {score, failing} = scores(smoothTargets, smoothResults, xLabels);
