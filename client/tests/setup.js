@@ -113,21 +113,75 @@
 
 // FOURTH ATTEMPT
 
-require('babel-register')();
+// require('babel-register')();
 
-var jsdom = require('jsdom').jsdom;
+// var jsdom = require('jsdom').JSDOM;
 
-var exposedProperties = ['window', 'navigator', 'document'];
+// console.log(jsdom);
 
-global.document = jsdom('');
-global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
-  if (typeof global[property] === 'undefined') {
-    exposedProperties.push(property);
-    global[property] = document.defaultView[property];
-  }
-});
+// // import { jsdom } from 'jsdom';
 
+// var exposedProperties = ['window', 'navigator', 'document'];
+
+// const dom = new jsdom('<html><body></body></html>');
+// // "Hello world"
+// // console.log(dom.defaultView);
+// // console.log('^^^ dom.default view\n vvvv dom.window');
+// // console.log(dom.window);
+
+// // global.document = new jsdom('<html><body></body></html>');
+// global.window = dom.window;
+// global.document = dom.document;
+
+// // Object.keys(document.defaultView).forEach((property) => {
+// //   if (typeof global[property] === 'undefined') {
+// //     exposedProperties.push(property);
+// //     global[property] = document.defaultView[property];
+// //   }
+// // });
+
+// global.navigator = {
+//   userAgent: 'node.js'
+// };
+
+// // FIFTH ATTEMPT
+
+// console.log('\n\n\n\n\nin setup\n\n\n\n\n\n\n');
+
+// import mochaJsdom from 'mocha-jsdom';
+
+// export const mockDOM = () => {
+// 	console.log('before if\n\n\n\n')
+//   if (typeof document !== 'undefined') return;
+
+//   const jsdom = require('jsdom').jsdom;
+
+//   global.document = jsdom('<html><body></body></html>');
+//   global.window = document.defaultView;
+//   global.navigator = { userAgent: 'node.js' };
+//   console.log('\n\n\nsometext\n\n\n', window);
+// }
+
+// export const setupDOM = () => {
+//   mochaJsdom({ skipWindowCheck: true });
+// }
+
+// SIXTH ATTEMPT
+
+const { JSDOM } = require('jsdom');
+const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+const { window } = jsdom;
+
+function copyProps(src, target) {
+  const props = Object.getOwnPropertyNames(src)
+    .filter(prop => typeof target[prop] === 'undefined')
+    .map(prop => Object.getOwnPropertyDescriptor(src, prop));
+  Object.defineProperties(target, props);
+}
+
+global.window = window;
+global.document = window.document;
 global.navigator = {
   userAgent: 'node.js'
 };
+copyProps(window, global);

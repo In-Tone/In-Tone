@@ -29,7 +29,7 @@ import { resetAudio } from '../utils/RecordingUtils';
 // utilities
 import { toneTypeIdToQuality } from '../utils/HashMaps';
 
-class Study extends React.Component {
+export class Study extends React.Component {
 
 	constructor(props) {
 		super(props);
