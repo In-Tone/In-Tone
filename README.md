@@ -1,6 +1,6 @@
 # In-Tone
 
-http://www.in-tone.tech/
+https://in-tone.herokuapp.com/
 
 ## Git/Waffle Workflow
 
