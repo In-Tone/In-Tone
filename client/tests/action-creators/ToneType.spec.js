@@ -8,14 +8,21 @@ import nock from 'nock';
 // action creators
 import { setToneTypes, fetchToneTypes } from '../../reducers/ToneTypes';
 
-const mockStore = configureMockStore(thunkMiddleware);
+const middleware = [thunkMiddleware]
+const mockStore = configureMockStore(middleware);
 
 describe('ToneTypes', function() {
+
+	// nock.disableNetConnect();
+	// nock.enableNetConnect('127.0.0.1');
 
 	// see nock docs about intercepters
 	afterEach(() => {
 		nock.cleanAll();
 	});
+
+	const scope = nock(`http://localhost:3000`);
+	// const scope = nock(`https://in-tone.herokuapp.com`);
 
 	it('should create an action for setting tones by type', function() {
 
@@ -33,8 +40,8 @@ describe('ToneTypes', function() {
 
 		const language = 'thai';
 
-		nock(`https://in-tone.herokuapp.com/`)
-			.get(`api/targets/${language}/tonetypes`)
+		scope
+			.get(`/api/targets/${language}/tonetypes`)
 			.reply(200, { body: { tonetypes: ['rising'] }});
 
 		const expectedAction = [
@@ -45,10 +52,24 @@ describe('ToneTypes', function() {
 		];
 		const store = mockStore({ tonetypes: [] });
 
-		return store.dispatch(fetchToneTypes(language))
-			.then(() => {
-				expect(store.getActions()).to.be.deep.equal(expectedAction);
-			});
+		console.log('store:\n', store);
+		console.log('\n\n\nstore.dispatch:\n', store.dispatch)
+		console.log(store.dispatch(fetchToneTypes(language)));
+
+		const checkedActions = expect(store.getActions()).to.be.deep.equal(expectedAction);
+
+		const actionChecker = new Promise ((resolve, reject) => {
+			const actionCreator = store.dispatch(fetchToneTypes(language));
+			resolve(checkedActions); 
+		});
+
+		actionChecker();
+
+
+		// store.dispatch(fetchToneTypes(language))
+		// 	// .then(() => {
+		// expect(store.getActions()).to.be.deep.equal(expectedAction);
+			// });
 
 	});
 
