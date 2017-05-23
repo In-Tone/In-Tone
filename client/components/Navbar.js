@@ -15,6 +15,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import {logout} from '../reducers/Auth';
 import { fetchUserTones } from '../reducers/UserTone';
 import { fetchUserBest } from '../reducers/UserBest';
+import {fetchTargets} from '../reducers/Targets';
 
 class Navbar extends Component {
 	constructor(props) {

@@ -19,6 +19,7 @@ import ProfileGraphs from './ProfileGraphs';
 import { targetToUserAudio, targetToUserPitches} from '../utils/HashMaps';
 
 const Word = (props) => {
+	console.log('word props', props)
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
 	const userAudioSource = targetToUserAudio(targetsArray, userBestArray);
@@ -52,6 +53,7 @@ const Word = (props) => {
 									targetPitches={target.pitches}
 									duration={target.duration}
 									userPitches={userPitchArray[target.id]}
+									targetID={target.id}
 								/>
 							</Col>
 						</Row>
@@ -65,7 +67,8 @@ const Word = (props) => {
 )}
 
 const mapStateToProps = state => ({
-	userBest: state.userBest
+	userBest: state.userBest,
+	userTones: state.userTones
 });
 
 export default connect(mapStateToProps, null)(Word);

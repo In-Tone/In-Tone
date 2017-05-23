@@ -2,8 +2,6 @@ import Chart from 'chart.js';
 
 // draw graph function using chart.js
 export const drawGraph = (context, xLabels, results, targetPitches, score, axesLabelsBool) => {
-	console.log('axes bool', axesLabelsBool)
-	console.log('score', score)
 	let graphObject = {
 			type: 'line',
 			data: {
@@ -43,6 +41,9 @@ export const drawGraph = (context, xLabels, results, targetPitches, score, axesL
 					],
 					xAxes: [
 						{
+							ticks:{
+								display: axesLabelsBool
+							},
 							scaleLabel: {
 								display: true,
 								labelString: 'Time (ms)',

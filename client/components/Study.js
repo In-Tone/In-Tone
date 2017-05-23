@@ -91,6 +91,7 @@ export class Study extends React.Component {
 	// render study component //
 	////////////////////////////
 	render() {
+		console.log('study props', this.props)
 		// IF: if the redux store's currentTarget field is populated; i.e., IF a language has been selected
 		// ELSE: select a language and cause the redux store's currentTarget field to be populated
 		if (Object.keys(this.props.currentTarget).length) {

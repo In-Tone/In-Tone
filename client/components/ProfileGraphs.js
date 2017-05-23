@@ -35,7 +35,7 @@ class ProfileGraphs extends Component {
 		}else{ smoothUser = [];}
 
 		// axes markers
-		let xLabels = getXLabels(duration, target);
+		let xLabels = getXLabels(smoothTargets);
 
 		drawGraph(chartCtx, xLabels, smoothUser, smoothTargets, 0, false);
 	}

@@ -15,9 +15,7 @@ import ProfileGraphs from './ProfileGraphs';
 import { targetToUserAudio } from '../utils/HashMaps';
 
 const AllWords = (props) => {
-	console.log('all words props', props)
 	const targetsArray = props.allTargets;
-	console.log('targets Array in allWords', targetsArray)
 	const userBestArray = props.userBest;
 	const targetUserHash = targetToUserAudio(targetsArray, userBestArray);
 	return (
@@ -25,7 +23,6 @@ const AllWords = (props) => {
 		{
 		targetsArray.length && targetsArray.map(target => {
 			let audioSRC = targetUserHash[target.id];
-			console.log('targets being looped', target)
 				return (
 					<div key={target.id}>
 						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
