@@ -24,8 +24,10 @@ describe('/api/login', () => {
   before('Await database sync', () => db.didSync);
   afterEach('Clear the tables', () => db.truncate({ cascade: true }))
   
-  // LOGIN TESTS
-  describe('POST /login/local (email, password)', () => {
+  /////////////////
+  // LOGIN TESTS //
+  /////////////////
+  xdescribe('POST /login/local (email, password)', () => {
   	// create test user before each it statement
   	beforeEach('create user', () => {
 	    User.create({
@@ -51,8 +53,19 @@ describe('/api/login', () => {
     )
   })
 
-  // WHO AM I TESTS
+  ////////////////////
+  // WHO AM I TESTS //
+  ////////////////////
   describe('GET /whoami', () => {
+
+  	beforeEach('create user', () => {
+	    User.create({
+	      email: testUser.email,
+	      password: testUser.password,
+	      username: 'tester',
+			  rank: '1'
+	    })
+  	})
 
     describe('when not logged in', () =>
       it('responds with an empty object', () =>
@@ -63,7 +76,6 @@ describe('/api/login', () => {
 
     describe('when logged in', () => {
       const agent = request.agent(app)
-
       it('responds with the currently logged in user', () =>
       	agent.post('/api/login/local')
         .send(testUser)
@@ -73,7 +85,7 @@ describe('/api/login', () => {
 	          .expect(200)
 	          .then(res => {
 	          	expect(res.body).to.contain({
-	            email: testUser.email
+		            email: testUser.email
 	          	})
 	          })
         })
@@ -81,13 +93,15 @@ describe('/api/login', () => {
   	})
   })
 
-  // 
-  xdescribe('POST /logout', () =>
+  //////////////////
+  // LOGOUT TESTS //
+  //////////////////
+  describe('POST /logout', () =>
     describe('when logged in', () => {
       const agent = request.agent(app)
 
       beforeEach('log in', () => agent
-        .post('/api/login/logout')
+        .post('/api/login/local')
         .send(testUser))
 
       it('logs you out and redirects to whoami', () => agent

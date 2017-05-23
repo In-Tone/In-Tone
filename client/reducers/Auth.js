@@ -35,7 +35,6 @@ export const whoami = () =>
   dispatch =>
     axios.get('/api/login/whoami')
       .then(response => {
-        console.log("whoami responds", response);
         const user = {
           userSince: response.data.created_at,
           email: response.data.email,
