@@ -92,7 +92,7 @@ class Profile extends Component {
 									this.state.selectedTone ? (<Word
 									allTargets={this.props.allTargets}
 									currentTone={this.state.selectedTone}
-									/>) : <AllWords allTargets={this.props.allTargets} />
+									/>) : <AllWords />
 								}
 							</Paper>
 							</div>
