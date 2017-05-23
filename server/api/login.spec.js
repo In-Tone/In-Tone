@@ -57,7 +57,6 @@ describe('/api/login', () => {
   // WHO AM I TESTS //
   ////////////////////
   describe('GET /whoami', () => {
-
   	beforeEach('create user', () => {
 	    User.create({
 	      email: testUser.email,
@@ -66,14 +65,12 @@ describe('/api/login', () => {
 			  rank: '1'
 	    })
   	})
-
     describe('when not logged in', () =>
       it('responds with an empty object', () =>
         request(app).get('/api/login/whoami')
           .expect(200)
           .then(res => expect(res.body).to.eql({}))
       ))
-
     describe('when logged in', () => {
       const agent = request.agent(app)
       it('responds with the currently logged in user', () =>
@@ -99,11 +96,10 @@ describe('/api/login', () => {
   describe('POST /logout', () =>
     describe('when logged in', () => {
       const agent = request.agent(app)
-
-      beforeEach('log in', () => agent
-        .post('/api/login/local')
+      beforeEach('log in', () => 
+      	agent.post('/api/login/local')
         .send(testUser))
-
+      
       it('logs you out and redirects to whoami', () => agent
         .post('/api/login/logout')
         .expect(302)
