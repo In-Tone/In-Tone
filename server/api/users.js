@@ -8,22 +8,6 @@ const UserTone = db.model('UserTone');
 const {mustBeLoggedIn} = require('../auth');
 const router = require('express').Router();
 
-router.get('/:username', (req, res, next) => {
-	User.findOne({
-		where: { username: req.params.username },
-		include: [{ all: true }]
-	})
-		.then(foundUser => {
-			if (!foundUser) {
-				const err = new Error('User not found');
-				err.status = 404;
-				throw err;
-			}
-			res.send(foundUser);
-		})
-		.catch(next);
-});
-
 router.get('/usertones/:userId', (req, res, next) => {
 	UserTone.findAll({ 
 		where: { 
