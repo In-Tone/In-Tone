@@ -14,7 +14,7 @@ export const fetchToneTypes = (language) =>
 		axios.get(`/api/targets/${language}/tonetypes`)
 			.then(res => res.data)
 			.then(toneTypes => dispatch(setToneTypes(toneTypes)))
-			.catch(err => console.error(err))
+			.catch(err => console.error(err));
 };
 
 const reducer = (state = [], action) => {
