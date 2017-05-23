@@ -42,7 +42,7 @@ class Graph extends React.Component {
 		// create ms x-axis labels
 		let xLabels = getXLabels(smoothTargets);
 		// draw graph
-		drawGraph(chartCtx, xLabels, [], smoothTargets);
+		drawGraph(chartCtx, xLabels, [], smoothTargets, 0, true);
 	}
 
 	////////////////////////////////////////////////////////////
@@ -88,12 +88,12 @@ class Graph extends React.Component {
 			// score is the user score
 			let score = scores(smoothTargets, smoothResults, xLabels);
 
-			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score);
+			const graph = drawGraph(chartCtx, xLabels, smoothResults, smoothTargets, score, true);
 			this.currGraph.push(graph);
 			if (nextProps.user) dataCollect(smoothResults, blob, isBest, date, score, difficulty, user_id, tone_type_id, target_id, userBest);
 		}
 		else {
-			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets);
+			const graph = drawGraph(chartCtx, xLabels, [], smoothTargets, 0, true);
 			this.currGraph.push(graph);
 		}
 	}

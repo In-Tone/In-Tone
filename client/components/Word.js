@@ -30,7 +30,7 @@ const Word = (props) => {
 			let audioSRC = userAudioSource[target.id];
 			if (target.tone_type_id === props.currentTone) {
 				return (
-					<div>
+					<div key={target.id}>
 						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
 						<Row>
 							<Col md={6} style={styles.columnLeft}>
@@ -42,9 +42,6 @@ const Word = (props) => {
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
 									<audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/>
 								</div>
-								{/*<div style={styles.wordInfo}>
-									<Link to='/'><h4>Retry</h4></Link>
-								</div>*/}
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
 									<h4> {Math.floor(Math.random() * 10) + 1} </h4>

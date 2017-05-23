@@ -51,21 +51,6 @@ export const whoami = () =>
         }
       })
       // .catch(failed => dispatch(authenticated(null)))
-/////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const createUser = (newUser) => dispatch => {
 	axios.post('/api/users', newUser)
