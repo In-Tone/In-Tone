@@ -1,6 +1,9 @@
+'use strict';
+// testing utilities
 import { expect } from 'chai';
-import { createStore } from 'redux';
 
+// components
+import { createStore } from 'redux';
 import rootReducer from '../../reducers/index';
 
 describe('Reducers', () => { // need to get rid of native spelling in targets model
