@@ -7,3 +7,5 @@ const db = require('../db/index.js');
 
 db.sync()  // sync our database
 .then(() => require('./index.js')) // then start our express server
+
+module.exports = db;

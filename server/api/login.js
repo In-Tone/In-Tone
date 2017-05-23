@@ -46,6 +46,7 @@ passport.use(new (require('passport-local').Strategy)({usernameField:"email", pa
 
 
 router.post('/local', (req, res, next) => {
+  console.log("BACKEND");
   passport.authenticate('local', {successRedirect: '/', session: true})(req, res, next)
  //  User.findOne({
   //  where: {

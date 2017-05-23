@@ -2,12 +2,12 @@
 
 const request = require('supertest')
 		, {expect} = require('chai')
-		, db = require('../../db/db')
+		, db = require('../../db/index')
 		, User = db.model('user')
 		, app = require('../start')
 		, agent = request.agent(app)
 
-describe('/api/users', () => {
+xdescribe('/api/users', () => {
 	before('Await database sync', () => {
 		return db.didSync
 		.then(() => {

@@ -6,7 +6,9 @@ const passport = require('passport');
 const volleyball = require('volleyball');
 const db = require('../db/index.js'); 
 
-app.use(volleyball);
+// if (!global.it) {
+  app.use(volleyball);
+// }
 
 const port = process.env.PORT || 3000;
 
@@ -56,3 +58,5 @@ app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
+
+module.exports = app
