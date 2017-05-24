@@ -8,6 +8,7 @@ import audioURLReducer from './UserAudioURL';
 import blobReducer from './BestBlob';
 import setToneTypesReducer from './ToneTypes';
 import userBestReducer from './UserBest';
+import compatibilityReducer from './CompatibilityFlag';
 
 const rootReducer = combineReducers({
   language: languageReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   url: audioURLReducer,
   blob: blobReducer,
   toneTypes: setToneTypesReducer,
-  userBest: userBestReducer
+  userBest: userBestReducer,
+  compatibilityFlag: compatibilityReducer 
 });
 
 export default rootReducer;

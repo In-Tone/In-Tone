@@ -13,7 +13,9 @@ import FlatButton from 'material-ui/FlatButton';
 import { tonalLanguages, aboutInTone } from './FooterText';
 
 // dispatchers
-import {fetchTargets} from '../reducers/Targets';
+import { fetchTargets } from '../reducers/Targets';
+import { setCompatibility } from '../reducers/CompatibilityFlag';
+import { compatibilityFlag } from './CompatibilityText';
 
 class Footer extends Component {
 	constructor(props) {
@@ -25,28 +27,48 @@ class Footer extends Component {
 	}
 
 	onLanguageClick(button) {
+		this.props.setCompatibility();
 		const language = button.props.label.toLowerCase();
 		this.props.fetchTargets(language);
 	}
 
 	onTonalLanguageClick() {
+		this.props.setCompatibility();
 		this.refs.tonalLanguages.show();
 		this.refs.howItWorks.hide();
 	}
 
 	onHowItWorksClick() {
+		this.props.setCompatibility();
 		this.refs.tonalLanguages.hide();
 		this.refs.howItWorks.show();
 	}
 
 	onTrainClick() {
+		this.props.setCompatibility();
 		this.refs.tonalLanguages.hide();
 		this.refs.howItWorks.hide();
+	}
+
+	componentDidMount() {
+		if (this.props.compatibilityFlag) this.refs.compatibilityFlag.show();
+		else this.refs.compatibilityFlag.hide();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (!this.props.compatibilityFlag) this.refs.compatibilityFlag.hide();
+	}
+
+	componentDidUpdate() {
+		if (!this.props.compatibilityFlag) this.refs.compatibilityFlag.hide();
 	}
 
 	render() {
 		return (
 			<footer className="col-xs-12" style={styles.footer}>
+				<SkyLight dialogStyles={styles.myDialog} overlayStyles={styles.overlay} hideOnOverlayClicked ref="compatibilityFlag" title="Feature Support">
+					{compatibilityFlag()}
+				</SkyLight>
 				<FlatButton onClick={this.onTonalLanguageClick} className="col-xs-4" style={styles.button} hoverColor={'rgba(156, 39, 176, 0.7)'} >
 					What are Tonal Languages?
 				</FlatButton>
@@ -67,9 +89,13 @@ class Footer extends Component {
 	}
 }
 
-const mapDispatchToProps = {fetchTargets};
+const mapStateToProps = state => ({
+	compatibilityFlag: state.compatibilityFlag
+});
 
-export default connect(null, mapDispatchToProps)(Footer);
+const mapDispatchToProps = {fetchTargets, setCompatibility};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
 
 const styles = {
 	footer: {
