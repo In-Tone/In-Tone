@@ -21,10 +21,10 @@ const AllWords = (props) => {
 	return (
 		<div style={styles.wordDiv}>
 		{
-		targetsArray.length && targetsArray.map(target => {
+		props.allTargets.map((target, index) => {
 			let audioSRC = targetUserHash[target.id];
 				return (
-					<div key={target.id}>
+					<div key={index}>
 						<h2 style={styles.transliterationStyles}>{target.transliteration} | {target.englishTranslation}</h2>
 						<Row>
 							<Col md={6} style={styles.columnLeft}>
@@ -34,7 +34,7 @@ const AllWords = (props) => {
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
-									<audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/>
+									{audioSRC !== 0 ? <audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/> : <span>Record your attempt!</span>}
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
@@ -45,6 +45,7 @@ const AllWords = (props) => {
 								<ProfileGraphs
 									targetPitches={target.pitches}
 									duration={target.duration}
+									targetId={target.id}
 								/>
 							</Col>
 						</Row>
@@ -57,7 +58,8 @@ const AllWords = (props) => {
 )};
 
 const mapStateToProps = state => ({
-	userBest: state.userBest
+	userBest: state.userBest,
+	allTargets: state.allTargets
 });
 
 export default connect(mapStateToProps, null)(AllWords);
