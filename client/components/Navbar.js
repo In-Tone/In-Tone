@@ -15,19 +15,41 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import {logout} from '../reducers/Auth';
 import { fetchUserTones } from '../reducers/UserTone';
 import { fetchUserBest } from '../reducers/UserBest';
+import { setCompatibility } from '../reducers/CompatibilityFlag';
 
 class Navbar extends Component {
 	constructor(props) {
 		super(props);
 
-		this.logout = this.props.logout.bind(this);
 		this.onProfileClick = this.onProfileClick.bind(this);
+		this.onInToneClick = this.onInToneClick.bind(this);
+		this.onLogOutClick = this.onLogOutClick.bind(this);
+		this.onLogInClick = this.onLogInClick.bind(this);
+		this.onRegisterClick = this.onRegisterClick.bind(this);
 	}
 
 	onProfileClick () {
 		const userId = this.props.user.id;
 		this.props.fetchUserTones(userId);
 		this.props.fetchUserBest(userId);
+		this.props.setCompatibility();
+	}
+
+	onInToneClick () {
+		this.props.setCompatibility();
+	}
+
+	onLogOutClick () {
+		this.props.logout();
+		this.props.setCompatibility();
+	}
+
+	onLogInClick () {
+		this.props.setCompatibility();
+	}
+
+	onRegisterClick () {
+		this.props.setCompatibility();
 	}
 
 	render() {
@@ -39,17 +61,17 @@ class Navbar extends Component {
 				{
 					this.props.user ?
 					<Link to='/profile'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.onProfileClick}> Profile </FlatButton></Link> :
-					<Link to='/signup'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}> Register </FlatButton></Link>
+					<Link to='/signup'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.onRegisterClick}> Register </FlatButton></Link>
 				}
 				</Col>
 				<Col xs={4}>
-					<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo}> In-Tone </FlatButton></Link>
+					<Link to='/'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navLogo} onClick={this.onInToneClick}> In-Tone </FlatButton></Link>
 				</Col>
 				<Col xs={4}>
 				{
 					this.props.user ?
 					<Link to='/home'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.logout}>Logout</FlatButton></Link> :
-					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements}>Login</FlatButton></Link>
+					<Link to='/login'><FlatButton hoverColor={'rgba(138, 135, 135, 0.7)'} style={styles.navElements} onClick={this.onLogInClick}>Login</FlatButton></Link>
 				}
 				</Col>
 
@@ -61,7 +83,7 @@ class Navbar extends Component {
 
 export default connect(
   ({ user }) => ({ user: user }),
-  {logout, fetchUserTones, fetchUserBest}
+  {logout, fetchUserTones, fetchUserBest, setCompatibility}
 )(Navbar);
 
 const styles = {
