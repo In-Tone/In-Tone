@@ -19,18 +19,15 @@ import ProfileGraphs from './ProfileGraphs';
 import { targetToUserAudio, targetToUserPitches} from '../utils/HashMaps';
 
 const Word = (props) => {
-	console.log('word props - userBest', props.userBest)
 	const targetsArray = props.allTargets;
 	const userBestArray = props.userBest;
 	const userAudioSource = targetToUserAudio(targetsArray, userBestArray);
 	const userPitchArray = targetToUserPitches(targetsArray, userBestArray);
-	console.log('userPitchArray', userPitchArray)
 	return (
 		<div style={styles.wordDiv}>
 		{
 		props.allTargets.map(target => {
 			let audioSRC = userAudioSource[target.id];
-			console.log('word target', target)
 			if (target.tone_type_id === props.currentTone) {
 				return (
 					<div key={target.id}>
@@ -69,8 +66,7 @@ const Word = (props) => {
 )}
 
 const mapStateToProps = state => ({
-	userBest: state.userBest,
-	userTones: state.userTones
+	userBest: state.userBest
 });
 
 export default connect(mapStateToProps, null)(Word);

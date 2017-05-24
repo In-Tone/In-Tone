@@ -23,7 +23,6 @@ import AllWords from './AllWords';
 import { whoami } from '../reducers/Auth';
 import { fetchTargets } from '../reducers/Targets';
 import { fetchToneTypes } from '../reducers/ToneTypes';
-import { fetchUserBest } from '../reducers/UserBest';
 
 class Profile extends Component {
 	constructor(props){
@@ -43,8 +42,6 @@ class Profile extends Component {
 	componentDidMount() {
 		this.props.fetchTargets('thai');
 		this.props.fetchToneTypes('thai');
-		console.log('profile props in did mount', this.props);
-		//this.props.fetchUserBest(this.props.user.id);
 	}
 
 	render() {
@@ -130,9 +127,6 @@ const mapDispatchToProps = dispatch => {
 		},
 		fetchToneTypes: language => {
 			dispatch(fetchToneTypes(language));
-		},
-		fetchUserBest: userId => {
-			dispatch(fetchUserBest(userId));
 		}
 	};
 };
