@@ -3,6 +3,9 @@ const router = require('express').Router();
 const User = db.model('user');
 const passport = require('passport'); 
 
+//////////////
+// PASSPORT //
+//////////////
 passport.serializeUser((user, done) => {
   done(null, user.id);
 })
