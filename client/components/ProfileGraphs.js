@@ -18,6 +18,7 @@ class ProfileGraphs extends Component {
 	}
 
 	componentDidMount(){
+		console.log('profile graphs props', this.props)
 		let smoothUser;
 		let duration = this.props.duration;
 		
@@ -31,7 +32,7 @@ class ProfileGraphs extends Component {
 		let smoothTargets = pitchFix(slicedTarget);
 
 		// set up the user pitch contours. Handle race conditions/empty user arrays
-		if(this.props.userPitches){ smoothUser = this.props.userPitches;
+		if(this.props.userPitches){ smoothUser = this.props.userTones;
 		}else{ smoothUser = [];}
 
 		// axes markers

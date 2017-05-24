@@ -81,9 +81,9 @@ class Graph extends React.Component {
 		}
 
 		if (nextProps.userTones.length) {
-			const oldResults = pitchFiltering(userPitches);
-			const userTone = pitchSlicing(oldResults);
-			const smoothResults = pitchFix(userTone);
+			const filteredResults = pitchFiltering(userPitches);
+			const slicedResults = pitchSlicing(filteredResults);
+			const smoothResults = pitchFix(slicedResults);
 
 			// score is the user score
 			let score = scores(smoothTargets, smoothResults, xLabels);

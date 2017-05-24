@@ -24,6 +24,7 @@ const Word = (props) => {
 	const userBestArray = props.userBest;
 	const userAudioSource = targetToUserAudio(targetsArray, userBestArray);
 	const userPitchArray = targetToUserPitches(targetsArray, userBestArray);
+	const userTones = props.userTones;
 	return (
 		<div style={styles.wordDiv}>
 		{
@@ -54,6 +55,7 @@ const Word = (props) => {
 									duration={target.duration}
 									userPitches={userPitchArray[target.id]}
 									targetID={target.id}
+									userTones={userTones[target.id]}
 								/>
 							</Col>
 						</Row>
