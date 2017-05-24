@@ -1,30 +1,13 @@
 'use strict'
 
-// const db = require('../../db/db');
-const db = require('../../db/index.js');
+const db = require('../../db');
 const User = db.model('user');
 const ToneType = db.model('toneType');
 const UserTone = db.model('UserTone');
 const {mustBeLoggedIn} = require('../auth');
 const router = require('express').Router();
 
-router.get('/:username', (req, res, next) => {
-	User.findOne({
-		where: { username: req.params.username },
-		include: [{ all: true }]
-	})
-		.then(foundUser => {
-			if (!foundUser) {
-				const err = new Error('User not found');
-				err.status = 404;
-				throw err;
-			}
-			res.send(foundUser);
-		})
-		.catch(next);
-});
-
-router.get('/usertones/:userId', (req, res, next) => {
+router.get('/:userId', (req, res, next) => {
 	UserTone.findAll({ 
 		where: { 
 			user_id: req.params.userId 
@@ -35,7 +18,7 @@ router.get('/usertones/:userId', (req, res, next) => {
 		.catch(next);
 })
 
-router.get('/usertones/:userId/best', (req, res, next) => {
+router.get('/:userId/best', (req, res, next) => {
 	UserTone.findAll({
 		where: {
 			user_id: req.params.userId,
@@ -46,7 +29,7 @@ router.get('/usertones/:userId/best', (req, res, next) => {
 		.catch(next);
 })
 
-router.post('/usertones/:userId/:targetId/:bool', (req, res, next) => {
+router.post('/:userId/:targetId/:bool', (req, res, next) => {
 	if (req.params.bool) {
 		UserTone.findOne({
 			where: {

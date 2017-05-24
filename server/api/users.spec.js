@@ -23,25 +23,36 @@ describe('/api/users', () => {
 	})
 	afterEach('Clear the tables', () => db.truncate({ cascade: true}))
 
-	describe('GET /:id', () => {
+	// GET requests for users
+	describe('GET /:username', () => {
 
 		describe('Get a user', () => {
 			it('gets a user by id', () => {
-
+				
 			})
 		})
 
-		describe('Get user contours per voicing', () => {
+		describe('Include all user associations', () => {
 			it('retrieves user contours by category', () => {
 
 			})
 		})
 
-		describe('Get all user contours', () => {
-			it('gets all contours by user', () => {
-				
+	})
+
+	// GET requests for usertones 
+	describe('GET /usertones', () => {
+
+		describe('Get the best tones for a user', () => {
+			it('finds all the best results for a user', () => {
+
 			})
 		})
+
+	})
+
+	// POST requests for usertones
+	describe('POST /usertones', () => {
 
 	})
 
