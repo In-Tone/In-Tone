@@ -34,11 +34,10 @@ const AllWords = (props) => {
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
-									{audioSRC !== 0 ? <audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/> : <span>Record your attempt!</span>}
+									{audioSRC !== 0 ? <audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/> : <h4>Record your attempt!</h4>}
 								</div>
 								<div style={styles.wordInfo}>
-									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
-									<h4> {Math.floor(Math.random() * 10)+1} </h4>
+									<h4 style={styles.infoBuffer}>Number of Attempts: n/a</h4>
 								</div>
 							</Col>
 							<Col md={6}>
@@ -100,5 +99,8 @@ const styles = {
 	},
 	hrStyles: {
 		border: 'solid 1px grey'
+	},
+	span: {
+		lineHeight: '40px'
 	}
 };

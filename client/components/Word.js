@@ -42,7 +42,7 @@ const Word = (props) => {
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
-									<audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/>
+									{audioSRC !== 0 ? <audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/> : <span style={styles.span}>Record your attempt!</span>}
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: </h4>
@@ -54,7 +54,7 @@ const Word = (props) => {
 									targetPitches={target.pitches}
 									duration={target.duration}
 									userPitches={userPitchArray[target.id]}
-									targetID={target.id}
+									targetId={target.id}
 									userTones={userTones[target.id]}
 								/>
 							</Col>
@@ -111,5 +111,8 @@ const styles = {
 	},
 	hrStyles: {
 		border: 'solid 1px grey'
+	},
+	span: {
+		lineHeight: '40px'
 	}
 };

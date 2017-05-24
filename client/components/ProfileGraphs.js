@@ -7,7 +7,7 @@ import Paper from 'material-ui/Paper';
 
 // utilities
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
-import { drawProfileGraph } from '../utils/GraphingUtils';
+import { drawGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 
 // ProfileGraphs: a *smart* component to access canvas refs
@@ -18,6 +18,7 @@ class ProfileGraphs extends Component {
 	}*/
 
 	componentDidMount(){
+		console.log('profile graph props', this.props)
 		let smoothUser;
 		let duration = this.props.duration;
 		// each canvas has to have a unique ref so they don't just rewrite the previous
@@ -34,9 +35,9 @@ class ProfileGraphs extends Component {
 		else smoothUser = [];
 
 		// axes markers
-		let xLabels = getXLabels(target);
+		let xLabels = getXLabels(smoothTargets);
 
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothUser, smoothTargets);
+		const graph = drawGraph(chartCtx, xLabels, smoothUser, smoothTargets);
 	}
 
 	render() {
