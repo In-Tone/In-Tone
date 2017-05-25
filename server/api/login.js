@@ -1,9 +1,11 @@
 const db = require('../../db/index');
 const router = require('express').Router();
-// const User = require('../../db/models/User');
 const User = db.model('user');
 const passport = require('passport'); 
 
+//////////////
+// PASSPORT //
+//////////////
 passport.serializeUser((user, done) => {
   done(null, user.id);
 })
@@ -47,22 +49,6 @@ passport.use(new (require('passport-local').Strategy)({usernameField:"email", pa
 
 router.post('/local', (req, res, next) => {
   passport.authenticate('local', {successRedirect: '/', session: true})(req, res, next)
- //  User.findOne({
-  //  where: {
-  //    email: req.body.email
-  //  }
-  // })
-  //  .then(foundUser => {
-  //    if (!foundUser) res.status(401).send('User not found');
-  //    else if (!foundUser.hasMatchingPassword(req.body.password)) res.status(401).send('Incorrect password');
-  //    else {
-  //      req.login(foundUser, err => {
-  //        if (err) next(err);
-  //        else res.json(foundUser);
-  //      })
-  //    }
-  //  })
-  //  .catch(next);
 });
 
 router.get('/whoami', (req, res) => {

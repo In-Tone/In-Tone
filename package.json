@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require client/tests/setup.js --compilers js:babel-register --watch-extensions js client/tests/**/*.spec.js",
+    "test": "mocha --require client/tests/setup.js --compilers js:babel-register --watch-extensions js client/tests/**/*.spec.js server/api/*.spec.js",
     "start": "node server/index.js",
     "start-watch": "nodemon server/index.js",
     "build-watch": "webpack -w",

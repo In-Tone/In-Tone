@@ -11,7 +11,7 @@ import { setToneTypes, fetchToneTypes } from '../../reducers/ToneTypes';
 const middleware = [thunkMiddleware]
 const mockStore = configureMockStore(middleware);
 
-describe('ToneTypes', function() {
+xdescribe('ToneTypes', function() {
 
 	// nock.disableNetConnect();
 	// nock.enableNetConnect('127.0.0.1');
