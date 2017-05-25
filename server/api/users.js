@@ -43,8 +43,9 @@ router.post('/:userId/:targetId/:bool', (req, res, next) => {
 			.catch(next);
 	}
 	UserTone.create(req.body)
+		console.log('MADE IT TO USER TONE')
 		.then(() => {
-			console.log(req.body);
+			console.log('WHAT IS REQ.BODY', req.body)
 			UserTone.findAll({ where: { user_id: req.params.userId } })
 				.then(foundTones => res.send(foundTones))
 				.catch(next);

@@ -34,7 +34,7 @@ const AllWords = (props) => {
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>User Audio:</h4>
-									{audioSRC !== 0 ? <audio src={audioSRC}controls id='profileUser' style={{width: '50%'}}/> : <h4>Record your attempt!</h4>}
+									<audio src={audioSRC > 0 ? audioSRC : null	}controls id='profileUser' style={{width: '50%'}}/>
 								</div>
 								<div style={styles.wordInfo}>
 									<h4 style={styles.infoBuffer}>Number of Attempts: n/a</h4>
