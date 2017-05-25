@@ -150,7 +150,6 @@ export default class AudioInput extends React.Component {
 
             // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
             mediaRecorder.onstop = function(e) {
-                console.log("recorder stopped");
 
                 // prompt to name the file
                 var clipName = prompt('Enter a name for your sound clip');
@@ -177,8 +176,6 @@ export default class AudioInput extends React.Component {
                 var audioURL = window.URL.createObjectURL(blob);
                 audio.src = audioURL;
 
-                console.log("blob", blob);
-
                 // use FileReader to access the Blob data
                 var reader = new FileReader();
                 reader.addEventListener("loadend", function() {
@@ -199,7 +196,6 @@ export default class AudioInput extends React.Component {
                     quantization: 16, // samples per beat, defaults to 4 (i.e. 16th notes)
                     });
 
-                    console.log('all freqs: ', frequencies)
                     // filter out bad data - hacky for now, throws out nulls and high values
                     frequencies = frequencies.filter(freq => {
                     if (typeof freq === 'number') {
@@ -229,15 +225,10 @@ export default class AudioInput extends React.Component {
                         }
                     });
 
-                    console.log("frequencies", frequencies)
-
-
-                        console.log("data", data)
                         self.setState({
                             arrayBuffer: data,
                             pitches: frequencies
                         });
-                        console.log("state: ", self.state);
                     });
 
                 });

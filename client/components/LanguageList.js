@@ -24,7 +24,7 @@ const wrapState = ComposedComponent => {
 		constructor(props){
 			super(props)
 			this.state = {
-				selectedIndex: 0
+				selectedIndex: 1
 			}
 			this.handleRequestChange = this.handleRequestChange.bind(this);
 		}
