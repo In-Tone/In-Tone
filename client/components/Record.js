@@ -97,7 +97,7 @@ class Record extends React.Component {
 					record.style.background = '';
 					record.style.color = '';
 					mediaRecorder.stop();
-				}, 3700+duration);
+				}, 3800+duration);
 			};
 
 			//////////////////////////////////////
