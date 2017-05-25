@@ -40,7 +40,6 @@ export const findPreviousBestScore = (target_id, userBest) => {
 };
 
 export const makeAxiosRequest = reqObj => {
-	axios.post(`/api/users/usertones/${reqObj.user_id}/${reqObj.target_id}/${reqObj.isBest}`, reqObj)
-		.then(()=> res.sendStatus(200))
+	axios.post(`/api/users/${reqObj.user_id}/${reqObj.target_id}/${reqObj.isBest}`, reqObj)
 		.catch(err => console.error(err));
 };

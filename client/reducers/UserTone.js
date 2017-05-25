@@ -11,7 +11,7 @@ export const setUserTone = tones => ({
 
 export const fetchUserTones = userId => 
 	dispatch => {
-		axios.get(`api/users/usertones/${userId}`)
+		axios.get(`api/users/${userId}`)
 			.then(res => res.data)
 			.then(allTones => dispatch(setUserTone(allTones)))
 			.catch(err => console.error(err));
@@ -19,7 +19,7 @@ export const fetchUserTones = userId =>
 
 export const postNewTone = (userId, targetId, bool, attempt) => 
 	dispatch => {
-		axios.post(`api/users/usertones/${userId}/${targetId}/${bool}`, attempt)
+		axios.post(`api/users/${userId}/${targetId}/${bool}`, attempt)
 			.then(res => res.data)
 			.then(newTones => dispatch(setUserTone(newTones)))
 			.catch(err => console.error(err));

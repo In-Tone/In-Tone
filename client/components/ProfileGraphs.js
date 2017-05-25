@@ -7,21 +7,21 @@ import Paper from 'material-ui/Paper';
 
 // utilities
 import { pitchFiltering, pitchSlicing, getXLabels, pitchSmoothing, pitchFix } from '../utils/ProcessingUtils';
-import { drawProfileGraph } from '../utils/GraphingUtils';
+import { drawGraph } from '../utils/GraphingUtils';
 import { scores } from '../utils/CalculateScore';
 
 // ProfileGraphs: a *smart* component to access canvas refs
 class ProfileGraphs extends Component {
-	constructor(props){
+/*	constructor(props){
 		super(props)
 		this.chartDuration = Math.round(this.props.duration).toString();
-	}
+	}*/
 
 	componentDidMount(){
 		let smoothUser;
 		let duration = this.props.duration;
 		// each canvas has to have a unique ref so they don't just rewrite the previous
-		let chartRef = this.chartDuration;
+		let chartRef = this.props.targetId;
 		let chartCtx = this.refs[chartRef].getContext('2d');
 
 		// set up the target pitch contours
@@ -30,19 +30,19 @@ class ProfileGraphs extends Component {
 		let smoothTargets = pitchFix(slicedTarget);
 
 		// set up the user pitch contours. Handle race conditions/empty user arrays
-		if(this.props.userPitches) smoothUser = this.props.userPitches;
+		if(this.props.userTones) smoothUser = this.props.userTones;
 		else smoothUser = [];
 
 		// axes markers
-		let xLabels = getXLabels(duration, target);
+		let xLabels = getXLabels(smoothTargets);
 
-		const graph = drawProfileGraph(chartCtx, xLabels, smoothUser, smoothTargets);
+		const graph = drawGraph(chartCtx, xLabels, smoothUser, smoothTargets);
 	}
 
 	render() {
 		return(
 			<Paper zDepth={1} style={styles.profileGraphs}>
-				<canvas ref={this.chartDuration}></canvas>
+				<canvas ref={this.props.targetId}></canvas>
 			</Paper>
 		);
 	}

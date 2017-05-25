@@ -35,7 +35,6 @@ export const whoami = () =>
   dispatch =>
     axios.get('/api/login/whoami')
       .then(response => {
-        console.log("whoami responds", response);
         const user = {
           userSince: response.data.created_at,
           email: response.data.email,
@@ -51,21 +50,6 @@ export const whoami = () =>
         }
       })
       // .catch(failed => dispatch(authenticated(null)))
-/////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const createUser = (newUser) => dispatch => {
 	axios.post('/api/users', newUser)

@@ -98,7 +98,6 @@ export const recorder = () => {
 
         // onstop handler for mediaRecorder -- when stopped, this says what to do with the recorded data
         mediaRecorder.onstop = function(e) {
-            console.log("recorder stopped");
 
             var soundClips = document.querySelector('soundClips');
 
@@ -127,8 +126,6 @@ export const recorder = () => {
             var audioURL = window.URL.createObjectURL(blob);
             audio.src = audioURL;
 
-            console.log("blob", blob);
-
             // use FileReader to access the Blob data
             var reader = new FileReader();
             reader.addEventListener("loadend", function() {
@@ -149,7 +146,6 @@ export const recorder = () => {
                 quantization: 16, // samples per beat, defaults to 4 (i.e. 16th notes)
                 });
 
-                console.log('all freqs: ', frequencies)
                 // filter out bad data - hacky for now, throws out nulls and high values
                 frequencies = frequencies.filter(freq => {
                 if (typeof freq === 'number') {
@@ -172,15 +168,10 @@ export const recorder = () => {
                 }
                 });
 
-                console.log("frequencies", frequencies)
-
-
-                    console.log("data", data)
                     self.setState({
                         arrayBuffer: data,
                         pitches: frequencies
                     });
-                    console.log("state: ", self.state);
                 });
 
             });

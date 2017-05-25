@@ -1,9 +1,7 @@
 export const processTargetData = res => {
-	// console.log('here is res: ', res);
 	let data = [];
 
 	for (let i = 0; i < res.data.length; i++) {
-		// console.log(res.data[i])
 		let targets = res.data[i].targets;
 
 		let dataPart1 = {
@@ -12,9 +10,7 @@ export const processTargetData = res => {
 			tone: res.data[i].tone
 		};
 
-		// console.log('dataPart1: ', dataPart1, '\n\n\n')
 		for (let j = 0; j < targets.length; j++) {
-			// console.log(targets);
 			let dataPart2 = {
 				duration: targets[j].duration,
 				englishTranslation: targets[j].englishTranslation,
