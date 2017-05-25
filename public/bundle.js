@@ -44570,7 +44570,7 @@ var browserIncompatible = function browserIncompatible() {
 };
 
 var compatibilityFlag = exports.compatibilityFlag = function compatibilityFlag() {
-	if (Modernizr.bloburls && Modernizr.webaudio) return browserCompatible();else browserIncompatible();
+	if (Modernizr.bloburls && Modernizr.webaudio) return browserCompatible();else return browserIncompatible();
 };
 
 /***/ }),
@@ -45675,7 +45675,7 @@ var Record = function (_React$Component) {
 						record.style.background = '';
 						record.style.color = '';
 						mediaRecorder.stop();
-					}, 3700 + duration);
+					}, 3800 + duration);
 				};
 
 				//////////////////////////////////////
