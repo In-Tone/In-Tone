@@ -13,5 +13,5 @@ const browserIncompatible = () => (
 
 export const compatibilityFlag = () => {
 	if (Modernizr.bloburls && Modernizr.webaudio) return browserCompatible();
-	else browserIncompatible();
+	else return browserIncompatible();
 };
