@@ -21,7 +21,7 @@ import { targetWord, button } from './StudyElements';
 
 // dispatchers
 import { setUserTone } from '../reducers/UserTone';
-import {fetchTargets} from '../reducers/Targets';
+import { fetchTargets } from '../reducers/Targets';
 import { setCurrentTarget } from '../reducers/CurrentTarget';
 import { setUserURL } from '../reducers/UserAudioURL';
 import { resetAudio } from '../utils/RecordingUtils';
