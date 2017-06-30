@@ -2,6 +2,8 @@
 
 https://in-tone.herokuapp.com/
 
+https://www.youtube.com/watch?v=wLWbgK10ZSo&t=4s
+
 ## Git/Waffle Workflow
 
 #### NAMING CONVENTIONS:
